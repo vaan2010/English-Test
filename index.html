@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>English Quiz Taker</title>
+  <style>
+    /* CSS matching the dark theme */
+    html {
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+    }
+    body { 
+      background: #0d1117; 
+      color: #c9d1d9; 
+      font-family: sans-serif; 
+      padding: 20px; 
+      line-height: 1.6;
+      margin: 0;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    h1, h2, h3 { color: #58a6ff; margin-top: 0; }
+    #pageTitle {
+      font-size: clamp(1.2rem, 4.5vw, 2rem);
+      line-height: 1.25;
+    }
+    .layout-container { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      width: 100%;
+      min-width: 0;
+    }
+    .main-content { flex: 1; min-width: 0; max-width: 100%; }
+    .sidebar { 
+      width: 320px; 
+      background: #161b22; 
+      padding: 20px; 
+      border-radius: 8px; 
+      border: 1px solid #30363d;
+      position: sticky;
+      top: 20px;
+      max-height: calc(100vh - 40px);
+      overflow-x: hidden;
+      overflow-y: auto;
+      min-width: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+    .sidebar-toolbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      min-width: 0;
+      width: 100%;
+    }
+    .sidebar-title {
+      margin: 0;
+      flex: 1;
+      min-width: 0;
+      line-height: 1.3;
+      font-size: 1.05rem;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+    .btn-clear-history {
+      flex-shrink: 0;
+      padding: 6px 10px;
+      font-size: 0.75rem;
+      background: #da3633;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      line-height: 1.2;
+      margin-top: 2px;
+    }
+    .btn-clear-history:hover {
+      background: #f85149;
+    }
+    .card { 
+      background: #161b22; 
+      padding: 20px 30px; 
+      border-radius: 8px; 
+      margin-bottom: 25px; 
+      border: 1px solid #30363d;
+      max-width: 100%;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .card p,
+    .card li {
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .card code {
+      word-break: break-all;
+      overflow-wrap: anywhere;
+      font-size: 0.9em;
+    }
+    .file-input-wrap {
+      max-width: 100%;
+      overflow: hidden;
+    }
+    .file-input-wrap input[type="file"] {
+      max-width: 100%;
+    }
+    button { 
+      padding: 8px 16px; 
+      background: #238636; 
+      color: white; 
+      border: none; 
+      border-radius: 6px; 
+      cursor: pointer; 
+      font-size: 1em;
+    }
+    button:hover { background: #2ea043; }
+    button:disabled { 
+      background: #161b22; 
+      color: #8b949e; 
+      border: 1px solid #30363d; 
+      cursor: not-allowed; 
+    }
+    input[type="text"] { 
+      padding: 8px 12px; 
+      background: #0d1117; 
+      border: 1px solid #30363d; 
+      color: #fff; 
+      width: 100%;
+      max-width: 320px;
+      min-width: 0;
+      border-radius: 4px; 
+      font-size: 1em;
+    }
+    input[type="text"]:focus {
+      border-color: #58a6ff;
+      outline: none;
+    }
+    input[type="file"] {
+      padding: 10px 0;
+      color: #c9d1d9;
+    }
+    .question-row { 
+      margin-bottom: 30px; 
+      padding-bottom: 20px; 
+      border-bottom: 1px solid #30363d; 
+    }
+    .spell-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 12px;
+    }
+    .spell-row .spell-input {
+      flex: 1 1 200px;
+      max-width: 100%;
+    }
+    .spell-row .feedback {
+      margin-left: 15px;
+    }
+    .mcq-stem {
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .mcq-stem p {
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .mcq-stem img,
+    .mcq-stem table {
+      max-width: 100%;
+      height: auto;
+    }
+    .question-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .feedback { margin-left: 15px; font-weight: bold; }
+    .feedback.ok { color: #3fb950; }
+    .feedback.bad { color: #f85149; }
+    .choice-label { 
+      display: block; 
+      margin: 10px 0; 
+      cursor: pointer; 
+      padding: 10px 15px;
+      border-radius: 6px;
+      border: 1px solid #30363d;
+      transition: all 0.2s;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .choice-label:hover { background: #21262d; }
+    .choice-label.selected {
+      background: #1f6feb;
+      border-color: #58a6ff;
+      color: #ffffff;
+    }
+    .mcq-choices { margin-top: 15px; }
+    .score-banner { 
+      font-size: 1.5em; 
+      font-weight: bold; 
+      margin-top: 20px; 
+      color: #f2cc60; 
+      text-align: center; 
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    
+    /* Sidebar list styling */
+    .history-item {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: background 0.2s;
+      min-width: 0;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    .history-item:hover {
+      background: #21262d;
+    }
+    .history-item h4 {
+      margin: 0 0 8px 0;
+      color: #f2cc60;
+      font-size: 1em;
+      font-weight: 600;
+      white-space: normal;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      max-width: 100%;
+      line-height: 1.35;
+    }
+    .history-card-head {
+      min-width: 0;
+      max-width: 100%;
+    }
+    .history-score-line {
+      font-size: 0.95em;
+      margin-bottom: 8px;
+      max-width: 100%;
+      line-height: 1.4;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+    .history-details {
+      display: none;
+      margin-top: 10px;
+    }
+    .history-details.active {
+      display: block;
+    }
+    .retest-btn {
+      background: #d29922;
+      color: #000;
+      width: 100%;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    .retest-btn:hover {
+      background: #e3b341;
+    }
+    .history-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.9em;
+      min-width: 0;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .history-list li {
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #21262d;
+    }
+    .history-list li:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    /* Mobile Responsive Sidebar */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 20px;
+      min-width: 0;
+      width: 100%;
+    }
+    .page-header h1 {
+      margin-bottom: 0;
+      min-width: 0;
+      flex: 1;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+    .menu-toggle {
+      display: none;
+      background: #1f6feb;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: bold;
+      flex-shrink: 0;
+      white-space: nowrap;
+      align-self: flex-start;
+      margin-top: 2px;
+    }
+    .menu-toggle:hover {
+      background: #388bfd;
+    }
+    .sidebar-overlay {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 12px;
+      }
+      .layout-container {
+        flex-direction: column;
+      }
+      .card {
+        padding: 16px 14px;
+      }
+      input[type="text"],
+      input.spell-input {
+        max-width: 100%;
+      }
+      .spell-row .spell-input {
+        flex: 1 1 100%;
+      }
+      .spell-row .feedback {
+        flex: 1 1 100%;
+        margin-left: 0;
+        margin-top: 4px;
+      }
+      .score-banner {
+        font-size: 1.15em;
+        text-align: left;
+      }
+      #btnSubmit {
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .btn-export-pack {
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+      .menu-toggle .menu-label {
+        display: inline;
+      }
+      .sidebar {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        height: 100vh;
+        max-height: 100vh;
+        width: min(340px, 92vw);
+        max-width: 100%;
+        z-index: 1000;
+        transition: right 0.3s ease;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+        border-radius: 0;
+        border: none;
+        border-left: 1px solid #30363d;
+        padding: 16px 14px 20px;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+      .sidebar.open {
+        right: 0;
+      }
+      .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+        display: none;
+      }
+      .sidebar-overlay.active {
+        display: block;
+      }
+      .sidebar-close {
+        display: block;
+        margin-bottom: 12px;
+        margin-top: 4px;
+        padding: 10px 12px;
+        background: transparent;
+        color: #8b949e;
+        border: 1px solid #30363d;
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+      }
+      .sidebar-close:hover {
+        background: #21262d;
+      }
+    }
+    @media (max-width: 420px) {
+      .menu-toggle .menu-label {
+        display: none;
+      }
+    }
+    @media (min-width: 769px) {
+      .sidebar-close {
+        display: none;
+      }
+    }
+    .btn-export-pack {
+      font-size: 1.05em;
+      padding: 12px 22px;
+      background: #21262d;
+      color: #c9d1d9;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-export-pack:hover {
+      background: #30363d;
+      border-color: #58a6ff;
+    }
+    .btn-export-pack:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .submit-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+  <!-- Sidebar Overlay for mobile -->
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+  <div class="layout-container">
+    
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <div class="page-header">
+        <h1 id="pageTitle">English Quiz Taker</h1>
+        <button id="btnToggleMenu" class="menu-toggle" type="button" aria-label="Open exam history"><span class="menu-icon" aria-hidden="true">☰</span><span class="menu-label">History</span></button>
+      </div>
+      
+      <div class="card" id="uploadPanel">
+        <h2>Load Quiz Data</h2>
+        <p style="color:#8b949e;">Please upload the <code>english_quiz_questions.json</code> file you exported from the generator.</p>
+        <div class="file-input-wrap">
+          <input type="file" id="jsonFile" accept=".json" />
+        </div>
+      </div>
+
+      <div id="quizPanel" style="display:none;">
+        <div class="card">
+          <h2>Type 1: Listen and Spell</h2>
+          <p style="color:#8b949e;"><strong>Instructions:</strong> Click the "Play Audio" button to listen to the pronunciation of the word. Then, spell the English word correctly in the input box below. Pay attention to the spelling!</p>
+          <hr style="border:0; border-top:1px solid #30363d; margin: 20px 0;">
+          <div id="spellList"></div>
+        </div>
+
+        <div class="card">
+          <h2>Type 2: Comprehensive Multiple Choice</h2>
+          <p style="color:#8b949e;"><strong>Instructions:</strong> Read each sentence carefully. You will need to either fill in the blank with the most appropriate word or phrase to complete the sentence logically, OR choose the best synonym for the highlighted word. Select one answer for each question.</p>
+          <hr style="border:0; border-top:1px solid #30363d; margin: 20px 0;">
+          <div id="mcqList"></div>
+        </div>
+
+        <div class="card" style="text-align: center; border:none; background:transparent;">
+          <div class="submit-row">
+            <button id="btnSubmit" type="button" style="font-size: 1.2em; padding: 12px 30px;">Submit All Answers</button>
+            <button id="btnExportPack" type="button" class="btn-export-pack">匯出 PDF 考題（ZIP）</button>
+          </div>
+          <p style="color:#8b949e;font-size:0.85em;margin:12px 0 0;max-width:520px;margin-left:auto;margin-right:auto;">ZIP 僅含可列印考卷 <code>quiz.pdf</code>（末頁為解答）。拼字聽力請在同一個測驗網頁上按 <strong>Play Audio</strong>，題號與 PDF Part 1 對齊。</p>
+          <div id="scoreDisplay" class="score-banner"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sidebar Area -->
+    <div class="sidebar" id="sidebar">
+      <button type="button" id="btnCloseSidebar" class="sidebar-close">Close ✕</button>
+      <div class="sidebar-toolbar">
+        <h3 class="sidebar-title">Exam History</h3>
+        <button type="button" id="btnClearHistory" class="btn-clear-history">Clear</button>
+      </div>
+      <p style="color:#8b949e; font-size: 0.9em;">Records of mistakes from your submissions will appear here.</p>
+      <div id="historyContainer"></div>
+    </div>
+
+  </div>
+
+  <script>
+    let spellData = [];
+    let mixedData = [];
+    let currentFileName = "Quiz";
+    /** @type {Record<string, string|null>} cache key = cleanKeyword lowercased */
+    let examHistory = JSON.parse(localStorage.getItem("quizHistory") || "[]");
+
+    const QUIZ_DRAFT_KEY = "quizTakerDraft";
+    let saveQuizDraftTimer = null;
+
+    function persistQuizDraftNow() {
+      if (!spellData.length && !mixedData.length) {
+        try {
+          localStorage.removeItem(QUIZ_DRAFT_KEY);
+        } catch (e) {}
+        return;
+      }
+      const spellInputs = [];
+      for (let i = 0; i < spellData.length; i++) {
+        const el = document.getElementById("spellInput_" + i);
+        spellInputs.push(el ? el.value : "");
+      }
+      const mcqPicked = [];
+      for (let i = 0; i < mixedData.length; i++) {
+        const radios = document.getElementsByName("mcq_" + i);
+        let v = null;
+        for (let j = 0; j < radios.length; j++) {
+          if (radios[j].checked) {
+            v = radios[j].value;
+            break;
+          }
+        }
+        mcqPicked.push(v);
+      }
+      const submitted = btnSubmit && btnSubmit.disabled;
+      const spellFeedback = [];
+      for (let i = 0; i < spellData.length; i++) {
+        const el = document.getElementById("spellFeedback_" + i);
+        spellFeedback.push(el ? { t: el.textContent || "", c: el.className || "feedback" } : { t: "", c: "feedback" });
+      }
+      const mcqFeedback = [];
+      for (let i = 0; i < mixedData.length; i++) {
+        const el = document.getElementById("mcqFeedback_" + i);
+        mcqFeedback.push(el ? { t: el.textContent || "", c: el.className || "feedback" } : { t: "", c: "feedback" });
+      }
+      const draft = {
+        v: 1,
+        currentFileName,
+        spellData,
+        mixedData,
+        spellInputs,
+        mcqPicked,
+        submitted: !!submitted,
+        scoreText: scoreDisplay ? (scoreDisplay.textContent || "") : "",
+        spellFeedback,
+        mcqFeedback
+      };
+      try {
+        localStorage.setItem(QUIZ_DRAFT_KEY, JSON.stringify(draft));
+      } catch (e) {
+        console.warn("Could not save quiz draft (storage full?)", e);
+      }
+    }
+
+    function scheduleQuizDraftSave() {
+      if (saveQuizDraftTimer) clearTimeout(saveQuizDraftTimer);
+      saveQuizDraftTimer = setTimeout(function() {
+        saveQuizDraftTimer = null;
+        persistQuizDraftNow();
+      }, 300);
+    }
+
+    function applyRestoredQuizDraft(d) {
+      if (!d || d.v !== 1) return;
+      const si = d.spellInputs || [];
+      for (let i = 0; i < spellData.length; i++) {
+        const el = document.getElementById("spellInput_" + i);
+        if (el && si[i] != null) el.value = si[i];
+      }
+      const mp = d.mcqPicked || [];
+      for (let i = 0; i < mixedData.length; i++) {
+        const val = mp[i];
+        if (val == null) continue;
+        const radios = document.getElementsByName("mcq_" + i);
+        for (let j = 0; j < radios.length; j++) {
+          if (radios[j].value === val) {
+            radios[j].checked = true;
+            break;
+          }
+        }
+      }
+      if (!d.submitted) {
+        mixedData.forEach((_, i) => {
+          const radios = document.getElementsByName("mcq_" + i);
+          for (let j = 0; j < radios.length; j++) {
+            if (radios[j].checked) {
+              const lbl = radios[j].closest(".choice-label");
+              if (lbl) lbl.classList.add("selected");
+              break;
+            }
+          }
+        });
+      } else {
+        for (let i = 0; i < spellData.length; i++) {
+          const el = document.getElementById("spellInput_" + i);
+          if (el) el.disabled = true;
+        }
+        const sfb = d.spellFeedback || [];
+        for (let i = 0; i < spellData.length; i++) {
+          const el = document.getElementById("spellFeedback_" + i);
+          const fb = sfb[i];
+          if (el && fb) {
+            el.textContent = fb.t || "";
+            el.className = fb.c || "feedback";
+          }
+        }
+        for (let i = 0; i < mixedData.length; i++) {
+          const radios = document.getElementsByName("mcq_" + i);
+          for (let j = 0; j < radios.length; j++) radios[j].disabled = true;
+        }
+        const mfb = d.mcqFeedback || [];
+        for (let i = 0; i < mixedData.length; i++) {
+          const el = document.getElementById("mcqFeedback_" + i);
+          const fb = mfb[i];
+          if (el && fb) {
+            el.textContent = fb.t || "";
+            el.className = fb.c || "feedback";
+          }
+        }
+        if (scoreDisplay) scoreDisplay.textContent = d.scoreText || "";
+        if (btnSubmit) btnSubmit.disabled = true;
+      }
+    }
+
+    function tryRestoreQuizDraftFromStorage() {
+      try {
+        const raw = localStorage.getItem(QUIZ_DRAFT_KEY);
+        if (!raw) return;
+        const d = JSON.parse(raw);
+        if (!d || d.v !== 1 || !Array.isArray(d.spellData) || !Array.isArray(d.mixedData)) return;
+        if (!d.spellData.length && !d.mixedData.length) return;
+        spellData = d.spellData;
+        mixedData = d.mixedData;
+        currentFileName = d.currentFileName || "Quiz";
+        if (pageTitle) pageTitle.textContent = currentFileName;
+        renderQuiz();
+        applyRestoredQuizDraft(d);
+      } catch (e) {
+        console.warn("Quiz draft restore failed", e);
+      }
+    }
+
+    const pageTitle = document.getElementById("pageTitle");
+    const fileInput = document.getElementById("jsonFile");
+    const quizPanel = document.getElementById("quizPanel");
+    const spellList = document.getElementById("spellList");
+    const mcqList = document.getElementById("mcqList");
+    const btnSubmit = document.getElementById("btnSubmit");
+    const btnExportPack = document.getElementById("btnExportPack");
+    const scoreDisplay = document.getElementById("scoreDisplay");
+    if (btnExportPack) btnExportPack.disabled = true;
+    const historyContainer = document.getElementById("historyContainer");
+    const btnClearHistory = document.getElementById("btnClearHistory");
+    const btnToggleMenu = document.getElementById("btnToggleMenu");
+    const btnCloseSidebar = document.getElementById("btnCloseSidebar");
+    const sidebar = document.getElementById("sidebar");
+    const sidebarOverlay = document.getElementById("sidebarOverlay");
+
+    if (quizPanel) {
+      quizPanel.addEventListener("input", function(e) {
+        if (e.target && e.target.classList && e.target.classList.contains("spell-input")) {
+          scheduleQuizDraftSave();
+        }
+      });
+      quizPanel.addEventListener("change", function(e) {
+        const t = e.target;
+        if (t && t.name && /^mcq_\d+$/.test(String(t.name))) scheduleQuizDraftSave();
+      });
+    }
+    window.addEventListener("pagehide", persistQuizDraftNow);
+    window.addEventListener("beforeunload", persistQuizDraftNow);
+
+    function closeSidebar() {
+      if (sidebar) sidebar.classList.remove("open");
+      if (sidebarOverlay) sidebarOverlay.classList.remove("active");
+    }
+
+    if (btnToggleMenu) {
+      btnToggleMenu.addEventListener("click", () => {
+        sidebar.classList.add("open");
+        sidebarOverlay.classList.add("active");
+      });
+    }
+
+    if (btnCloseSidebar) {
+      btnCloseSidebar.addEventListener("click", closeSidebar);
+    }
+    
+    if (sidebarOverlay) {
+      sidebarOverlay.addEventListener("click", closeSidebar);
+    }
+
+    if (btnClearHistory) {
+      btnClearHistory.addEventListener("click", () => {
+        if (confirm("確定要清除所有考試紀錄嗎？(Are you sure you want to clear all history?)")) {
+          examHistory = [];
+          localStorage.removeItem("quizHistory");
+          renderHistory();
+        }
+      });
+    }
+
+    function shuffleArray(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const t = a[i];
+        a[i] = a[j];
+        a[j] = t;
+      }
+      return a;
+    }
+
+    function renderHistory() {
+      historyContainer.innerHTML = "";
+      // Render from newest to oldest
+      [...examHistory].reverse().forEach((attempt, index) => {
+        const historyItem = document.createElement("div");
+        historyItem.className = "history-item";
+        
+        const titleDiv = document.createElement("div");
+        titleDiv.className = "history-card-head";
+        
+        const historyTitle = document.createElement("h4");
+        historyTitle.textContent = attempt.fileName;
+        historyTitle.style.marginBottom = "4px";
+        titleDiv.appendChild(historyTitle);
+        
+        const historyScore = document.createElement("div");
+        historyScore.className = "history-score-line";
+        
+        const scoreNum = parseFloat(attempt.score);
+        const scoreColor = scoreNum >= 80 ? "#3fb950" : "#f85149";
+        
+        historyScore.innerHTML = `<span style="color: #58a6ff; font-weight: bold;">Score:</span> <strong style="color: ${scoreColor};">${attempt.score}</strong>`;
+        
+        titleDiv.appendChild(historyScore);
+        
+        historyItem.appendChild(titleDiv);
+        
+        const detailsWrap = document.createElement("div");
+        detailsWrap.className = "history-details";
+
+        const list = document.createElement("ul");
+        list.className = "history-list";
+        
+        if (attempt.mistakes.length === 0) {
+          const li = document.createElement("li");
+          li.style.color = "#3fb950";
+          li.textContent = "Perfect! No mistakes.";
+          list.appendChild(li);
+          detailsWrap.appendChild(list);
+        } else {
+          attempt.mistakes.forEach(m => {
+            const li = document.createElement("li");
+            li.innerHTML = `<span style="color:#8b949e">[${m.type} Q${m.qNum}]</span><br/>Expected: <strong style="color:#58a6ff">${m.expected}</strong><br/>You answered: <em style="color:#f85149; text-decoration: line-through;">${m.userAns}</em>`;
+            list.appendChild(li);
+          });
+          detailsWrap.appendChild(list);
+
+          const retestBtn = document.createElement("button");
+          retestBtn.className = "retest-btn";
+          retestBtn.textContent = "Retest Mistakes";
+          retestBtn.onclick = (e) => {
+            e.stopPropagation();
+            closeSidebar();
+            spellData = [];
+            mixedData = [];
+            attempt.mistakes.forEach(m => {
+              if (m.type === "Spelling") spellData.push(m.originalData);
+              if (m.type === "MCQ") {
+                // Keep the MCQ choices shuffled differently if desired, or just copy it.
+                // We'll shuffle the choices and the question array.
+                let qCopy = JSON.parse(JSON.stringify(m.originalData));
+                qCopy.choices = shuffleArray(qCopy.choices);
+                mixedData.push(qCopy);
+              }
+            });
+            spellData = shuffleArray(spellData);
+            mixedData = shuffleArray(mixedData);
+            currentFileName = attempt.fileName + " (Retest)";
+            pageTitle.textContent = currentFileName;
+            renderQuiz();
+            persistQuizDraftNow();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          };
+          detailsWrap.appendChild(retestBtn);
+        }
+        
+        historyItem.onclick = () => {
+          const isActive = detailsWrap.classList.contains("active");
+          // close all others
+          document.querySelectorAll(".history-details").forEach(d => d.classList.remove("active"));
+          if (!isActive) {
+            detailsWrap.classList.add("active");
+          }
+        };
+
+        historyItem.appendChild(detailsWrap);
+        historyContainer.appendChild(historyItem);
+      });
+    }
+    
+    renderHistory();
+
+    // Utility functions for string normalization
+    function cleanKeyword(s) {
+      return String(s || "").replace(/\*+/g, "").trim();
+    }
+    
+    function normalizeForSpell(s) {
+      return String(s || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\u2019']/g, "'")
+        .replace(/[^a-z0-9'\- ]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    // Text to Speech (same approach as gemini-image-words.html: OS / browser Web Speech API)
+    function pickEnglishVoice() {
+      const voices = speechSynthesis.getVoices();
+      let v =
+        voices.find(function(x) {
+          return x.lang && x.lang.toLowerCase().indexOf("en-us") === 0;
+        }) ||
+        voices.find(function(x) {
+          return x.lang && x.lang.toLowerCase().indexOf("en") === 0;
+        });
+      return v || null;
+    }
+
+    function speakEnglish(text) {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "en-US";
+      const v = pickEnglishVoice();
+      if (v) u.voice = v;
+      u.rate = 0.92;
+      speechSynthesis.speak(u);
+    }
+
+    function playSpellAudio(word) {
+      speakEnglish(cleanKeyword(word));
+    }
+
+    // Load JSON file
+    fileInput.addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const json = JSON.parse(evt.target.result);
+          spellData = json.spellQuestions || [];
+          mixedData = json.mixedQuestions || [];
+
+          // Backward compatibility for older exported JSON formats
+          if (!json.mixedQuestions && (json.mcqQuestions || json.synonymQuestions)) {
+            mixedData = (json.mcqQuestions || []).concat(json.synonymQuestions || []);
+          }
+          
+          // Change Page Title to File Name without .json
+          currentFileName = file.name.replace(/\.json$/i, '');
+          pageTitle.textContent = currentFileName;
+          
+          renderQuiz();
+          persistQuizDraftNow();
+        } catch(err) {
+          alert("Error parsing JSON. Please upload a valid JSON file.");
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // Render all questions to DOM
+    function renderQuiz() {
+      // NOTE: Upload panel remains visible per user request.
+      quizPanel.style.display = "block";
+      spellList.innerHTML = "";
+      mcqList.innerHTML = "";
+      scoreDisplay.textContent = "";
+      btnSubmit.disabled = false;
+      const canExport = spellData.length > 0 || mixedData.length > 0;
+      if (btnExportPack) btnExportPack.disabled = !canExport;
+
+      // 1. Render Spelling Questions
+      if (spellData.length === 0) {
+        spellList.innerHTML = "<p style='color:#8b949e;'>No spelling questions available.</p>";
+      } else {
+        spellData.forEach((word, idx) => {
+          const row = document.createElement("div");
+          row.className = "question-row spell-row";
+          
+          const label = document.createElement("strong");
+          label.style.color = "#58a6ff";
+          label.style.marginRight = "10px";
+          label.textContent = (idx + 1) + ".";
+          
+          const btnSpeak = document.createElement("button");
+          btnSpeak.innerHTML = "🔊 Play Audio";
+          btnSpeak.style.marginRight = "15px";
+          btnSpeak.type = "button";
+          btnSpeak.onclick = function() {
+            playSpellAudio(word);
+          };
+          
+          const input = document.createElement("input");
+          input.type = "text";
+          input.className = "spell-input";
+          input.id = "spellInput_" + idx;
+          input.placeholder = "Type the word here...";
+          input.autocomplete = "off";
+          input.spellcheck = false;
+          
+          const feedback = document.createElement("span");
+          feedback.id = "spellFeedback_" + idx;
+          feedback.className = "feedback";
+          
+          row.appendChild(label);
+          row.appendChild(btnSpeak);
+          row.appendChild(input);
+          row.appendChild(feedback);
+          spellList.appendChild(row);
+        });
+      }
+
+      // 2. Render MCQ Questions
+      if (mixedData.length === 0) {
+        mcqList.innerHTML = "<p style='color:#8b949e;'>No multiple choice questions available.</p>";
+      } else {
+        mixedData.forEach((q, idx) => {
+          const row = document.createElement("div");
+          row.className = "question-row";
+          
+          const stemWrap = document.createElement("div");
+          stemWrap.className = "mcq-stem";
+          stemWrap.style.marginBottom = "15px";
+          stemWrap.innerHTML = "<strong style='color:#58a6ff;margin-right:8px;'>" + (idx + 1) + ".</strong>" + (q.stemHtml || "");
+          row.appendChild(stemWrap);
+          
+          const choicesWrap = document.createElement("div");
+          choicesWrap.className = "mcq-choices";
+          
+          const choices = q.choices || [];
+          choices.forEach((c, j) => {
+            const lbl = document.createElement("label");
+            lbl.className = "choice-label";
+            
+            const radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = "mcq_" + idx;
+            radio.value = c;
+            radio.style.marginRight = "10px";
+            
+            radio.addEventListener("change", function() {
+              const allLabels = choicesWrap.querySelectorAll(".choice-label");
+              allLabels.forEach(l => l.classList.remove("selected"));
+              if (this.checked) {
+                lbl.classList.add("selected");
+              }
+            });
+            
+            lbl.appendChild(radio);
+            lbl.appendChild(document.createTextNode(String.fromCharCode(65 + j) + ") " + choiceLabel(c)));
+            choicesWrap.appendChild(lbl);
+          });
+          row.appendChild(choicesWrap);
+          
+          const feedback = document.createElement("div");
+          feedback.id = "mcqFeedback_" + idx;
+          feedback.className = "feedback";
+          feedback.style.marginTop = "15px";
+          row.appendChild(feedback);
+          
+          mcqList.appendChild(row);
+        });
+      }
+    }
+
+    function htmlToPlain(html) {
+      if (!html) return "";
+      const d = document.createElement("div");
+      d.innerHTML = html;
+      var t = (d.innerText || d.textContent || "").replace(/\s+/g, " ").trim();
+      t = t.replace(/:(?=[A-Za-z])/g, ": ");
+      return t;
+    }
+
+    /** jsPDF built-in fonts are WinAnsi-only; avoid CJK and smart punctuation in PDF strings. */
+    function pdfSafeAscii(str) {
+      return String(str || "")
+        .replace(/[\u2013\u2014\u2212]/g, "-")
+        .replace(/[\u2018\u2019]/g, "'")
+        .replace(/[\u201C\u201D]/g, '"')
+        .replace(/\u2026/g, "...")
+        .replace(/[^\r\n\x20-\x7E]/g, "?");
+    }
+
+    function choiceLabel(c) {
+      if (typeof c === "string") return c;
+      if (c && typeof c === "object") {
+        if (c.value != null) return String(c.value);
+        if (c.label != null) return String(c.label);
+      }
+      return String(c);
+    }
+
+    function mcqAnswerLetter(answer, choices) {
+      var ans = String(answer || "").trim();
+      var arr = choices || [];
+      for (var j = 0; j < arr.length; j++) {
+        if (String(choiceLabel(arr[j])).trim() === ans) {
+          return String.fromCharCode(65 + j);
+        }
+      }
+      return "?";
+    }
+
+    function extractRunsFromElement(el) {
+      var runs = [];
+      function walk(n, bold, underline) {
+        if (n.nodeType === 3) {
+          if (n.textContent) runs.push({ text: n.textContent, bold: !!bold, underline: !!underline });
+          return;
+        }
+        if (n.nodeType !== 1) return;
+        var tag = n.tagName.toLowerCase();
+        var b = bold || tag === "strong" || tag === "b";
+        var u = underline;
+        if (tag === "span") {
+          var st = n.getAttribute("style") || "";
+          if (/font-weight\s*:\s*bold/i.test(st) || /font-weight\s*:\s*[6-9]\d{2}/i.test(st)) b = true;
+          if (/text-decoration\s*:\s*underline/i.test(st)) u = true;
+          if (n.classList && n.classList.contains("stem-blank")) b = true;
+        }
+        if (tag === "u") u = true;
+        for (var i = 0; i < n.childNodes.length; i++) walk(n.childNodes[i], b, u);
+      }
+      walk(el, false, false);
+      var merged = [];
+      runs.forEach(function(r) {
+        var t = r.text.replace(/\s+/g, " ");
+        if (!t) return;
+        var last = merged[merged.length - 1];
+        if (merged.length && last.bold === r.bold && last.underline === r.underline) {
+          last.text += t;
+        } else merged.push({ text: t, bold: r.bold, underline: r.underline });
+      });
+      return merged;
+    }
+
+    function stemHtmlToParagraphRunsList(html) {
+      var wrap = document.createElement("div");
+      wrap.innerHTML = html || "";
+      function topLevelBlocks(root) {
+        var out = [];
+        Array.from(root.childNodes).forEach(function(node) {
+          if (node.nodeType !== 1) return;
+          var t = node.tagName.toLowerCase();
+          if (t === "p") {
+            out.push(extractRunsFromElement(node));
+          } else if (t === "div") {
+            var inner = topLevelBlocks(node);
+            if (inner.length) out = out.concat(inner);
+            else out.push(extractRunsFromElement(node));
+          }
+        });
+        return out;
+      }
+      var blocks = topLevelBlocks(wrap);
+      if (blocks.length) return blocks;
+      return [extractRunsFromElement(wrap)];
+    }
+
+    function runsToTokens(runs) {
+      var tokens = [];
+      runs.forEach(function(run) {
+        var parts = run.text.split(/(\s+)/);
+        parts.forEach(function(p) {
+          if (p === "") return;
+          tokens.push({
+            str: p,
+            bold: run.bold,
+            underline: !!run.underline,
+            isSpace: /^\s+$/.test(p)
+          });
+        });
+      });
+      return tokens;
+    }
+
+    function drawParagraphRunsPdf(doc, runs, x0, y0, maxW, fontSize, lineHeight, newPageIf) {
+      var tokens = runsToTokens(runs);
+      var lines = [];
+      var curLine = [];
+      doc.setFontSize(fontSize);
+      var curW = 0;
+      function tokW(tok) {
+        doc.setFont("helvetica", tok.bold ? "bold" : "normal");
+        return doc.getTextWidth(tok.str);
+      }
+      tokens.forEach(function(tok) {
+        var w = tokW(tok);
+        if (curW + w > maxW + 0.01 && curLine.length) {
+          lines.push(curLine);
+          curLine = [];
+          curW = 0;
+          if (tok.isSpace) return;
+        }
+        curLine.push(tok);
+        curW += w;
+      });
+      if (curLine.length) lines.push(curLine);
+
+      var y = y0;
+      lines.forEach(function(lineToks) {
+        newPageIf(15);
+        var cx = x0;
+        lineToks.forEach(function(tok) {
+          doc.setFont("helvetica", tok.bold ? "bold" : "normal");
+          doc.setFontSize(fontSize);
+          doc.text(tok.str, cx, y);
+          var tw = doc.getTextWidth(tok.str);
+          if (tok.underline && !tok.isSpace && tw > 0) {
+            doc.setDrawColor(40);
+            doc.setLineWidth(0.12);
+            doc.line(cx, y + 0.9, cx + tw, y + 0.9);
+          }
+          cx += tw;
+        });
+        y += lineHeight;
+      });
+      return y;
+    }
+
+    function safeZipBaseName(name) {
+      const s = String(name || "quiz").replace(/\.json$/i, "");
+      return s.replace(/[<>:"/\\|?*\u0000-\u001f]+/g, "_").replace(/^\.+/, "").trim() || "quiz";
+    }
+
+    function buildQuizPdfBlob() {
+      var jspdf = window.jspdf;
+      if (!jspdf || typeof jspdf.jsPDF !== "function") {
+        throw new Error("jsPDF 未載入");
+      }
+      var jsPDF = jspdf.jsPDF;
+      var doc = new jsPDF({ unit: "mm", format: "a4" });
+      var pageW = doc.internal.pageSize.getWidth();
+      var pageH = doc.internal.pageSize.getHeight();
+      var margin = 18;
+      var maxW = pageW - margin * 2;
+      var y = 20;
+
+      function newPageIf(minBottom) {
+        var th = minBottom != null ? minBottom : 18;
+        if (y > pageH - th) {
+          doc.addPage();
+          y = 20;
+        }
+      }
+
+      function addParagraph(text, fontSize, lineHeight) {
+        var fs = fontSize || 10;
+        var lh = lineHeight || (fs >= 12 ? 6 : 5.2);
+        doc.setFontSize(fs);
+        var lines = doc.splitTextToSize(String(text), maxW);
+        for (var i = 0; i < lines.length; i++) {
+          newPageIf(15);
+          doc.text(lines[i], margin, y);
+          y += lh;
+        }
+      }
+
+      doc.setFontSize(18);
+      doc.text("English Quiz", margin, y);
+      y += 10;
+      doc.setFontSize(11);
+      doc.text("Quiz: " + pdfSafeAscii(currentFileName), margin, y);
+      y += 7;
+      doc.setFontSize(9);
+      var genIso = new Date().toISOString();
+      doc.text("Generated: " + genIso.slice(0, 10) + " " + genIso.slice(11, 19) + " UTC", margin, y);
+      y += 10;
+
+      if (spellData.length) {
+        addParagraph("Part 1 -- Listen and Spell", 14, 7);
+        addParagraph("Use the English Quiz Taker web page: click [Play Audio] for spelling item 1, 2, 3, ... (same numbers as below). Then write each word on the line.", 10);
+        y += 2;
+        spellData.forEach(function(word, idx) {
+          var n = idx + 1;
+          addParagraph(n + ".  _______________________________________________________", 11, 6);
+          newPageIf(20);
+          doc.setDrawColor(120);
+          doc.line(margin, y + 1, pageW - margin, y + 1);
+          y += 8;
+        });
+        y += 4;
+      }
+
+      if (mixedData.length) {
+        newPageIf(30);
+        addParagraph("Part 2 -- Multiple Choice", 14, 7);
+        y += 2;
+        mixedData.forEach(function(q, idx) {
+          var paraRuns = stemHtmlToParagraphRunsList(q.stemHtml || "");
+          paraRuns.forEach(function(runs, pi) {
+            var blockRuns = pi === 0
+              ? [{ text: (idx + 1) + ". ", bold: false }].concat(runs)
+              : runs;
+            y = drawParagraphRunsPdf(doc, blockRuns, margin, y, maxW, 10, 5.5, newPageIf);
+          });
+          var choices = q.choices || [];
+          choices.forEach(function(c, j) {
+            var lab = String.fromCharCode(65 + j) + ") " + choiceLabel(c);
+            addParagraph(lab, 10);
+          });
+          y += 3;
+        });
+      }
+
+      doc.addPage();
+      y = 20;
+      addParagraph("Answer Key", 16, 8);
+      y += 2;
+      if (spellData.length) {
+        addParagraph("Part 1 (Spelling)", 12, 6);
+        spellData.forEach(function(word, idx) {
+          addParagraph(idx + 1 + ". " + cleanKeyword(word), 10);
+        });
+        y += 2;
+      }
+      if (mixedData.length) {
+        addParagraph("Part 2 (Multiple Choice: number + letter only, 5 per line)", 12, 6);
+        var mcqLineParts = [];
+        for (var mi = 0; mi < mixedData.length; mi++) {
+          var qm = mixedData[mi];
+          var Lm = mcqAnswerLetter(qm.answer, qm.choices || []);
+          mcqLineParts.push(mi + 1 + ". " + Lm);
+          if (mcqLineParts.length === 5) {
+            addParagraph(mcqLineParts.join("     "), 10);
+            mcqLineParts = [];
+          }
+        }
+        if (mcqLineParts.length) {
+          addParagraph(mcqLineParts.join("     "), 10);
+        }
+      }
+
+      return doc.output("blob");
+    }
+
+    async function exportQuizPack() {
+      if (!spellData.length && !mixedData.length) {
+        alert("請先載入考題 JSON。");
+        return;
+      }
+      if (!window.JSZip) {
+        alert("JSZip 未載入，請檢查網路後重新整理頁面。");
+        return;
+      }
+      if (!window.jspdf || typeof window.jspdf.jsPDF !== "function") {
+        alert("jsPDF 未載入，請檢查網路後重新整理頁面。");
+        return;
+      }
+
+      var prevLabel = btnExportPack.textContent;
+      btnExportPack.disabled = true;
+      btnExportPack.textContent = "匯出中…";
+
+      try {
+        var zip = new JSZip();
+        zip.file("quiz.pdf", buildQuizPdfBlob());
+
+        var readmeLines = [
+          "English Quiz Taker - export pack",
+          "Quiz: " + currentFileName,
+          "Exported (ISO): " + new Date().toISOString(),
+          "",
+          "This ZIP contains quiz.pdf only (printable quiz + answer key on last pages).",
+          "For Part 1 spelling, open the same English Quiz Taker page and use [Play Audio]",
+          "for each item; numbers match the PDF.",
+          "[Play Audio] uses the browser Web Speech API (OS voices)."
+        ];
+        zip.file("README.txt", readmeLines.join("\n"));
+
+        btnExportPack.textContent = "打包 ZIP…";
+        var zipBlob = await zip.generateAsync({ type: "blob" });
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(zipBlob);
+        a.download = safeZipBaseName(currentFileName) + "_quiz_pack.zip";
+        a.rel = "noopener";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+      } catch (err) {
+        console.error(err);
+        alert("匯出失敗：" + (err && err.message ? err.message : String(err)));
+      } finally {
+        var canExport = spellData.length > 0 || mixedData.length > 0;
+        btnExportPack.textContent = prevLabel;
+        btnExportPack.disabled = !canExport;
+      }
+    }
+
+    if (btnExportPack) {
+      btnExportPack.addEventListener("click", function() { exportQuizPack(); });
+    }
+
+    // Submit answers and compute score
+    btnSubmit.addEventListener("click", () => {
+      // 1. Validation - check if every question is answered
+      let allAnswered = true;
+      
+      for (let i = 0; i < spellData.length; i++) {
+        const val = document.getElementById("spellInput_" + i).value.trim();
+        if (!val) { allAnswered = false; break; }
+      }
+      
+      if (allAnswered) {
+        for (let i = 0; i < mixedData.length; i++) {
+          const radios = document.getElementsByName("mcq_" + i);
+          let checked = false;
+          for (let r of radios) { 
+            if (r.checked) { checked = true; break; } 
+          }
+          if (!checked) { allAnswered = false; break; }
+        }
+      }
+
+      if (!allAnswered) {
+        alert("Please answer all questions before submitting.");
+        return; // Prevent submission
+      }
+
+      // 2. Grading
+      let totalScore = 0;
+      let totalQuestions = spellData.length + mixedData.length;
+      let mistakes = []; // Record mistakes for history
+
+      // Grade Spell
+      spellData.forEach((word, idx) => {
+        const inputEl = document.getElementById("spellInput_" + idx);
+        const feedbackEl = document.getElementById("spellFeedback_" + idx);
+        
+        const expected = normalizeForSpell(word);
+        const got = normalizeForSpell(inputEl.value);
+        
+        inputEl.disabled = true; // Lock the input after grading
+
+        if (expected === got) {
+          totalScore++;
+          feedbackEl.textContent = "Correct!";
+          feedbackEl.className = "feedback ok";
+        } else {
+          feedbackEl.textContent = "Incorrect. Answer: " + cleanKeyword(word);
+          feedbackEl.className = "feedback bad";
+          mistakes.push({
+            type: "Spelling",
+            qNum: idx + 1,
+            expected: cleanKeyword(word),
+            userAns: inputEl.value,
+            originalData: word
+          });
+        }
+      });
+
+      // Grade MCQ
+      mixedData.forEach((q, idx) => {
+        const radios = document.getElementsByName("mcq_" + idx);
+        let userVal = "";
+        
+        for (let r of radios) {
+          r.disabled = true; // Lock the radio after grading
+          if (r.checked) {
+            userVal = r.value;
+          }
+        }
+
+        const feedbackEl = document.getElementById("mcqFeedback_" + idx);
+        
+        if (userVal === q.answer) {
+          totalScore++;
+          feedbackEl.textContent = "Correct!";
+          feedbackEl.className = "feedback ok";
+        } else {
+          var Lm = mcqAnswerLetter(q.answer, q.choices || []);
+          feedbackEl.textContent =
+            "Incorrect. Answer: " + Lm + (Lm !== "?" ? " (" + q.answer + ")" : q.answer);
+          feedbackEl.className = "feedback bad";
+          mistakes.push({
+            type: "MCQ",
+            qNum: idx + 1,
+            expected: q.answer,
+            userAns: userVal,
+            originalData: q
+          });
+        }
+      });
+
+      // 3. Complete and show total score
+      btnSubmit.disabled = true;
+      
+      // Calculate 100-point scale score (1 decimal place)
+      let percentage = 0;
+      if (totalQuestions > 0) {
+        percentage = (totalScore / totalQuestions) * 100;
+      }
+      let formattedPercentage = percentage.toFixed(1);
+      
+      let scoreText = `Quiz Finished! Questions Correct: ${totalScore} / ${totalQuestions} — Score: ${formattedPercentage}`;
+      
+      if (percentage < 80) {
+        scoreText += " (Needs more effort! 請再努力喔！)";
+      }
+      
+      scoreDisplay.textContent = scoreText;
+      
+      // 4. Update Sidebar History
+      examHistory.push({
+        fileName: currentFileName,
+        score: formattedPercentage,
+        mistakes: mistakes
+      });
+      localStorage.setItem("quizHistory", JSON.stringify(examHistory));
+      
+      renderHistory();
+      
+      // Scroll to the top to see score
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      persistQuizDraftNow();
+    });
+
+    tryRestoreQuizDraftFromStorage();
+
+  </script>
+</body>
+</html>
