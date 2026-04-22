@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -112,6 +112,23 @@
     }
     .file-input-wrap input[type="file"] {
       max-width: 100%;
+    }
+    .loaded-quiz-file-line {
+      margin-top: 12px;
+      font-size: 0.95rem;
+      color: #8b949e;
+      line-height: 1.45;
+    }
+    .loaded-quiz-file-line strong {
+      color: #58a6ff;
+      font-weight: 600;
+      word-break: break-all;
+    }
+    .loaded-quiz-file-note {
+      display: block;
+      font-size: 0.82rem;
+      margin-top: 6px;
+      color: #6e7681;
     }
     button { 
       padding: 8px 16px; 
@@ -457,6 +474,298 @@
       justify-content: center;
       align-items: center;
     }
+    .quiz-panel-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      max-width: 1200px;
+    }
+    .btn-back-to-modes {
+      padding: 8px 14px;
+      font-size: 0.95rem;
+      background: #21262d;
+      color: #c9d1d9;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-back-to-modes:hover {
+      background: #30363d;
+      border-color: #484f58;
+    }
+    .quiz-tab-bar {
+      display: flex;
+      gap: 0;
+      margin-bottom: 0;
+      border-radius: 8px 8px 0 0;
+      overflow: hidden;
+      border: 1px solid #30363d;
+      border-bottom: none;
+      max-width: 1200px;
+    }
+    .quiz-tab {
+      flex: 1;
+      padding: 12px 16px;
+      font-size: 1rem;
+      background: #161b22;
+      color: #8b949e;
+      border: none;
+      border-right: 1px solid #30363d;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .quiz-tab:last-child { border-right: none; }
+    .quiz-tab:hover:not(:disabled) {
+      background: #21262d;
+      color: #c9d1d9;
+    }
+    .quiz-tab.active {
+      background: #1f6feb;
+      color: #fff;
+    }
+    .quiz-tab:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .quiz-tab-panel {
+      display: none;
+    }
+    .quiz-tab-panel.active {
+      display: block;
+    }
+    .spell-block {
+      position: relative;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #30363d;
+    }
+    .spell-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .spell-edge-hint {
+      font-size: 0.9rem;
+      color: #f2cc60;
+      margin: 6px 0 10px;
+    }
+    .spell-row-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 12px;
+    }
+    .spell-meaning-row {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    .spell-meaning-row label {
+      color: #8b949e;
+      font-size: 0.9rem;
+      min-width: 72px;
+    }
+    .spell-meaning-row input[type="text"] {
+      flex: 1 1 200px;
+      max-width: 100%;
+    }
+    .spell-answer-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .spell-progress-line {
+      text-align: center;
+      color: #8b949e;
+      font-size: 0.95rem;
+      margin: 6px 0 14px;
+      letter-spacing: 0.02em;
+    }
+    .spell-top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .spell-inline-word {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 8px 10px;
+      margin: 12px 0 16px;
+    }
+    .spell-char-slot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      min-height: 2.4rem;
+    }
+    .spell-char-fixed {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: #58a6ff;
+      line-height: 1.15;
+      padding: 0 2px 6px;
+      border-bottom: 2px solid #484f58;
+      min-width: 0.75em;
+      text-align: center;
+    }
+    .spell-char-fixed.spell-char-tail {
+      font-weight: 600;
+    }
+    input.spell-cell-in {
+      width: 1.45em;
+      max-width: 12vw;
+      padding: 6px 2px 8px;
+      text-align: center;
+      font-size: 1.55rem;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #58a6ff;
+      color: #e8edf2;
+      border-radius: 0;
+      box-sizing: content-box;
+    }
+    input.spell-cell-in:focus {
+      outline: none;
+      border-bottom-color: #f2cc60;
+    }
+    input.spell-cell-in:disabled {
+      opacity: 0.65;
+      border-bottom-color: #30363d;
+      color: #8b949e;
+    }
+    .spell-ref-zh {
+      text-align: center;
+      color: #9fb0bf;
+      font-size: 0.98rem;
+      margin: 4px 0 14px;
+      line-height: 1.5;
+      padding: 0 6px;
+    }
+    .spell-feedback-line {
+      margin-top: 10px;
+      display: block;
+    }
+    .listen-footer {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #30363d;
+    }
+    .btn-proceed-mcq {
+      font-size: 1.05em;
+      padding: 12px 24px;
+      background: #1f6feb;
+      color: #fff;
+    }
+    .btn-proceed-mcq:hover:not(:disabled) {
+      background: #388bfd;
+    }
+    .btn-proceed-mcq:disabled {
+      background: #21262d;
+      color: #484f58;
+      border: 1px solid #30363d;
+    }
+    .result-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .result-modal.open {
+      display: flex;
+    }
+    .result-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+    }
+    .result-modal-card {
+      position: relative;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 24px 28px;
+      max-width: 520px;
+      width: 100%;
+      max-height: min(85vh, 640px);
+      overflow-y: auto;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+    }
+    .result-modal-card h2 {
+      margin-top: 0;
+    }
+    .result-score-line {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #f2cc60;
+      margin: 12px 0 16px;
+    }
+    .result-mistake-list {
+      margin: 0;
+      padding-left: 1.2em;
+      color: #c9d1d9;
+    }
+    .result-mistake-list li {
+      margin-bottom: 10px;
+    }
+    .btn-close-modal {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+    }
+    .exam-mode-panel .exam-mode-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 18px;
+      max-width: 420px;
+    }
+    .exam-mode-btn {
+      width: 100%;
+      padding: 18px 22px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      border-radius: 10px;
+      border: 1px solid #30363d;
+      background: linear-gradient(180deg, #21262d 0%, #161b22 100%);
+      color: #e6edf3;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    }
+    .exam-mode-btn:hover:not(:disabled) {
+      border-color: #58a6ff;
+      background: linear-gradient(180deg, #30363d 0%, #21262d 100%);
+    }
+    .exam-mode-btn:active:not(:disabled) {
+      transform: scale(0.99);
+    }
+    .exam-mode-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .exam-mode-btn.primary {
+      background: linear-gradient(180deg, #1f6feb 0%, #1158c7 100%);
+      border-color: #388bfd;
+    }
+    .exam-mode-btn.primary:hover:not(:disabled) {
+      background: linear-gradient(180deg, #388bfd 0%, #1f6feb 100%);
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -480,31 +789,74 @@
         <div class="file-input-wrap">
           <input type="file" id="jsonFile" accept=".json" />
         </div>
+        <p id="loadedQuizFileLine" class="loaded-quiz-file-line" style="display: none;">
+          Quiz file in use: <strong id="loadedQuizFileName"></strong>
+          <span class="loaded-quiz-file-note">Browsers clear the file picker after refresh; this name is the quiz data stored on this page (same as your last successful load).</span>
+        </p>
+      </div>
+
+      <div id="examModePanel" class="card exam-mode-panel" style="display:none;">
+        <h2>Choose exam mode</h2>
+        <p style="color:#8b949e;">Pick what you want to practice this time. The page title and history will show the mode you select.</p>
+        <div class="exam-mode-buttons">
+          <button type="button" class="exam-mode-btn primary" id="btnModeListen" disabled>Listening only</button>
+          <button type="button" class="exam-mode-btn primary" id="btnModeMcq" disabled>Multiple choice only</button>
+          <button type="button" class="exam-mode-btn primary" id="btnModeAll" disabled>Full quiz</button>
+        </div>
       </div>
 
       <div id="quizPanel" style="display:none;">
-        <div class="card">
-          <h2>Type 1: Listen and Spell</h2>
-          <p style="color:#8b949e;"><strong>Instructions:</strong> Click the "Play Audio" button to listen to the pronunciation of the word. Then, spell the English word correctly in the input box below. Pay attention to the spelling!</p>
-          <hr style="border:0; border-top:1px solid #30363d; margin: 20px 0;">
-          <div id="spellList"></div>
+        <div class="quiz-panel-toolbar">
+          <button type="button" id="btnBackToModes" class="btn-back-to-modes">← 返回標題（選擇考試模式）</button>
+        </div>
+        <div class="quiz-tab-bar" id="quizTabBar">
+          <button type="button" class="quiz-tab active" id="tabBtnListen" data-tab="listen">Listening &amp; spelling</button>
+          <button type="button" class="quiz-tab" id="tabBtnMcq" data-tab="mcq" disabled>Multiple choice</button>
         </div>
 
-        <div class="card">
-          <h2>Type 2: Comprehensive Multiple Choice</h2>
-          <p style="color:#8b949e;"><strong>Instructions:</strong> Read each sentence carefully. You will need to either fill in the blank with the most appropriate word or phrase to complete the sentence logically, OR choose the best synonym for the highlighted word. Select one answer for each question.</p>
-          <hr style="border:0; border-top:1px solid #30363d; margin: 20px 0;">
-          <div id="mcqList"></div>
-        </div>
-
-        <div class="card" style="text-align: center; border:none; background:transparent;">
-          <div class="submit-row">
-            <button id="btnSubmit" type="button" style="font-size: 1.2em; padding: 12px 30px;">Submit All Answers</button>
-            <button id="btnExportPack" type="button" class="btn-export-pack">匯出 PDF 考題（ZIP）</button>
+        <div id="tabPanelListen" class="quiz-tab-panel active">
+          <div class="card" style="border-radius: 0 0 8px 8px; margin-top: 0;">
+            <h2>Listening &amp; spelling</h2>
+            <p id="listenInstr" style="color:#8b949e;">Use <strong>Play Audio</strong>, type the missing letters in the underlined boxes (first and last letters are given), and enter the <strong>Chinese meaning</strong>.</p>
+            <hr style="border:0; border-top:1px solid #30363d; margin: 20px 0;">
+            <div id="spellList"></div>
+            <div class="listen-footer" id="listenFooter">
+              <button type="button" id="btnProceedMcq" class="btn-proceed-mcq" disabled>Finish listening — continue to multiple choice</button>
+              <p class="listen-hint-text" id="listenProceedHint" style="color:#8b949e;font-size:0.9em;margin-top:10px;"></p>
+            </div>
           </div>
-          <p style="color:#8b949e;font-size:0.85em;margin:12px 0 0;max-width:520px;margin-left:auto;margin-right:auto;">ZIP 僅含可列印考卷 <code>quiz.pdf</code>（末頁為解答）。拼字聽力請在同一個測驗網頁上按 <strong>Play Audio</strong>，題號與 PDF Part 1 對齊。</p>
+        </div>
+
+        <div id="tabPanelMcq" class="quiz-tab-panel">
+          <div class="card" style="border-radius: 0 0 8px 8px; margin-top: 0;">
+            <h2>Multiple choice</h2>
+            <p style="color:#8b949e;"><strong>Instructions:</strong> Read each item and choose the best option to fill the blank or match the underlined word. One answer per question.</p>
+            <hr style="border:0; border-top:1px solid #30363d; margin: 20px 0;">
+            <div id="mcqList"></div>
+          </div>
+        </div>
+
+        <div class="card" id="quizFooterCard" style="text-align: center; border:none; background:transparent;">
+          <div class="submit-row">
+            <button id="btnSubmit" type="button" style="font-size: 1.2em; padding: 12px 30px;">Submit</button>
+            <button id="btnExportPack" type="button" class="btn-export-pack">Export quiz PDF (ZIP)</button>
+          </div>
+          <p id="quizFooterZipHint" style="color:#8b949e;font-size:0.85em;margin:12px 0 0;max-width:520px;margin-left:auto;margin-right:auto;">The ZIP contains a printable <code>quiz.pdf</code> (answer key on the last pages). For Part 1 spelling, use <strong>Play Audio</strong> on the <strong>Listening &amp; spelling</strong> tab; numbers match the PDF.</p>
           <div id="scoreDisplay" class="score-banner"></div>
         </div>
+      </div>
+    </div>
+
+    <div id="resultModal" class="result-modal" aria-hidden="true">
+      <div class="result-modal-backdrop" id="resultModalBackdrop"></div>
+      <div class="result-modal-card" role="dialog" aria-labelledby="resultModalTitle">
+        <h2 id="resultModalTitle">Results</h2>
+        <p id="resultScoreLine" class="result-score-line"></p>
+        <div id="resultMistakesWrap">
+          <p id="resultPerfectLine" style="display:none;color:#3fb950;margin:0 0 12px;">Perfect — no mistakes!</p>
+          <ul id="resultMistakeList" class="result-mistake-list"></ul>
+        </div>
+        <button type="button" id="btnCloseResultModal" class="btn-close-modal">Close</button>
       </div>
     </div>
     
@@ -524,6 +876,17 @@
   <script>
     let spellData = [];
     let mixedData = [];
+    /** Full bank: listening items (modes + PDF export) */
+    let fullSpellData = [];
+    /** Full bank: multiple-choice items */
+    let fullMixedData = [];
+    /** JSON file base name (no mode suffix) */
+    let baseFileName = "Quiz";
+    /** null | 'listen_only' | 'mcq_only' | 'all' */
+    let examMode = null;
+    /** Listening answers locked (after MCQ unlock or after submit) */
+    let listenPhaseLocked = false;
+    /** Shown in title & history (includes mode suffix) */
     let currentFileName = "Quiz";
     /** @type {Record<string, string|null>} cache key = cleanKeyword lowercased */
     let examHistory = JSON.parse(localStorage.getItem("quizHistory") || "[]");
@@ -531,17 +894,565 @@
     const QUIZ_DRAFT_KEY = "quizTakerDraft";
     let saveQuizDraftTimer = null;
 
+    function cleanKeyword(s) {
+      return String(s || "").replace(/\*+/g, "").trim();
+    }
+
+    function normalizeForSpell(s) {
+      return String(s || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\u2019']/g, "'")
+        .replace(/[^a-z0-9'\- ]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function normalizeSpellQuestion(x) {
+      if (x && typeof x === "object" && x.word != null) {
+        return { word: cleanKeyword(x.word), zh: String(x.zh || "").trim() };
+      }
+      return { word: cleanKeyword(x), zh: "" };
+    }
+
+    function spellItemWord(item) {
+      if (item && typeof item === "object" && item.word != null) {
+        return cleanKeyword(item.word);
+      }
+      return cleanKeyword(item);
+    }
+
+    function spellItemZhExpected(item) {
+      if (item && typeof item === "object") return String(item.zh || "").trim();
+      return "";
+    }
+
+    function normalizeZhMean(s) {
+      return String(s || "")
+        .trim()
+        .replace(/\s+/g, "")
+        .replace(/[，、。．,．·•]/g, "");
+    }
+
+    function zhMeaningMatches(expected, userInput) {
+      const u = normalizeZhMean(userInput);
+      if (!u) return false;
+      const exp = String(expected || "").trim();
+      if (!exp) return true;
+      const parts = exp.split(/[/／|｜]/).map(normalizeZhMean).filter(Boolean);
+      if (!parts.length) return true;
+      return parts.indexOf(u) >= 0;
+    }
+
+    function spellEdgeHints(word) {
+      const w = spellItemWord(word);
+      if (!w) return { first: "?", last: "?" };
+      return {
+        first: w.charAt(0).toLowerCase(),
+        last: w.charAt(w.length - 1).toLowerCase(),
+      };
+    }
+
+    function spellWordChars(wordItem) {
+      return Array.from(spellItemWord(wordItem));
+    }
+
+    function syncSpellHiddenInput(idx) {
+      const wArr = spellWordChars(spellData[idx]);
+      const h = document.getElementById("spellInput_" + idx);
+      if (!h || !wArr.length) return;
+      if (wArr.length <= 2) {
+        h.value = wArr.join("");
+        return;
+      }
+      let s = "";
+      for (let i = 0; i < wArr.length; i++) {
+        if (i === 0 || i === wArr.length - 1) {
+          s += wArr[i];
+        } else {
+          const cell = document.getElementById("spellCell_" + idx + "_" + i);
+          s += cell && cell.value ? cell.value : "";
+        }
+      }
+      h.value = s;
+    }
+
+    function distributeAnswerToSpellCells(idx, answerRaw) {
+      const wArr = spellWordChars(spellData[idx]);
+      if (wArr.length <= 2) return;
+      const aStr = String(answerRaw || "");
+      const aArr = Array.from(aStr);
+      for (let i = 1; i < wArr.length - 1; i++) {
+        const cell = document.getElementById("spellCell_" + idx + "_" + i);
+        if (cell && aArr[i] != null) cell.value = aArr[i];
+      }
+      syncSpellHiddenInput(idx);
+    }
+
+    function wireSpellLineCells(idx, cells) {
+      cells.forEach(function (cell, j) {
+        cell.addEventListener("keydown", function (e) {
+          if (e.key === "Backspace" && !cell.value) {
+            if (j > 0) {
+              cells[j - 1].focus();
+              cells[j - 1].select();
+            }
+            e.preventDefault();
+            return;
+          }
+          if (e.key === "ArrowLeft" && j > 0) {
+            cells[j - 1].focus();
+            e.preventDefault();
+          }
+          if (e.key === "ArrowRight" && j < cells.length - 1) {
+            cells[j + 1].focus();
+            e.preventDefault();
+          }
+        });
+        cell.addEventListener("input", function () {
+          let v = cell.value;
+          if (v.length > 1) {
+            const extra = v.slice(1);
+            v = v.charAt(0);
+            cell.value = v;
+            for (
+              let k = 0;
+              k < extra.length && j + 1 + k < cells.length;
+              k++
+            ) {
+              cells[j + 1 + k].value = extra.charAt(k);
+            }
+            const lastIdx = Math.min(j + extra.length, cells.length - 1);
+            cells[lastIdx].focus();
+          }
+          syncSpellHiddenInput(idx);
+          scheduleQuizDraftSave();
+          refreshListenProceedGate();
+          if (cell.value && j < cells.length - 1) {
+            cells[j + 1].focus();
+          }
+        });
+        cell.addEventListener("paste", function (e) {
+          e.preventDefault();
+          const t =
+            (e.clipboardData || window.clipboardData).getData("text") || "";
+          const chars = Array.from(t.replace(/\s/g, ""));
+          let cj = j;
+          for (
+            let p = 0;
+            p < chars.length && cj < cells.length;
+            p++, cj++
+          ) {
+            cells[cj].value = chars[p];
+          }
+          syncSpellHiddenInput(idx);
+          scheduleQuizDraftSave();
+          refreshListenProceedGate();
+          if (cj <= cells.length - 1) cells[cj].focus();
+          else cells[cells.length - 1].focus();
+        });
+      });
+    }
+
+    function setSpellCellsDisabled(idx, dis) {
+      document
+        .querySelectorAll('[id^="spellCell_' + idx + '_"]')
+        .forEach(function (c) {
+          c.disabled = !!dis;
+        });
+    }
+
+    function switchQuizTab(which) {
+      const pL = document.getElementById("tabPanelListen");
+      const pM = document.getElementById("tabPanelMcq");
+      const bL = document.getElementById("tabBtnListen");
+      const bM = document.getElementById("tabBtnMcq");
+      if (!pL || !pM || !bL || !bM) return;
+      if (which === "listen") {
+        pL.classList.add("active");
+        pM.classList.remove("active");
+        bL.classList.add("active");
+        bM.classList.remove("active");
+      } else {
+        pM.classList.add("active");
+        pL.classList.remove("active");
+        bM.classList.add("active");
+        bL.classList.remove("active");
+      }
+    }
+
+    function needsListenProceedForSubmit() {
+      return (
+        examMode === "all" &&
+        spellData.length > 0 &&
+        mixedData.length > 0
+      );
+    }
+
+    function isListenOnlyLayout() {
+      return (
+        examMode === "listen_only" ||
+        (examMode === "all" &&
+          spellData.length > 0 &&
+          mixedData.length === 0)
+      );
+    }
+
+    function isMcqOnlyLayout() {
+      return examMode === "mcq_only";
+    }
+
+    function updateListenInstructionAndFooter() {
+      const listenInstr = document.getElementById("listenInstr");
+      if (listenInstr) {
+        if (needsListenProceedForSubmit()) {
+          listenInstr.innerHTML =
+            "Use <strong>Play Audio</strong>, type each missing letter in the <strong>underlined boxes</strong> (first and last letters are shown), and enter the <strong>Chinese meaning</strong>. When listening is complete, click <strong>Finish listening — continue to multiple choice</strong>. <strong>After that, you cannot change your listening answers.</strong>";
+        } else if (spellData.length > 0) {
+          listenInstr.innerHTML =
+            "Use <strong>Play Audio</strong>, type each missing letter in the <strong>underlined boxes</strong> (first and last letters are shown), and enter the <strong>Chinese meaning</strong>. When finished, scroll down and click <strong>Submit</strong>.";
+        }
+      }
+    }
+
+    function refreshProceedButtonVisibility() {
+      const btnProceed = document.getElementById("btnProceedMcq");
+      if (!btnProceed) return;
+      btnProceed.style.display = needsListenProceedForSubmit() ? "" : "none";
+    }
+
+    function syncListenTabUi() {
+      const submitEl = document.getElementById("btnSubmit");
+      const graded = submitEl ? submitEl.disabled : false;
+      const bar = document.getElementById("quizTabBar");
+      const tabListen = document.getElementById("tabPanelListen");
+      const tabMcq = document.getElementById("tabPanelMcq");
+      const btnListen = document.getElementById("tabBtnListen");
+      const btnMcq = document.getElementById("tabBtnMcq");
+      const footer = document.getElementById("listenFooter");
+      const btnProceed = document.getElementById("btnProceedMcq");
+
+      if (isMcqOnlyLayout()) {
+        if (bar) bar.style.display = "none";
+        if (footer) footer.style.display = "none";
+        if (tabListen) {
+          tabListen.style.display = "none";
+          tabListen.classList.remove("active");
+        }
+        if (tabMcq) {
+          tabMcq.style.display = "block";
+          tabMcq.classList.add("active");
+        }
+        if (btnListen) btnListen.style.display = "none";
+        if (btnMcq) btnMcq.style.display = "none";
+        listenPhaseLocked = true;
+        return;
+      }
+
+      if (isListenOnlyLayout()) {
+        if (bar) bar.style.display = "none";
+        if (footer) footer.style.display = "";
+        if (tabListen) {
+          tabListen.style.display = "block";
+          tabListen.classList.add("active");
+        }
+        if (tabMcq) {
+          tabMcq.style.display = "none";
+          tabMcq.classList.remove("active");
+        }
+        if (btnListen) btnListen.style.display = "none";
+        if (btnMcq) btnMcq.style.display = "none";
+        if (btnProceed) btnProceed.style.display = "none";
+        listenPhaseLocked = !!graded;
+        for (let i = 0; i < spellData.length; i++) {
+          setSpellCellsDisabled(i, !!graded);
+          const en = document.getElementById("spellInput_" + i);
+          const zh = document.getElementById("spellZhInput_" + i);
+          if (en) en.disabled = !!graded;
+          if (zh) zh.disabled = !!graded;
+        }
+        return;
+      }
+
+      const hasListen = spellData.length > 0;
+
+      if (!hasListen) {
+        if (bar) bar.style.display = "none";
+        if (footer) footer.style.display = "none";
+        if (tabListen) {
+          tabListen.style.display = "none";
+          tabListen.classList.remove("active");
+        }
+        if (tabMcq) {
+          tabMcq.style.display = "block";
+          tabMcq.classList.add("active");
+        }
+        if (btnMcq) {
+          btnMcq.disabled = false;
+          btnMcq.style.display = "";
+          btnMcq.classList.add("active");
+        }
+        if (btnListen) {
+          btnListen.style.display = "none";
+          btnListen.classList.remove("active");
+        }
+        listenPhaseLocked = true;
+        return;
+      }
+
+      if (bar) bar.style.display = "";
+      if (footer) footer.style.display = "";
+      if (tabListen) tabListen.style.display = "";
+      if (tabMcq) tabMcq.style.display = "";
+      if (btnListen) btnListen.style.display = "";
+      if (btnMcq) {
+        btnMcq.style.display = "";
+        btnMcq.disabled = !listenPhaseLocked;
+      }
+
+      refreshProceedButtonVisibility();
+
+      for (let i = 0; i < spellData.length; i++) {
+        setSpellCellsDisabled(i, listenPhaseLocked || !!graded);
+        const en = document.getElementById("spellInput_" + i);
+        const zh = document.getElementById("spellZhInput_" + i);
+        if (en) en.disabled = listenPhaseLocked || !!graded;
+        if (zh) zh.disabled = listenPhaseLocked || !!graded;
+      }
+      if (btnProceed && btnProceed.style.display !== "none") {
+        btnProceed.disabled =
+          listenPhaseLocked || !isListenFormComplete() || !!graded;
+      }
+    }
+
+    function isListenFormComplete() {
+      for (let i = 0; i < spellData.length; i++) {
+        syncSpellHiddenInput(i);
+        const wArr = spellWordChars(spellData[i]);
+        if (wArr.length > 2) {
+          for (let j = 1; j < wArr.length - 1; j++) {
+            const cell = document.getElementById("spellCell_" + i + "_" + j);
+            if (!cell || !String(cell.value || "").trim()) return false;
+          }
+        }
+        const en = document.getElementById("spellInput_" + i);
+        const zh = document.getElementById("spellZhInput_" + i);
+        if (!en || !String(en.value || "").trim()) return false;
+        if (!zh || !zh.value.trim()) return false;
+      }
+      return true;
+    }
+
+    function refreshListenProceedGate() {
+      const hasListen = spellData.length > 0;
+      const btnProceed = document.getElementById("btnProceedMcq");
+      const hint = document.getElementById("listenProceedHint");
+      if (!hasListen) return;
+      if (!needsListenProceedForSubmit()) {
+        if (hint) {
+          hint.textContent =
+            "When you finish the listening items, scroll down and click Submit.";
+        }
+        return;
+      }
+      const submitEl = document.getElementById("btnSubmit");
+      const graded = submitEl ? submitEl.disabled : false;
+      if (btnProceed && btnProceed.style.display !== "none") {
+        btnProceed.disabled =
+          listenPhaseLocked || !isListenFormComplete() || !!graded;
+      }
+      if (hint) {
+        if (listenPhaseLocked) {
+          hint.textContent =
+            "Multiple choice is unlocked. Your listening answers are locked.";
+        } else if (!isListenFormComplete()) {
+          hint.textContent =
+            "Complete spelling and Chinese meaning for every listening item to unlock the Multiple choice tab.";
+        } else {
+          hint.textContent =
+            "You can use the button above to open the multiple-choice section.";
+        }
+      }
+    }
+
+    function displayMistakeType(t) {
+      if (t === "選擇題") return "MCQ";
+      return t;
+    }
+
+    function openResultModal(scoreLineText, mistakes) {
+      const modal = document.getElementById("resultModal");
+      const line = document.getElementById("resultScoreLine");
+      const perfect = document.getElementById("resultPerfectLine");
+      const ul = document.getElementById("resultMistakeList");
+      if (!modal || !line || !ul) return;
+      line.textContent = scoreLineText || "";
+      ul.innerHTML = "";
+      if (!mistakes || !mistakes.length) {
+        if (perfect) perfect.style.display = "block";
+      } else {
+        if (perfect) perfect.style.display = "none";
+        mistakes.forEach(function (m) {
+          const li = document.createElement("li");
+          const head = document.createElement("span");
+          head.style.color = "#8b949e";
+          head.textContent =
+            "[" + displayMistakeType(m.type) + " Q" + m.qNum + "]";
+          li.appendChild(head);
+          li.appendChild(document.createElement("br"));
+          const expL = document.createElement("span");
+          expL.textContent = "Correct / expected: ";
+          const expV = document.createElement("strong");
+          expV.style.color = "#58a6ff";
+          expV.textContent = String(m.expected || "");
+          li.appendChild(expL);
+          li.appendChild(expV);
+          li.appendChild(document.createElement("br"));
+          const uaL = document.createElement("span");
+          uaL.textContent = "Your answer: ";
+          const uaV = document.createElement("em");
+          uaV.style.color = "#f85149";
+          uaV.textContent = String(m.userAns || "");
+          li.appendChild(uaL);
+          li.appendChild(uaV);
+          ul.appendChild(li);
+        });
+      }
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeResultModal() {
+      const modal = document.getElementById("resultModal");
+      if (modal) {
+        modal.classList.remove("open");
+        modal.setAttribute("aria-hidden", "true");
+      }
+    }
+
+    function getExamModeTitleSuffix(m) {
+      if (m === "listen_only") return "Listening only";
+      if (m === "mcq_only") return "Multiple choice only";
+      if (m === "all") return "Full quiz";
+      return "";
+    }
+
+    function updateLoadedQuizFileLine() {
+      const line = document.getElementById("loadedQuizFileLine");
+      const nameEl = document.getElementById("loadedQuizFileName");
+      if (!line || !nameEl) return;
+      const hasBank =
+        fullSpellData.length > 0 || fullMixedData.length > 0;
+      if (!hasBank) {
+        line.style.display = "none";
+        return;
+      }
+      line.style.display = "block";
+      let raw = String(baseFileName || "Quiz").trim() || "Quiz";
+      raw = raw.replace(/\s*\(Retest\)\s*$/i, "").trim() || "Quiz";
+      const display = /\.json$/i.test(raw) ? raw : raw + ".json";
+      nameEl.textContent = display;
+    }
+
+    function backToExamModePicker() {
+      const hasBank =
+        fullSpellData.length > 0 || fullMixedData.length > 0;
+      const hasSession =
+        spellData.length > 0 || mixedData.length > 0;
+      if (!hasBank && !hasSession) {
+        alert(
+          "尚未載入題庫。請先於上方「Load Quiz Data」上傳 english_quiz_questions.json（或由產生器匯出的題庫檔）。"
+        );
+        return;
+      }
+      closeResultModal();
+      const sd = document.getElementById("scoreDisplay");
+      if (sd) sd.textContent = "";
+      const bs = document.getElementById("btnSubmit");
+      if (bs) bs.disabled = false;
+      showExamModePicker();
+      persistQuizDraftNow();
+    }
+
+    function showExamModePicker() {
+      examMode = null;
+      spellData = [];
+      mixedData = [];
+      listenPhaseLocked = false;
+      currentFileName = baseFileName;
+      const emp = document.getElementById("examModePanel");
+      const qp = document.getElementById("quizPanel");
+      if (emp) emp.style.display = "block";
+      if (qp) qp.style.display = "none";
+      const pt = document.getElementById("pageTitle");
+      if (pt) pt.textContent = baseFileName;
+      const bl = document.getElementById("btnModeListen");
+      const bm = document.getElementById("btnModeMcq");
+      const ba = document.getElementById("btnModeAll");
+      if (bl) bl.disabled = fullSpellData.length === 0;
+      if (bm) bm.disabled = fullMixedData.length === 0;
+      if (ba) ba.disabled =
+        fullSpellData.length === 0 && fullMixedData.length === 0;
+      updateLoadedQuizFileLine();
+    }
+
+    function startExamWithMode(mode) {
+      if (mode === "listen_only") {
+        if (!fullSpellData.length) {
+          alert("This quiz file has no listening / spelling items.");
+          return;
+        }
+        examMode = "listen_only";
+        spellData = fullSpellData.slice();
+        mixedData = [];
+      } else if (mode === "mcq_only") {
+        if (!fullMixedData.length) {
+          alert("This quiz file has no multiple-choice items.");
+          return;
+        }
+        examMode = "mcq_only";
+        spellData = [];
+        mixedData = fullMixedData.slice();
+      } else {
+        if (!fullSpellData.length && !fullMixedData.length) {
+          alert("This quiz file has no questions.");
+          return;
+        }
+        examMode = "all";
+        spellData = fullSpellData.slice();
+        mixedData = fullMixedData.slice();
+      }
+      currentFileName =
+        baseFileName + " — " + getExamModeTitleSuffix(examMode);
+      const pt = document.getElementById("pageTitle");
+      if (pt) pt.textContent = currentFileName;
+      const emp = document.getElementById("examModePanel");
+      const qp = document.getElementById("quizPanel");
+      if (emp) emp.style.display = "none";
+      if (qp) qp.style.display = "block";
+      listenPhaseLocked = false;
+      renderQuiz();
+      persistQuizDraftNow();
+    }
+
     function persistQuizDraftNow() {
-      if (!spellData.length && !mixedData.length) {
+      const hasBank =
+        fullSpellData.length > 0 || fullMixedData.length > 0;
+      const hasSession =
+        spellData.length > 0 || mixedData.length > 0;
+      if (!hasBank && !hasSession) {
         try {
           localStorage.removeItem(QUIZ_DRAFT_KEY);
         } catch (e) {}
         return;
       }
       const spellInputs = [];
+      const spellZhInputs = [];
       for (let i = 0; i < spellData.length; i++) {
         const el = document.getElementById("spellInput_" + i);
         spellInputs.push(el ? el.value : "");
+        const z = document.getElementById("spellZhInput_" + i);
+        spellZhInputs.push(z ? z.value : "");
       }
       const mcqPicked = [];
       for (let i = 0; i < mixedData.length; i++) {
@@ -566,12 +1477,22 @@
         const el = document.getElementById("mcqFeedback_" + i);
         mcqFeedback.push(el ? { t: el.textContent || "", c: el.className || "feedback" } : { t: "", c: "feedback" });
       }
+      const mcqPanel = document.getElementById("tabPanelMcq");
+      const activeTab =
+        mcqPanel && mcqPanel.classList.contains("active") ? "mcq" : "listen";
       const draft = {
-        v: 1,
-        currentFileName,
+        v: 4,
+        baseFileName,
+        examMode: hasSession ? examMode : null,
+        fullSpellData,
+        fullMixedData,
+        currentFileName: hasSession ? currentFileName : baseFileName,
         spellData,
         mixedData,
         spellInputs,
+        spellZhInputs,
+        listenPhaseLocked: !!listenPhaseLocked,
+        activeTab,
         mcqPicked,
         submitted: !!submitted,
         scoreText: scoreDisplay ? (scoreDisplay.textContent || "") : "",
@@ -594,11 +1515,24 @@
     }
 
     function applyRestoredQuizDraft(d) {
-      if (!d || d.v !== 1) return;
+      if (!d || (d.v !== 1 && d.v !== 2 && d.v !== 3 && d.v !== 4)) return;
       const si = d.spellInputs || [];
       for (let i = 0; i < spellData.length; i++) {
         const el = document.getElementById("spellInput_" + i);
-        if (el && si[i] != null) el.value = si[i];
+        if (el && si[i] != null) {
+          el.value = si[i];
+          distributeAnswerToSpellCells(i, si[i]);
+        }
+      }
+      if (d.v === 2 || d.v === 3 || d.v === 4) {
+        const sz = d.spellZhInputs || [];
+        for (let i = 0; i < spellData.length; i++) {
+          const zel = document.getElementById("spellZhInput_" + i);
+          if (zel && sz[i] != null) zel.value = sz[i];
+        }
+        listenPhaseLocked = !!d.listenPhaseLocked;
+      } else {
+        listenPhaseLocked = false;
       }
       const mp = d.mcqPicked || [];
       for (let i = 0; i < mixedData.length; i++) {
@@ -625,6 +1559,7 @@
         });
       } else {
         for (let i = 0; i < spellData.length; i++) {
+          setSpellCellsDisabled(i, true);
           const el = document.getElementById("spellInput_" + i);
           if (el) el.disabled = true;
         }
@@ -652,6 +1587,22 @@
         }
         if (scoreDisplay) scoreDisplay.textContent = d.scoreText || "";
         if (btnSubmit) btnSubmit.disabled = true;
+        for (let i = 0; i < spellData.length; i++) {
+          const zel = document.getElementById("spellZhInput_" + i);
+          if (zel) zel.disabled = true;
+        }
+      }
+      syncListenTabUi();
+      refreshListenProceedGate();
+      updateListenInstructionAndFooter();
+      const bothParts =
+        examMode === "all" &&
+        spellData.length > 0 &&
+        mixedData.length > 0;
+      if ((d.v === 2 || d.v === 3 || d.v === 4) && bothParts && d.activeTab === "mcq" && listenPhaseLocked) {
+        switchQuizTab("mcq");
+      } else if ((d.v === 2 || d.v === 3 || d.v === 4) && bothParts && d.activeTab === "listen") {
+        switchQuizTab("listen");
       }
     }
 
@@ -660,14 +1611,64 @@
         const raw = localStorage.getItem(QUIZ_DRAFT_KEY);
         if (!raw) return;
         const d = JSON.parse(raw);
-        if (!d || d.v !== 1 || !Array.isArray(d.spellData) || !Array.isArray(d.mixedData)) return;
-        if (!d.spellData.length && !d.mixedData.length) return;
-        spellData = d.spellData;
-        mixedData = d.mixedData;
-        currentFileName = d.currentFileName || "Quiz";
-        if (pageTitle) pageTitle.textContent = currentFileName;
+        if (!d || (d.v !== 1 && d.v !== 2 && d.v !== 3 && d.v !== 4)) return;
+        if (!Array.isArray(d.spellData) || !Array.isArray(d.mixedData)) return;
+        if (d.v >= 3) {
+          baseFileName = d.baseFileName || "Quiz";
+          spellData = (d.spellData || []).map(normalizeSpellQuestion);
+          mixedData = d.mixedData || [];
+          fullSpellData = (d.fullSpellData || d.spellData || []).map(
+            normalizeSpellQuestion
+          );
+          fullMixedData = d.fullMixedData || d.mixedData || [];
+          const hasSession =
+            spellData.length > 0 || mixedData.length > 0;
+          const hasBank =
+            fullSpellData.length > 0 || fullMixedData.length > 0;
+          if (!hasBank && !hasSession) return;
+          if (hasSession) {
+            examMode =
+              d.examMode != null && d.examMode !== ""
+                ? d.examMode
+                : "all";
+            currentFileName = d.currentFileName || baseFileName;
+          } else {
+            examMode = null;
+            currentFileName = baseFileName;
+          }
+        } else {
+          spellData = (d.spellData || []).map(normalizeSpellQuestion);
+          mixedData = d.mixedData || [];
+          fullSpellData = spellData.slice();
+          fullMixedData = mixedData.slice();
+          examMode = "all";
+          let rawName = String(d.currentFileName || "Quiz");
+          baseFileName = rawName.split(" — ")[0].trim();
+          baseFileName = baseFileName
+            .replace(/\s*\(Retest\)\s*$/i, "")
+            .trim() || "Quiz";
+          currentFileName = d.currentFileName || baseFileName;
+        }
+        const hasSessionNow =
+          spellData.length > 0 || mixedData.length > 0;
+        const hasBankNow =
+          fullSpellData.length > 0 || fullMixedData.length > 0;
+        if (!hasSessionNow && hasBankNow && examMode == null) {
+          const pt = document.getElementById("pageTitle");
+          if (pt) pt.textContent = baseFileName;
+          showExamModePicker();
+          return;
+        }
+        if (!hasSessionNow) return;
+        const emp = document.getElementById("examModePanel");
+        const qp = document.getElementById("quizPanel");
+        if (emp) emp.style.display = "none";
+        if (qp) qp.style.display = "block";
+        const pt = document.getElementById("pageTitle");
+        if (pt) pt.textContent = currentFileName;
         renderQuiz();
         applyRestoredQuizDraft(d);
+        updateLoadedQuizFileLine();
       } catch (e) {
         console.warn("Quiz draft restore failed", e);
       }
@@ -691,8 +1692,15 @@
 
     if (quizPanel) {
       quizPanel.addEventListener("input", function(e) {
-        if (e.target && e.target.classList && e.target.classList.contains("spell-input")) {
+        if (
+          e.target &&
+          e.target.classList &&
+          (e.target.classList.contains("spell-input") ||
+            e.target.classList.contains("spell-zh-input") ||
+            e.target.classList.contains("spell-cell-in"))
+        ) {
           scheduleQuizDraftSave();
+          refreshListenProceedGate();
         }
       });
       quizPanel.addEventListener("change", function(e) {
@@ -700,6 +1708,82 @@
         if (t && t.name && /^mcq_\d+$/.test(String(t.name))) scheduleQuizDraftSave();
       });
     }
+
+    const btnProceedMcq = document.getElementById("btnProceedMcq");
+    const tabBtnListen = document.getElementById("tabBtnListen");
+    const tabBtnMcq = document.getElementById("tabBtnMcq");
+    if (btnProceedMcq) {
+      btnProceedMcq.addEventListener("click", function () {
+        if (listenPhaseLocked) return;
+        if (!isListenFormComplete()) {
+          alert("Complete spelling and Chinese meaning for every listening item.");
+          return;
+        }
+        listenPhaseLocked = true;
+        syncListenTabUi();
+        refreshListenProceedGate();
+        switchQuizTab("mcq");
+        persistQuizDraftNow();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+    if (tabBtnListen) {
+      tabBtnListen.addEventListener("click", function () {
+        if (spellData.length === 0) return;
+        switchQuizTab("listen");
+      });
+    }
+    if (tabBtnMcq) {
+      tabBtnMcq.addEventListener("click", function () {
+        if (this.disabled) return;
+        if (spellData.length === 0) {
+          switchQuizTab("mcq");
+          return;
+        }
+        if (!listenPhaseLocked) {
+          alert(
+            "Finish all listening items on the Listening & spelling tab, then click “Finish listening — continue to multiple choice.”"
+          );
+          return;
+        }
+        switchQuizTab("mcq");
+      });
+    }
+    const btnCloseResultModal = document.getElementById("btnCloseResultModal");
+    const resultModalBackdrop = document.getElementById("resultModalBackdrop");
+    if (btnCloseResultModal) {
+      btnCloseResultModal.addEventListener("click", closeResultModal);
+    }
+    if (resultModalBackdrop) {
+      resultModalBackdrop.addEventListener("click", closeResultModal);
+    }
+
+    const btnModeListen = document.getElementById("btnModeListen");
+    const btnModeMcq = document.getElementById("btnModeMcq");
+    const btnModeAll = document.getElementById("btnModeAll");
+    if (btnModeListen) {
+      btnModeListen.addEventListener("click", function () {
+        startExamWithMode("listen_only");
+      });
+    }
+    if (btnModeMcq) {
+      btnModeMcq.addEventListener("click", function () {
+        startExamWithMode("mcq_only");
+      });
+    }
+    if (btnModeAll) {
+      btnModeAll.addEventListener("click", function () {
+        startExamWithMode("all");
+      });
+    }
+
+    const btnBackToModes = document.getElementById("btnBackToModes");
+    if (btnBackToModes) {
+      btnBackToModes.addEventListener("click", function () {
+        backToExamModePicker();
+      });
+    }
+
     window.addEventListener("pagehide", persistQuizDraftNow);
     window.addEventListener("beforeunload", persistQuizDraftNow);
 
@@ -725,7 +1809,7 @@
 
     if (btnClearHistory) {
       btnClearHistory.addEventListener("click", () => {
-        if (confirm("確定要清除所有考試紀錄嗎？(Are you sure you want to clear all history?)")) {
+        if (confirm("Clear all exam history? This cannot be undone.")) {
           examHistory = [];
           localStorage.removeItem("quizHistory");
           renderHistory();
@@ -786,7 +1870,7 @@
         } else {
           attempt.mistakes.forEach(m => {
             const li = document.createElement("li");
-            li.innerHTML = `<span style="color:#8b949e">[${m.type} Q${m.qNum}]</span><br/>Expected: <strong style="color:#58a6ff">${m.expected}</strong><br/>You answered: <em style="color:#f85149; text-decoration: line-through;">${m.userAns}</em>`;
+            li.innerHTML = `<span style="color:#8b949e">[${displayMistakeType(m.type)} Q${m.qNum}]</span><br/>Expected: <strong style="color:#58a6ff">${m.expected}</strong><br/>You answered: <em style="color:#f85149; text-decoration: line-through;">${m.userAns}</em>`;
             list.appendChild(li);
           });
           detailsWrap.appendChild(list);
@@ -800,10 +1884,14 @@
             spellData = [];
             mixedData = [];
             attempt.mistakes.forEach(m => {
-              if (m.type === "Spelling") spellData.push(m.originalData);
-              if (m.type === "MCQ") {
-                // Keep the MCQ choices shuffled differently if desired, or just copy it.
-                // We'll shuffle the choices and the question array.
+              if (m.type === "Spelling" || m.type === "Listening") {
+                spellData.push(
+                  m.originalData && typeof m.originalData === "object"
+                    ? m.originalData
+                    : normalizeSpellQuestion(m.originalData)
+                );
+              }
+              if (m.type === "MCQ" || m.type === "選擇題") {
                 let qCopy = JSON.parse(JSON.stringify(m.originalData));
                 qCopy.choices = shuffleArray(qCopy.choices);
                 mixedData.push(qCopy);
@@ -811,10 +1899,33 @@
             });
             spellData = shuffleArray(spellData);
             mixedData = shuffleArray(mixedData);
-            currentFileName = attempt.fileName + " (Retest)";
+            baseFileName = attempt.baseFileName
+              ? attempt.baseFileName
+              : String(attempt.fileName || "Quiz")
+                  .split(" — ")[0]
+                  .replace(/\s*\(Retest\)\s*$/i, "")
+                  .trim() || "Quiz";
+            examMode =
+              attempt.examMode === "listen_only" ||
+              attempt.examMode === "mcq_only" ||
+              attempt.examMode === "all"
+                ? attempt.examMode
+                : "all";
+            fullSpellData = spellData.slice();
+            fullMixedData = mixedData.slice();
+            currentFileName =
+              baseFileName +
+              " — " +
+              getExamModeTitleSuffix(examMode) +
+              " (Retest)";
             pageTitle.textContent = currentFileName;
+            const emp = document.getElementById("examModePanel");
+            if (emp) emp.style.display = "none";
+            const qp = document.getElementById("quizPanel");
+            if (qp) qp.style.display = "block";
             renderQuiz();
             persistQuizDraftNow();
+            updateLoadedQuizFileLine();
             window.scrollTo({ top: 0, behavior: 'smooth' });
           };
           detailsWrap.appendChild(retestBtn);
@@ -835,21 +1946,6 @@
     }
     
     renderHistory();
-
-    // Utility functions for string normalization
-    function cleanKeyword(s) {
-      return String(s || "").replace(/\*+/g, "").trim();
-    }
-    
-    function normalizeForSpell(s) {
-      return String(s || "")
-        .trim()
-        .toLowerCase()
-        .replace(/[\u2019']/g, "'")
-        .replace(/[^a-z0-9'\- ]/g, "")
-        .replace(/\s+/g, " ")
-        .trim();
-    }
 
     // Text to Speech (same approach as gemini-image-words.html: OS / browser Web Speech API)
     function pickEnglishVoice() {
@@ -875,7 +1971,7 @@
     }
 
     function playSpellAudio(word) {
-      speakEnglish(cleanKeyword(word));
+      speakEnglish(spellItemWord(word));
     }
 
     // Load JSON file
@@ -886,19 +1982,20 @@
       reader.onload = function(evt) {
         try {
           const json = JSON.parse(evt.target.result);
-          spellData = json.spellQuestions || [];
+          fullSpellData = (json.spellQuestions || []).map(normalizeSpellQuestion);
           mixedData = json.mixedQuestions || [];
 
           // Backward compatibility for older exported JSON formats
           if (!json.mixedQuestions && (json.mcqQuestions || json.synonymQuestions)) {
             mixedData = (json.mcqQuestions || []).concat(json.synonymQuestions || []);
           }
-          
-          // Change Page Title to File Name without .json
-          currentFileName = file.name.replace(/\.json$/i, '');
-          pageTitle.textContent = currentFileName;
-          
-          renderQuiz();
+          fullMixedData = mixedData.slice();
+
+          baseFileName = file.name.replace(/\.json$/i, "");
+          spellData = [];
+          mixedData = [];
+          examMode = null;
+          showExamModePicker();
           persistQuizDraftNow();
         } catch(err) {
           alert("Error parsing JSON. Please upload a valid JSON file.");
@@ -909,53 +2006,137 @@
 
     // Render all questions to DOM
     function renderQuiz() {
+      listenPhaseLocked = false;
       // NOTE: Upload panel remains visible per user request.
       quizPanel.style.display = "block";
       spellList.innerHTML = "";
       mcqList.innerHTML = "";
       scoreDisplay.textContent = "";
       btnSubmit.disabled = false;
-      const canExport = spellData.length > 0 || mixedData.length > 0;
+      const canExport =
+        fullSpellData.length > 0 || fullMixedData.length > 0;
       if (btnExportPack) btnExportPack.disabled = !canExport;
 
-      // 1. Render Spelling Questions
+      // 1. Render Spelling / listening questions
       if (spellData.length === 0) {
-        spellList.innerHTML = "<p style='color:#8b949e;'>No spelling questions available.</p>";
+        spellList.innerHTML =
+          "<p style='color:#8b949e;'>No listening / spelling items in this quiz.</p>";
       } else {
         spellData.forEach((word, idx) => {
-          const row = document.createElement("div");
-          row.className = "question-row spell-row";
-          
+          const block = document.createElement("div");
+          block.className = "spell-block";
+
+          const topActions = document.createElement("div");
+          topActions.className = "spell-top-actions";
           const label = document.createElement("strong");
           label.style.color = "#58a6ff";
-          label.style.marginRight = "10px";
-          label.textContent = (idx + 1) + ".";
-          
+          label.textContent = idx + 1 + ".";
           const btnSpeak = document.createElement("button");
-          btnSpeak.innerHTML = "🔊 Play Audio";
-          btnSpeak.style.marginRight = "15px";
           btnSpeak.type = "button";
-          btnSpeak.onclick = function() {
-            playSpellAudio(word);
+          btnSpeak.id = "spellSpeakBtn_" + idx;
+          btnSpeak.innerHTML = "🔊 Play Audio";
+          btnSpeak.onclick = function () {
+            playSpellAudio(spellItemWord(word));
           };
-          
-          const input = document.createElement("input");
-          input.type = "text";
-          input.className = "spell-input";
-          input.id = "spellInput_" + idx;
-          input.placeholder = "Type the word here...";
-          input.autocomplete = "off";
-          input.spellcheck = false;
-          
+          topActions.appendChild(label);
+          topActions.appendChild(btnSpeak);
+          block.appendChild(topActions);
+
+          const prog = document.createElement("div");
+          prog.className = "spell-progress-line";
+          prog.textContent = idx + 1 + " / " + spellData.length;
+          block.appendChild(prog);
+
+          const hiddenAns = document.createElement("input");
+          hiddenAns.type = "text";
+          hiddenAns.className = "spell-input spell-answer-hidden";
+          hiddenAns.id = "spellInput_" + idx;
+          hiddenAns.tabIndex = -1;
+          hiddenAns.setAttribute("aria-hidden", "true");
+          hiddenAns.autocomplete = "off";
+          hiddenAns.spellcheck = false;
+          block.appendChild(hiddenAns);
+
+          const wArr = spellWordChars(word);
+          const rowWord = document.createElement("div");
+          rowWord.className = "spell-inline-word";
+          if (wArr.length <= 2) {
+            wArr.forEach(function (ch, ci) {
+              const slot = document.createElement("div");
+              slot.className = "spell-char-slot";
+              const fix = document.createElement("span");
+              fix.className =
+                "spell-char-fixed" +
+                (ci === wArr.length - 1 ? " spell-char-tail" : "");
+              fix.textContent =
+                ci === 0 ? String(ch).toUpperCase() : String(ch);
+              slot.appendChild(fix);
+              rowWord.appendChild(slot);
+            });
+            hiddenAns.value = wArr.join("");
+          } else {
+            const cells = [];
+            for (let i = 0; i < wArr.length; i++) {
+              const slot = document.createElement("div");
+              slot.className = "spell-char-slot";
+              if (i === 0 || i === wArr.length - 1) {
+                const fix = document.createElement("span");
+                fix.className =
+                  "spell-char-fixed" +
+                  (i === wArr.length - 1 ? " spell-char-tail" : "");
+                fix.textContent =
+                  i === 0
+                    ? String(wArr[i]).toUpperCase()
+                    : String(wArr[i]);
+                slot.appendChild(fix);
+              } else {
+                const inp = document.createElement("input");
+                inp.type = "text";
+                inp.className = "spell-cell-in";
+                inp.id = "spellCell_" + idx + "_" + i;
+                inp.maxLength = 1;
+                inp.setAttribute("inputmode", "text");
+                inp.autocomplete = "off";
+                inp.spellcheck = false;
+                slot.appendChild(inp);
+                cells.push(inp);
+              }
+              rowWord.appendChild(slot);
+            }
+            wireSpellLineCells(idx, cells);
+            syncSpellHiddenInput(idx);
+          }
+          block.appendChild(rowWord);
+
+          const refZh = spellItemZhExpected(word);
+          if (refZh) {
+            const zhHint = document.createElement("div");
+            zhHint.className = "spell-ref-zh";
+            zhHint.textContent = refZh;
+            block.appendChild(zhHint);
+          }
+
+          const rowZh = document.createElement("div");
+          rowZh.className = "spell-meaning-row";
+          const zhLabel = document.createElement("label");
+          zhLabel.setAttribute("for", "spellZhInput_" + idx);
+          zhLabel.textContent = "Chinese meaning";
+          const zhInput = document.createElement("input");
+          zhInput.type = "text";
+          zhInput.className = "spell-zh-input";
+          zhInput.id = "spellZhInput_" + idx;
+          zhInput.placeholder = "Type the Chinese meaning…";
+          zhInput.autocomplete = "off";
+          rowZh.appendChild(zhLabel);
+          rowZh.appendChild(zhInput);
+          block.appendChild(rowZh);
+
           const feedback = document.createElement("span");
           feedback.id = "spellFeedback_" + idx;
-          feedback.className = "feedback";
-          
-          row.appendChild(label);
-          row.appendChild(btnSpeak);
-          row.appendChild(input);
-          row.appendChild(feedback);
-          spellList.appendChild(row);
+          feedback.className = "feedback spell-feedback-line";
+          block.appendChild(feedback);
+
+          spellList.appendChild(block);
         });
       }
 
@@ -1010,6 +2191,15 @@
           mcqList.appendChild(row);
         });
       }
+
+      syncListenTabUi();
+      refreshListenProceedGate();
+      updateListenInstructionAndFooter();
+      refreshProceedButtonVisibility();
+      if (isMcqOnlyLayout()) switchQuizTab("mcq");
+      else if (isListenOnlyLayout()) switchQuizTab("listen");
+      else if (spellData.length > 0) switchQuizTab("listen");
+      else switchQuizTab("mcq");
     }
 
     function htmlToPlain(html) {
@@ -1029,6 +2219,30 @@
         .replace(/[\u201C\u201D]/g, '"')
         .replace(/\u2026/g, "...")
         .replace(/[^\r\n\x20-\x7E]/g, "?");
+    }
+
+    /** Printable hint line: first letter (upper) + _ for each middle + last letter (matches web UI). */
+    function pdfSpellPatternLine(wordItem) {
+      var raw = spellItemWord(wordItem);
+      var arr = Array.from(raw);
+      if (!arr.length) return "?";
+      if (arr.length === 1) {
+        return pdfSafeAscii(String(arr[0]).toUpperCase());
+      }
+      if (arr.length === 2) {
+        return (
+          pdfSafeAscii(String(arr[0]).toUpperCase()) +
+          " " +
+          pdfSafeAscii(String(arr[1]))
+        );
+      }
+      var out = [];
+      out.push(pdfSafeAscii(String(arr[0]).toUpperCase()));
+      for (var i = 1; i < arr.length - 1; i++) {
+        out.push("_");
+      }
+      out.push(pdfSafeAscii(String(arr[arr.length - 1])));
+      return out.join(" ");
     }
 
     function choiceLabel(c) {
@@ -1176,7 +2390,7 @@
     function buildQuizPdfBlob() {
       var jspdf = window.jspdf;
       if (!jspdf || typeof jspdf.jsPDF !== "function") {
-        throw new Error("jsPDF 未載入");
+        throw new Error("jsPDF is not loaded");
       }
       var jsPDF = jspdf.jsPDF;
       var doc = new jsPDF({ unit: "mm", format: "a4" });
@@ -1217,26 +2431,36 @@
       doc.text("Generated: " + genIso.slice(0, 10) + " " + genIso.slice(11, 19) + " UTC", margin, y);
       y += 10;
 
-      if (spellData.length) {
+      if (fullSpellData.length) {
         addParagraph("Part 1 -- Listen and Spell", 14, 7);
-        addParagraph("Use the English Quiz Taker web page: click [Play Audio] for spelling item 1, 2, 3, ... (same numbers as below). Then write each word on the line.", 10);
+        addParagraph(
+          "Use the English Quiz Taker: click [Play Audio] for each item (same numbers as below). The first and last letters of each word are shown; fill in the missing letters. Write the Chinese meaning on the line under each item.",
+          10
+        );
         y += 2;
-        spellData.forEach(function(word, idx) {
+        fullSpellData.forEach(function(word, idx) {
           var n = idx + 1;
-          addParagraph(n + ".  _______________________________________________________", 11, 6);
-          newPageIf(20);
+          newPageIf(32);
+          addParagraph(n + ".  " + pdfSpellPatternLine(word), 11, 6.2);
+          addParagraph(
+            "    Chinese meaning: _______________________________________________________",
+            10,
+            5.4
+          );
+          y += 1;
           doc.setDrawColor(120);
-          doc.line(margin, y + 1, pageW - margin, y + 1);
-          y += 8;
+          doc.setLineWidth(0.15);
+          doc.line(margin, y, pageW - margin, y);
+          y += 7;
         });
         y += 4;
       }
 
-      if (mixedData.length) {
+      if (fullMixedData.length) {
         newPageIf(30);
         addParagraph("Part 2 -- Multiple Choice", 14, 7);
         y += 2;
-        mixedData.forEach(function(q, idx) {
+        fullMixedData.forEach(function(q, idx) {
           var paraRuns = stemHtmlToParagraphRunsList(q.stemHtml || "");
           paraRuns.forEach(function(runs, pi) {
             var blockRuns = pi === 0
@@ -1257,18 +2481,37 @@
       y = 20;
       addParagraph("Answer Key", 16, 8);
       y += 2;
-      if (spellData.length) {
+      if (fullSpellData.length) {
         addParagraph("Part 1 (Spelling)", 12, 6);
-        spellData.forEach(function(word, idx) {
-          addParagraph(idx + 1 + ". " + cleanKeyword(word), 10);
+        fullSpellData.forEach(function(word, idx) {
+          addParagraph(
+            idx + 1 + ". " + pdfSafeAscii(spellItemWord(word)),
+            10
+          );
+          var zr = spellItemZhExpected(word);
+          if (zr && String(zr).trim()) {
+            doc.setFontSize(9);
+            doc.setTextColor(55, 65, 81);
+            var refBlock =
+              "    Chinese (reference): " + String(zr).trim();
+            var zlines = doc.splitTextToSize(refBlock, maxW);
+            for (var zi = 0; zi < zlines.length; zi++) {
+              newPageIf(14);
+              doc.text(zlines[zi], margin, y);
+              y += 4.8;
+            }
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(10);
+            y += 1;
+          }
         });
         y += 2;
       }
-      if (mixedData.length) {
+      if (fullMixedData.length) {
         addParagraph("Part 2 (Multiple Choice: number + letter only, 5 per line)", 12, 6);
         var mcqLineParts = [];
-        for (var mi = 0; mi < mixedData.length; mi++) {
-          var qm = mixedData[mi];
+        for (var mi = 0; mi < fullMixedData.length; mi++) {
+          var qm = fullMixedData[mi];
           var Lm = mcqAnswerLetter(qm.answer, qm.choices || []);
           mcqLineParts.push(mi + 1 + ". " + Lm);
           if (mcqLineParts.length === 5) {
@@ -1285,22 +2528,22 @@
     }
 
     async function exportQuizPack() {
-      if (!spellData.length && !mixedData.length) {
-        alert("請先載入考題 JSON。");
+      if (!fullSpellData.length && !fullMixedData.length) {
+        alert("Load a quiz JSON file first.");
         return;
       }
       if (!window.JSZip) {
-        alert("JSZip 未載入，請檢查網路後重新整理頁面。");
+        alert("JSZip is not loaded. Check your connection and refresh the page.");
         return;
       }
       if (!window.jspdf || typeof window.jspdf.jsPDF !== "function") {
-        alert("jsPDF 未載入，請檢查網路後重新整理頁面。");
+        alert("jsPDF is not loaded. Check your connection and refresh the page.");
         return;
       }
 
       var prevLabel = btnExportPack.textContent;
       btnExportPack.disabled = true;
-      btnExportPack.textContent = "匯出中…";
+      btnExportPack.textContent = "Exporting…";
 
       try {
         var zip = new JSZip();
@@ -1312,13 +2555,13 @@
           "Exported (ISO): " + new Date().toISOString(),
           "",
           "This ZIP contains quiz.pdf only (printable quiz + answer key on last pages).",
-          "For Part 1 spelling, open the same English Quiz Taker page and use [Play Audio]",
-          "for each item; numbers match the PDF.",
+          "Part 1 on paper shows first/last letter hints and a line for Chinese meaning.",
+          "For audio, open the same English Quiz Taker page and use [Play Audio]; item numbers match the PDF.",
           "[Play Audio] uses the browser Web Speech API (OS voices)."
         ];
         zip.file("README.txt", readmeLines.join("\n"));
 
-        btnExportPack.textContent = "打包 ZIP…";
+        btnExportPack.textContent = "Building ZIP…";
         var zipBlob = await zip.generateAsync({ type: "blob" });
         var a = document.createElement("a");
         a.href = URL.createObjectURL(zipBlob);
@@ -1330,9 +2573,10 @@
         URL.revokeObjectURL(a.href);
       } catch (err) {
         console.error(err);
-        alert("匯出失敗：" + (err && err.message ? err.message : String(err)));
+        alert("Export failed: " + (err && err.message ? err.message : String(err)));
       } finally {
-        var canExport = spellData.length > 0 || mixedData.length > 0;
+        var canExport =
+          fullSpellData.length > 0 || fullMixedData.length > 0;
         btnExportPack.textContent = prevLabel;
         btnExportPack.disabled = !canExport;
       }
@@ -1344,76 +2588,124 @@
 
     // Submit answers and compute score
     btnSubmit.addEventListener("click", () => {
-      // 1. Validation - check if every question is answered
-      let allAnswered = true;
-      
-      for (let i = 0; i < spellData.length; i++) {
-        const val = document.getElementById("spellInput_" + i).value.trim();
-        if (!val) { allAnswered = false; break; }
+      const hasListenSection = spellData.length > 0;
+      if (
+        hasListenSection &&
+        !listenPhaseLocked &&
+        needsListenProceedForSubmit()
+      ) {
+        alert("Finish the listening section and click “Finish listening — continue to multiple choice.”");
+        return;
       }
-      
+
+      let allAnswered = true;
+
+      for (let i = 0; i < spellData.length; i++) {
+        syncSpellHiddenInput(i);
+        const enEl = document.getElementById("spellInput_" + i);
+        const zhEl = document.getElementById("spellZhInput_" + i);
+        const val = enEl ? enEl.value.trim() : "";
+        const zt = zhEl ? zhEl.value.trim() : "";
+        if (!val || !zt) {
+          allAnswered = false;
+          break;
+        }
+      }
+
       if (allAnswered) {
         for (let i = 0; i < mixedData.length; i++) {
           const radios = document.getElementsByName("mcq_" + i);
           let checked = false;
-          for (let r of radios) { 
-            if (r.checked) { checked = true; break; } 
+          for (let r of radios) {
+            if (r.checked) {
+              checked = true;
+              break;
+            }
           }
-          if (!checked) { allAnswered = false; break; }
+          if (!checked) {
+            allAnswered = false;
+            break;
+          }
         }
       }
 
       if (!allAnswered) {
-        alert("Please answer all questions before submitting.");
-        return; // Prevent submission
+        alert("Answer all listening items (spelling + Chinese) and all multiple-choice questions before submitting.");
+        return;
       }
 
-      // 2. Grading
       let totalScore = 0;
       let totalQuestions = spellData.length + mixedData.length;
-      let mistakes = []; // Record mistakes for history
+      let mistakes = [];
 
-      // Grade Spell
       spellData.forEach((word, idx) => {
+        syncSpellHiddenInput(idx);
         const inputEl = document.getElementById("spellInput_" + idx);
+        const zhEl = document.getElementById("spellZhInput_" + idx);
         const feedbackEl = document.getElementById("spellFeedback_" + idx);
-        
-        const expected = normalizeForSpell(word);
+        const expected = normalizeForSpell(spellItemWord(word));
         const got = normalizeForSpell(inputEl.value);
-        
-        inputEl.disabled = true; // Lock the input after grading
+        const expZh = spellItemZhExpected(word);
+        const userZh = zhEl && zhEl.value ? zhEl.value.trim() : "";
+        const spellPartOk = expected === got;
+        const zhPartOk =
+          userZh.length > 0 && zhMeaningMatches(expZh, userZh);
 
-        if (expected === got) {
+        setSpellCellsDisabled(idx, true);
+        inputEl.disabled = true;
+        if (zhEl) zhEl.disabled = true;
+
+        if (spellPartOk && zhPartOk) {
           totalScore++;
           feedbackEl.textContent = "Correct!";
-          feedbackEl.className = "feedback ok";
+          feedbackEl.className = "feedback ok spell-feedback-line";
         } else {
-          feedbackEl.textContent = "Incorrect. Answer: " + cleanKeyword(word);
-          feedbackEl.className = "feedback bad";
+          const parts = [];
+          if (!spellPartOk) {
+            parts.push(
+              "Spelling wrong (answer: " + spellItemWord(word) + ")"
+            );
+          }
+          if (!zhPartOk) {
+            if (!userZh) parts.push("Chinese meaning not filled in");
+            else if (expZh) {
+              parts.push("Chinese incorrect (reference: " + expZh + ")");
+            } else {
+              parts.push(
+                "Chinese could not be checked (no reference in quiz file)"
+              );
+            }
+          }
+          feedbackEl.textContent = parts.join(" · ");
+          feedbackEl.className = "feedback bad spell-feedback-line";
           mistakes.push({
-            type: "Spelling",
+            type: "Listening",
             qNum: idx + 1,
-            expected: cleanKeyword(word),
-            userAns: inputEl.value,
-            originalData: word
+            expected:
+              spellItemWord(word) +
+              (expZh ? " · Chinese (ref): " + expZh : ""),
+            userAns:
+              (inputEl.value || "").trim() +
+              " · Chinese: " +
+              (userZh || "(empty)"),
+            originalData: word,
           });
         }
       });
 
-      // Grade MCQ
       mixedData.forEach((q, idx) => {
         const radios = document.getElementsByName("mcq_" + idx);
         let userVal = "";
-        
+
         for (let r of radios) {
-          r.disabled = true; // Lock the radio after grading
+          r.disabled = true;
           if (r.checked) {
             userVal = r.value;
           }
         }
 
         const feedbackEl = document.getElementById("mcqFeedback_" + idx);
-        
+
         if (userVal === q.answer) {
           totalScore++;
           feedbackEl.textContent = "Correct!";
@@ -1421,39 +2713,48 @@
         } else {
           var Lm = mcqAnswerLetter(q.answer, q.choices || []);
           feedbackEl.textContent =
-            "Incorrect. Answer: " + Lm + (Lm !== "?" ? " (" + q.answer + ")" : q.answer);
+            "Wrong. Answer: " +
+            Lm +
+            (Lm !== "?" ? " (" + q.answer + ")" : q.answer);
           feedbackEl.className = "feedback bad";
           mistakes.push({
             type: "MCQ",
             qNum: idx + 1,
-            expected: q.answer,
+            expected: Lm !== "?" ? Lm + " " + q.answer : q.answer,
             userAns: userVal,
-            originalData: q
+            originalData: q,
           });
         }
       });
 
-      // 3. Complete and show total score
       btnSubmit.disabled = true;
-      
-      // Calculate 100-point scale score (1 decimal place)
+      listenPhaseLocked = true;
+      syncListenTabUi();
+
       let percentage = 0;
       if (totalQuestions > 0) {
         percentage = (totalScore / totalQuestions) * 100;
       }
       let formattedPercentage = percentage.toFixed(1);
-      
-      let scoreText = `Quiz Finished! Questions Correct: ${totalScore} / ${totalQuestions} — Score: ${formattedPercentage}`;
-      
+
+      let scoreText =
+        totalScore +
+        " / " +
+        totalQuestions +
+        " correct — Score: " +
+        formattedPercentage;
       if (percentage < 80) {
-        scoreText += " (Needs more effort! 請再努力喔！)";
+        scoreText += " (below 80 — keep practicing)";
       }
-      
+
       scoreDisplay.textContent = scoreText;
+      openResultModal(scoreText, mistakes);
       
       // 4. Update Sidebar History
       examHistory.push({
         fileName: currentFileName,
+        baseFileName: baseFileName,
+        examMode: examMode,
         score: formattedPercentage,
         mistakes: mistakes
       });
