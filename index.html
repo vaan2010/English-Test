@@ -130,6 +130,35 @@
       margin-top: 6px;
       color: #6e7681;
     }
+    .loaded-quiz-file-block {
+      margin-top: 12px;
+    }
+    .loaded-quiz-file-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 12px 16px;
+    }
+    .loaded-quiz-file-row .loaded-quiz-file-line {
+      margin-top: 0;
+      flex: 1 1 200px;
+    }
+    .btn-clear-loaded-quiz {
+      flex: 0 0 auto;
+      margin-top: 2px;
+      padding: 6px 14px;
+      font-size: 0.88rem;
+      background: #21262d;
+      color: #f85149;
+      border: 1px solid rgba(248, 81, 73, 0.45);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-clear-loaded-quiz:hover {
+      background: #30363d;
+      border-color: #f85149;
+    }
     button { 
       padding: 8px 16px; 
       background: #238636; 
@@ -789,10 +818,15 @@
         <div class="file-input-wrap">
           <input type="file" id="jsonFile" accept=".json" />
         </div>
-        <p id="loadedQuizFileLine" class="loaded-quiz-file-line" style="display: none;">
-          Quiz file in use: <strong id="loadedQuizFileName"></strong>
-          <span class="loaded-quiz-file-note">Browsers clear the file picker after refresh; this name is the quiz data stored on this page (same as your last successful load).</span>
-        </p>
+        <div id="loadedQuizFileBlock" class="loaded-quiz-file-block" style="display: none;">
+          <div class="loaded-quiz-file-row">
+            <p id="loadedQuizFileLine" class="loaded-quiz-file-line">
+              Quiz file in use: <strong id="loadedQuizFileName"></strong>
+              <span class="loaded-quiz-file-note">Browsers clear the file picker after refresh; this name is the quiz data stored on this page (same as your last successful load).</span>
+            </p>
+            <button type="button" id="btnClearLoadedQuiz" class="btn-clear-loaded-quiz">Clear quiz file</button>
+          </div>
+        </div>
       </div>
 
       <div id="examModePanel" class="card exam-mode-panel" style="display:none;">
@@ -1338,20 +1372,109 @@
     }
 
     function updateLoadedQuizFileLine() {
-      const line = document.getElementById("loadedQuizFileLine");
+      const block = document.getElementById("loadedQuizFileBlock");
       const nameEl = document.getElementById("loadedQuizFileName");
-      if (!line || !nameEl) return;
+      if (!block || !nameEl) return;
       const hasBank =
         fullSpellData.length > 0 || fullMixedData.length > 0;
       if (!hasBank) {
-        line.style.display = "none";
+        block.style.display = "none";
         return;
       }
-      line.style.display = "block";
+      block.style.display = "block";
       let raw = String(baseFileName || "Quiz").trim() || "Quiz";
       raw = raw.replace(/\s*\(Retest\)\s*$/i, "").trim() || "Quiz";
       const display = /\.json$/i.test(raw) ? raw : raw + ".json";
       nameEl.textContent = display;
+    }
+
+    const DEFAULT_PAGE_TITLE = "English Quiz Taker";
+    const DEFAULT_LISTEN_INSTR_HTML =
+      "Use <strong>Play Audio</strong>, type the missing letters in the underlined boxes (first and last letters are given), and enter the <strong>Chinese meaning</strong>.";
+
+    function resetQuizUiToInitialState() {
+      const listenInstr = document.getElementById("listenInstr");
+      if (listenInstr) listenInstr.innerHTML = DEFAULT_LISTEN_INSTR_HTML;
+      const hint = document.getElementById("listenProceedHint");
+      if (hint) hint.textContent = "";
+      const bar = document.getElementById("quizTabBar");
+      const tabListen = document.getElementById("tabPanelListen");
+      const tabMcq = document.getElementById("tabPanelMcq");
+      const btnListen = document.getElementById("tabBtnListen");
+      const btnMcq = document.getElementById("tabBtnMcq");
+      const footer = document.getElementById("listenFooter");
+      const btnProceed = document.getElementById("btnProceedMcq");
+      if (bar) bar.style.display = "";
+      if (footer) footer.style.display = "";
+      if (tabListen) {
+        tabListen.style.display = "";
+        tabListen.classList.add("active");
+      }
+      if (tabMcq) {
+        tabMcq.style.display = "";
+        tabMcq.classList.remove("active");
+      }
+      if (btnListen) {
+        btnListen.style.display = "";
+        btnListen.classList.add("active");
+      }
+      if (btnMcq) {
+        btnMcq.style.display = "";
+        btnMcq.classList.remove("active");
+        btnMcq.disabled = true;
+      }
+      if (btnProceed) {
+        btnProceed.style.display = "";
+        btnProceed.disabled = true;
+      }
+    }
+
+    function clearLoadedQuiz() {
+      if (
+        !confirm(
+          "Remove the quiz loaded on this page and clear saved progress? (Exam history in the sidebar is not deleted.)"
+        )
+      ) {
+        return;
+      }
+      closeResultModal();
+      fullSpellData = [];
+      fullMixedData = [];
+      spellData = [];
+      mixedData = [];
+      examMode = null;
+      listenPhaseLocked = false;
+      baseFileName = "Quiz";
+      currentFileName = "Quiz";
+      const qp = document.getElementById("quizPanel");
+      if (qp) qp.style.display = "none";
+      showExamModePicker();
+      const pt = document.getElementById("pageTitle");
+      if (pt) pt.textContent = DEFAULT_PAGE_TITLE;
+      const sl = document.getElementById("spellList");
+      const ml = document.getElementById("mcqList");
+      if (sl) sl.innerHTML = "";
+      if (ml) ml.innerHTML = "";
+      const sd = document.getElementById("scoreDisplay");
+      if (sd) sd.textContent = "";
+      const bs = document.getElementById("btnSubmit");
+      if (bs) bs.disabled = false;
+      const bex = document.getElementById("btnExportPack");
+      if (bex) bex.disabled = true;
+      try {
+        localStorage.removeItem(QUIZ_DRAFT_KEY);
+      } catch (e) {}
+      const fi = document.getElementById("jsonFile");
+      if (fi) {
+        try {
+          fi.value = "";
+        } catch (e) {}
+      }
+      resetQuizUiToInitialState();
+      refreshListenProceedGate();
+      updateListenInstructionAndFooter();
+      refreshProceedButtonVisibility();
+      updateLoadedQuizFileLine();
     }
 
     function backToExamModePicker() {
@@ -1781,6 +1904,13 @@
     if (btnBackToModes) {
       btnBackToModes.addEventListener("click", function () {
         backToExamModePicker();
+      });
+    }
+
+    const btnClearLoadedQuiz = document.getElementById("btnClearLoadedQuiz");
+    if (btnClearLoadedQuiz) {
+      btnClearLoadedQuiz.addEventListener("click", function () {
+        clearLoadedQuiz();
       });
     }
 
