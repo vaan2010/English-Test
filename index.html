@@ -566,11 +566,85 @@
     }
     .spell-block {
       position: relative;
-      margin-bottom: 28px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid #30363d;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 22px;
+      padding: 20px 22px 18px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      box-sizing: border-box;
     }
-    .spell-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .spell-block:last-child {
+      margin-bottom: 0;
+    }
+    .spell-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .spell-card-num {
+      color: #58a6ff;
+      font-size: 1.12rem;
+      font-weight: 700;
+      min-width: 1.75rem;
+    }
+    .spell-card-progress {
+      flex: 1;
+      text-align: center;
+      color: #8b949e;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+    }
+    .spell-speak-btn {
+      background: linear-gradient(180deg, #33b356 0%, #238636 100%);
+      color: #fff;
+      border: 1px solid #2ea043;
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    }
+    .spell-speak-btn:hover:not(:disabled) {
+      filter: brightness(1.06);
+    }
+    .spell-speak-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .spell-card-divider {
+      height: 1px;
+      background: #30363d;
+      margin: 14px 0 16px;
+      border: 0;
+    }
+    .spell-word-panel {
+      background: #0d1117;
+      border: 1px solid #21262d;
+      border-radius: 8px;
+      padding: 18px 16px 20px;
+    }
+    .spell-meaning-section {
+      margin-top: 18px;
+    }
+    .spell-zh-head {
+      color: #c9d1d9;
+      font-size: 0.98rem;
+      font-weight: 600;
+      margin: 0 0 4px 0;
+    }
+    .spell-zh-sub {
+      color: #8b949e;
+      font-size: 0.82rem;
+      margin: 0 0 12px 0;
+      line-height: 1.45;
+    }
     .spell-edge-hint {
       font-size: 0.9rem;
       color: #f2cc60;
@@ -583,16 +657,19 @@
       gap: 10px 12px;
     }
     .spell-meaning-row {
-      margin-top: 12px;
+      margin-top: 0;
+      display: block;
+    }
+    .spell-meaning-row.spell-meaning-free {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
     }
     .spell-meaning-row label {
       color: #8b949e;
       font-size: 0.9rem;
-      min-width: 72px;
+      min-width: 0;
     }
     .spell-meaning-row input[type="text"] {
       flex: 1 1 200px;
@@ -611,28 +688,13 @@
       opacity: 0;
       pointer-events: none;
     }
-    .spell-progress-line {
-      text-align: center;
-      color: #8b949e;
-      font-size: 0.95rem;
-      margin: 6px 0 14px;
-      letter-spacing: 0.02em;
-    }
-    .spell-top-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 4px;
-    }
     .spell-inline-word {
       display: flex;
       flex-wrap: wrap;
       align-items: flex-end;
       justify-content: center;
       gap: 8px 10px;
-      margin: 12px 0 16px;
+      margin: 0;
     }
     .spell-char-slot {
       display: flex;
@@ -676,17 +738,33 @@
       border-bottom-color: #30363d;
       color: #8b949e;
     }
-    .spell-ref-zh {
-      text-align: center;
-      color: #9fb0bf;
-      font-size: 0.98rem;
-      margin: 4px 0 14px;
-      line-height: 1.5;
-      padding: 0 6px;
-    }
     .spell-feedback-line {
-      margin-top: 10px;
+      margin-top: 14px;
       display: block;
+      margin-left: 0;
+    }
+    .spell-zh-mcq-choices {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 0;
+    }
+    .spell-zh-mcq-choices .choice-label {
+      margin: 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      min-height: 3rem;
+    }
+    @media (max-width: 520px) {
+      .spell-zh-mcq-choices {
+        grid-template-columns: 1fr;
+      }
+    }
+    #spellList {
+      padding: 8px 12px 8px;
+      max-width: 100%;
+      box-sizing: border-box;
     }
     .listen-footer {
       margin-top: 20px;
@@ -841,7 +919,7 @@
 
       <div id="quizPanel" style="display:none;">
         <div class="quiz-panel-toolbar">
-          <button type="button" id="btnBackToModes" class="btn-back-to-modes">← 返回標題（選擇考試模式）</button>
+          <button type="button" id="btnBackToModes" class="btn-back-to-modes">← Back to title (choose exam mode)</button>
         </div>
         <div class="quiz-tab-bar" id="quizTabBar">
           <button type="button" class="quiz-tab active" id="tabBtnListen" data-tab="listen">Listening &amp; spelling</button>
@@ -851,7 +929,7 @@
         <div id="tabPanelListen" class="quiz-tab-panel active">
           <div class="card" style="border-radius: 0 0 8px 8px; margin-top: 0;">
             <h2>Listening &amp; spelling</h2>
-            <p id="listenInstr" style="color:#8b949e;">Use <strong>Play Audio</strong>, type the missing letters in the underlined boxes (first and last letters are given), and enter the <strong>Chinese meaning</strong>.</p>
+            <p id="listenInstr" style="color:#8b949e;">Use <strong>Play audio</strong> for each item. Spell the word in the <strong>underlined letter boxes</strong> (first and last letters are given). Then <strong>choose or type the Chinese meaning</strong> of that headword (short gloss, not a sentence). If the quiz JSON includes four <code>zhChoices</code> and <code>zhAnswer</code>, you will see a <strong>four-option Chinese MCQ</strong> — the choices stay in Chinese; all other UI text is in English.</p>
             <hr style="border:0; border-top:1px solid #30363d; margin: 20px 0;">
             <div id="spellList"></div>
             <div class="listen-footer" id="listenFooter">
@@ -944,9 +1022,24 @@
 
     function normalizeSpellQuestion(x) {
       if (x && typeof x === "object" && x.word != null) {
-        return { word: cleanKeyword(x.word), zh: String(x.zh || "").trim() };
+        const rawCh = Array.isArray(x.zhChoices) ? x.zhChoices : [];
+        const zhChoices = rawCh
+          .map(function (z) {
+            return String(z || "").trim();
+          })
+          .filter(Boolean)
+          .slice(0, 4);
+        const zhAnswer =
+          x.zhAnswer != null ? String(x.zhAnswer).trim() : "";
+        const okMcq = zhChoices.length === 4 && zhAnswer.length > 0;
+        return {
+          word: cleanKeyword(x.word),
+          zh: String(x.zh || "").trim(),
+          zhChoices: okMcq ? zhChoices : [],
+          zhAnswer: okMcq ? zhAnswer : "",
+        };
       }
-      return { word: cleanKeyword(x), zh: "" };
+      return { word: cleanKeyword(x), zh: "", zhChoices: [], zhAnswer: "" };
     }
 
     function spellItemWord(item) {
@@ -961,21 +1054,72 @@
       return "";
     }
 
+    function spellItemZhAnswer(item) {
+      if (item && typeof item === "object" && item.zhAnswer != null) {
+        return String(item.zhAnswer).trim();
+      }
+      return "";
+    }
+
+    function spellUsesZhMcq(item) {
+      if (!item || typeof item !== "object") return false;
+      const ch = item.zhChoices;
+      return (
+        Array.isArray(ch) &&
+        ch.length === 4 &&
+        spellItemZhAnswer(item).length > 0
+      );
+    }
+
+    function setSpellZhFieldsDisabled(idx, dis) {
+      const zh = document.getElementById("spellZhInput_" + idx);
+      if (zh) zh.disabled = !!dis;
+      const radios = document.getElementsByName("spellZhMcq_" + idx);
+      for (let j = 0; j < radios.length; j++) radios[j].disabled = !!dis;
+    }
+
     function normalizeZhMean(s) {
       return String(s || "")
         .trim()
         .replace(/\s+/g, "")
-        .replace(/[，、。．,．·•]/g, "");
+        .replace(
+          /[，、。．,．·•；;:!？?…「」『』【】\[\]（）()《》"'“”‘’—\-]/g,
+          ""
+        );
     }
 
+    /**
+     * Chinese meaning must match reference loosely (not "anything goes"):
+     * exact or slash-separated alternative; user's gloss contained in reference
+     * (example sentence); or reference phrase contained in user's longer answer.
+     * If there is no usable reference text, returns false (do not auto-pass).
+     */
     function zhMeaningMatches(expected, userInput) {
+      const minLen = 2;
       const u = normalizeZhMean(userInput);
       if (!u) return false;
       const exp = String(expected || "").trim();
-      if (!exp) return true;
+      if (!exp) return false;
       const parts = exp.split(/[/／|｜]/).map(normalizeZhMean).filter(Boolean);
-      if (!parts.length) return true;
-      return parts.indexOf(u) >= 0;
+      if (!parts.length) return false;
+      if (parts.indexOf(u) >= 0) return true;
+      for (let i = 0; i < parts.length; i++) {
+        const p = parts[i];
+        if (!p) continue;
+        if (p === u) return true;
+        if (u.length >= minLen && p.indexOf(u) >= 0) return true;
+        if (p.length >= minLen && u.indexOf(p) >= 0) return true;
+        if (p.length > 0 && p.length < minLen && u.indexOf(p) >= 0) return true;
+      }
+      return false;
+    }
+
+    /** True when JSON has text we can grade Chinese against (not blank / punctuation-only). */
+    function spellZhHasGradableReference(item) {
+      const exp = String(spellItemZhExpected(item) || "").trim();
+      if (!exp) return false;
+      const parts = exp.split(/[/／|｜]/).map(normalizeZhMean).filter(Boolean);
+      return parts.length > 0;
     }
 
     function spellEdgeHints(word) {
@@ -1141,10 +1285,10 @@
       if (listenInstr) {
         if (needsListenProceedForSubmit()) {
           listenInstr.innerHTML =
-            "Use <strong>Play Audio</strong>, type each missing letter in the <strong>underlined boxes</strong> (first and last letters are shown), and enter the <strong>Chinese meaning</strong>. When listening is complete, click <strong>Finish listening — continue to multiple choice</strong>. <strong>After that, you cannot change your listening answers.</strong>";
+            "For each item use <strong>Play audio</strong>, fill the <strong>letter boxes</strong>, then answer the <strong>Chinese meaning</strong> (MCQ choices stay in Chinese when <code>zhChoices</code> is present). When the listening section is done, click <strong>Finish listening — continue to multiple choice</strong>. <strong>You cannot change listening answers after that.</strong>";
         } else if (spellData.length > 0) {
           listenInstr.innerHTML =
-            "Use <strong>Play Audio</strong>, type each missing letter in the <strong>underlined boxes</strong> (first and last letters are shown), and enter the <strong>Chinese meaning</strong>. When finished, scroll down and click <strong>Submit</strong>.";
+            "For each item use <strong>Play audio</strong>, fill the <strong>letter boxes</strong>, then choose or type the <strong>Chinese meaning</strong> (four Chinese options when provided). When finished, scroll down and click <strong>Submit</strong>.";
         }
       }
     }
@@ -1201,9 +1345,8 @@
         for (let i = 0; i < spellData.length; i++) {
           setSpellCellsDisabled(i, !!graded);
           const en = document.getElementById("spellInput_" + i);
-          const zh = document.getElementById("spellZhInput_" + i);
           if (en) en.disabled = !!graded;
-          if (zh) zh.disabled = !!graded;
+          setSpellZhFieldsDisabled(i, !!graded);
         }
         return;
       }
@@ -1249,9 +1392,8 @@
       for (let i = 0; i < spellData.length; i++) {
         setSpellCellsDisabled(i, listenPhaseLocked || !!graded);
         const en = document.getElementById("spellInput_" + i);
-        const zh = document.getElementById("spellZhInput_" + i);
         if (en) en.disabled = listenPhaseLocked || !!graded;
-        if (zh) zh.disabled = listenPhaseLocked || !!graded;
+        setSpellZhFieldsDisabled(i, listenPhaseLocked || !!graded);
       }
       if (btnProceed && btnProceed.style.display !== "none") {
         btnProceed.disabled =
@@ -1270,9 +1412,21 @@
           }
         }
         const en = document.getElementById("spellInput_" + i);
-        const zh = document.getElementById("spellZhInput_" + i);
         if (!en || !String(en.value || "").trim()) return false;
-        if (!zh || !zh.value.trim()) return false;
+        if (spellUsesZhMcq(spellData[i])) {
+          const radios = document.getElementsByName("spellZhMcq_" + i);
+          let picked = false;
+          for (let r = 0; r < radios.length; r++) {
+            if (radios[r].checked) {
+              picked = true;
+              break;
+            }
+          }
+          if (!picked) return false;
+        } else {
+          const zh = document.getElementById("spellZhInput_" + i);
+          if (!zh || !zh.value.trim()) return false;
+        }
       }
       return true;
     }
@@ -1390,7 +1544,7 @@
 
     const DEFAULT_PAGE_TITLE = "English Quiz Taker";
     const DEFAULT_LISTEN_INSTR_HTML =
-      "Use <strong>Play Audio</strong>, type the missing letters in the underlined boxes (first and last letters are given), and enter the <strong>Chinese meaning</strong>.";
+      "Use <strong>Play audio</strong> for each item. Spell the word in the <strong>underlined letter boxes</strong> (first and last letters are given). Then <strong>choose or type the Chinese meaning</strong> (short headword gloss, not a sentence). Chinese four-choice options appear when the quiz file includes them; all other labels here are in English.";
 
     function resetQuizUiToInitialState() {
       const listenInstr = document.getElementById("listenInstr");
@@ -1484,7 +1638,7 @@
         spellData.length > 0 || mixedData.length > 0;
       if (!hasBank && !hasSession) {
         alert(
-          "尚未載入題庫。請先於上方「Load Quiz Data」上傳 english_quiz_questions.json（或由產生器匯出的題庫檔）。"
+          "No quiz loaded yet. Upload english_quiz_questions.json (or your export) via Load Quiz Data above."
         );
         return;
       }
@@ -1574,8 +1728,17 @@
       for (let i = 0; i < spellData.length; i++) {
         const el = document.getElementById("spellInput_" + i);
         spellInputs.push(el ? el.value : "");
-        const z = document.getElementById("spellZhInput_" + i);
-        spellZhInputs.push(z ? z.value : "");
+        if (spellUsesZhMcq(spellData[i])) {
+          const radios = document.getElementsByName("spellZhMcq_" + i);
+          let zv = "";
+          for (let j = 0; j < radios.length; j++) {
+            if (radios[j].checked) zv = radios[j].value;
+          }
+          spellZhInputs.push(zv);
+        } else {
+          const z = document.getElementById("spellZhInput_" + i);
+          spellZhInputs.push(z ? z.value : "");
+        }
       }
       const mcqPicked = [];
       for (let i = 0; i < mixedData.length; i++) {
@@ -1650,8 +1813,22 @@
       if (d.v === 2 || d.v === 3 || d.v === 4) {
         const sz = d.spellZhInputs || [];
         for (let i = 0; i < spellData.length; i++) {
-          const zel = document.getElementById("spellZhInput_" + i);
-          if (zel && sz[i] != null) zel.value = sz[i];
+          if (spellUsesZhMcq(spellData[i])) {
+            const val = sz[i];
+            if (val == null) continue;
+            const radios = document.getElementsByName("spellZhMcq_" + i);
+            for (let j = 0; j < radios.length; j++) {
+              if (radios[j].value === val) {
+                radios[j].checked = true;
+                const lbl = radios[j].closest(".choice-label");
+                if (lbl) lbl.classList.add("selected");
+                break;
+              }
+            }
+          } else {
+            const zel = document.getElementById("spellZhInput_" + i);
+            if (zel && sz[i] != null) zel.value = sz[i];
+          }
         }
         listenPhaseLocked = !!d.listenPhaseLocked;
       } else {
@@ -1670,6 +1847,17 @@
         }
       }
       if (!d.submitted) {
+        spellData.forEach((_, i) => {
+          if (!spellUsesZhMcq(spellData[i])) return;
+          const radios = document.getElementsByName("spellZhMcq_" + i);
+          for (let j = 0; j < radios.length; j++) {
+            if (radios[j].checked) {
+              const lbl = radios[j].closest(".choice-label");
+              if (lbl) lbl.classList.add("selected");
+              break;
+            }
+          }
+        });
         mixedData.forEach((_, i) => {
           const radios = document.getElementsByName("mcq_" + i);
           for (let j = 0; j < radios.length; j++) {
@@ -1711,8 +1899,7 @@
         if (scoreDisplay) scoreDisplay.textContent = d.scoreText || "";
         if (btnSubmit) btnSubmit.disabled = true;
         for (let i = 0; i < spellData.length; i++) {
-          const zel = document.getElementById("spellZhInput_" + i);
-          if (zel) zel.disabled = true;
+          setSpellZhFieldsDisabled(i, true);
         }
       }
       syncListenTabUi();
@@ -1828,7 +2015,11 @@
       });
       quizPanel.addEventListener("change", function(e) {
         const t = e.target;
-        if (t && t.name && /^mcq_\d+$/.test(String(t.name))) scheduleQuizDraftSave();
+        const nm = t && t.name ? String(t.name) : "";
+        if (nm && (/^mcq_\d+$/.test(nm) || /^spellZhMcq_\d+$/.test(nm))) {
+          scheduleQuizDraftSave();
+          refreshListenProceedGate();
+        }
       });
     }
 
@@ -2156,26 +2347,30 @@
           const block = document.createElement("div");
           block.className = "spell-block";
 
-          const topActions = document.createElement("div");
-          topActions.className = "spell-top-actions";
+          const header = document.createElement("div");
+          header.className = "spell-card-header";
           const label = document.createElement("strong");
-          label.style.color = "#58a6ff";
+          label.className = "spell-card-num";
           label.textContent = idx + 1 + ".";
+          const prog = document.createElement("span");
+          prog.className = "spell-card-progress";
+          prog.textContent = idx + 1 + " / " + spellData.length;
           const btnSpeak = document.createElement("button");
           btnSpeak.type = "button";
           btnSpeak.id = "spellSpeakBtn_" + idx;
-          btnSpeak.innerHTML = "🔊 Play Audio";
+          btnSpeak.className = "spell-speak-btn";
+          btnSpeak.innerHTML = "&#128266; Play audio";
           btnSpeak.onclick = function () {
             playSpellAudio(spellItemWord(word));
           };
-          topActions.appendChild(label);
-          topActions.appendChild(btnSpeak);
-          block.appendChild(topActions);
+          header.appendChild(label);
+          header.appendChild(prog);
+          header.appendChild(btnSpeak);
+          block.appendChild(header);
 
-          const prog = document.createElement("div");
-          prog.className = "spell-progress-line";
-          prog.textContent = idx + 1 + " / " + spellData.length;
-          block.appendChild(prog);
+          const divider = document.createElement("div");
+          divider.className = "spell-card-divider";
+          block.appendChild(divider);
 
           const hiddenAns = document.createElement("input");
           hiddenAns.type = "text";
@@ -2186,6 +2381,9 @@
           hiddenAns.autocomplete = "off";
           hiddenAns.spellcheck = false;
           block.appendChild(hiddenAns);
+
+          const wordPanel = document.createElement("div");
+          wordPanel.className = "spell-word-panel";
 
           const wArr = spellWordChars(word);
           const rowWord = document.createElement("div");
@@ -2236,30 +2434,76 @@
             wireSpellLineCells(idx, cells);
             syncSpellHiddenInput(idx);
           }
-          block.appendChild(rowWord);
+          wordPanel.appendChild(rowWord);
+          block.appendChild(wordPanel);
 
-          const refZh = spellItemZhExpected(word);
-          if (refZh) {
-            const zhHint = document.createElement("div");
-            zhHint.className = "spell-ref-zh";
-            zhHint.textContent = refZh;
-            block.appendChild(zhHint);
-          }
+          const meaningSection = document.createElement("div");
+          meaningSection.className = "spell-meaning-section";
 
           const rowZh = document.createElement("div");
           rowZh.className = "spell-meaning-row";
-          const zhLabel = document.createElement("label");
-          zhLabel.setAttribute("for", "spellZhInput_" + idx);
-          zhLabel.textContent = "Chinese meaning";
-          const zhInput = document.createElement("input");
-          zhInput.type = "text";
-          zhInput.className = "spell-zh-input";
-          zhInput.id = "spellZhInput_" + idx;
-          zhInput.placeholder = "Type the Chinese meaning…";
-          zhInput.autocomplete = "off";
-          rowZh.appendChild(zhLabel);
-          rowZh.appendChild(zhInput);
-          block.appendChild(rowZh);
+          if (spellUsesZhMcq(word)) {
+            const zhHead = document.createElement("div");
+            zhHead.className = "spell-zh-head";
+            zhHead.textContent = "Chinese meaning (choose one)";
+            const zhSub = document.createElement("div");
+            zhSub.className = "spell-zh-sub";
+            zhSub.textContent =
+              "Options below are in Chinese. Pick the best short gloss for this headword — not a full sentence.";
+            rowZh.appendChild(zhHead);
+            rowZh.appendChild(zhSub);
+            const choicesWrap = document.createElement("div");
+            choicesWrap.className = "mcq-choices spell-zh-mcq-choices";
+            word.zhChoices.forEach(function (choice, j) {
+              const lab = document.createElement("label");
+              lab.className = "choice-label";
+              const radio = document.createElement("input");
+              radio.type = "radio";
+              radio.name = "spellZhMcq_" + idx;
+              radio.value = choice;
+              radio.style.marginRight = "10px";
+              radio.addEventListener("change", function () {
+                const all = choicesWrap.querySelectorAll(".choice-label");
+                all.forEach(function (l) {
+                  l.classList.remove("selected");
+                });
+                if (this.checked) lab.classList.add("selected");
+              });
+              lab.appendChild(radio);
+              lab.appendChild(
+                document.createTextNode(
+                  String.fromCharCode(65 + j) + ") " + choice
+                )
+              );
+              choicesWrap.appendChild(lab);
+            });
+            rowZh.appendChild(choicesWrap);
+          } else {
+            rowZh.className = "spell-meaning-row spell-meaning-free";
+            const zhHead = document.createElement("div");
+            zhHead.className = "spell-zh-head";
+            zhHead.textContent = "Chinese meaning (type the gloss)";
+            const zhSub = document.createElement("div");
+            zhSub.className = "spell-zh-sub";
+            zhSub.textContent =
+              "Answer in Chinese. One short gloss for the headword, not a full sentence.";
+            const zhLabel = document.createElement("label");
+            zhLabel.setAttribute("for", "spellZhInput_" + idx);
+            zhLabel.textContent = "Your answer";
+            zhLabel.style.fontSize = "0.85rem";
+            const zhInput = document.createElement("input");
+            zhInput.type = "text";
+            zhInput.className = "spell-zh-input";
+            zhInput.id = "spellZhInput_" + idx;
+            zhInput.placeholder = "Type the Chinese gloss…";
+            zhInput.autocomplete = "off";
+            rowZh.appendChild(zhHead);
+            rowZh.appendChild(zhSub);
+            rowZh.appendChild(zhLabel);
+            rowZh.appendChild(zhInput);
+          }
+          meaningSection.appendChild(rowZh);
+          block.appendChild(meaningSection);
 
           const feedback = document.createElement("span");
           feedback.id = "spellFeedback_" + idx;
@@ -2564,7 +2808,7 @@
       if (fullSpellData.length) {
         addParagraph("Part 1 -- Listen and Spell", 14, 7);
         addParagraph(
-          "Use the English Quiz Taker: click [Play Audio] for each item (same numbers as below). The first and last letters of each word are shown; fill in the missing letters. Write the Chinese meaning on the line under each item.",
+          "Use the English Quiz Taker: click [Play Audio] for each item (same numbers as below). The first and last letters of each word are shown; fill in the missing letters. For Chinese, either choose one option (A–D) or write the meaning on the line.",
           10
         );
         y += 2;
@@ -2572,11 +2816,22 @@
           var n = idx + 1;
           newPageIf(32);
           addParagraph(n + ".  " + pdfSpellPatternLine(word), 11, 6.2);
-          addParagraph(
-            "    Chinese meaning: _______________________________________________________",
-            10,
-            5.4
-          );
+          if (spellUsesZhMcq(word)) {
+            addParagraph("    Chinese gloss for the word (circle one):", 10, 5.4);
+            word.zhChoices.forEach(function (c, j) {
+              addParagraph(
+                "      " + String.fromCharCode(65 + j) + ") " + String(c),
+                10,
+                5.2
+              );
+            });
+          } else {
+            addParagraph(
+              "    Chinese gloss (this word): _______________________________________________________",
+              10,
+              5.4
+            );
+          }
           y += 1;
           doc.setDrawColor(120);
           doc.setLineWidth(0.15);
@@ -2618,6 +2873,12 @@
             idx + 1 + ". " + pdfSafeAscii(spellItemWord(word)),
             10
           );
+          if (spellUsesZhMcq(word)) {
+            addParagraph(
+              "    Chinese (correct): " + String(spellItemZhAnswer(word) || ""),
+              9
+            );
+          }
           var zr = spellItemZhExpected(word);
           if (zr && String(zr).trim()) {
             doc.setFontSize(9);
@@ -2685,7 +2946,7 @@
           "Exported (ISO): " + new Date().toISOString(),
           "",
           "This ZIP contains quiz.pdf only (printable quiz + answer key on last pages).",
-          "Part 1 on paper shows first/last letter hints and a line for Chinese meaning.",
+          "Part 1 on paper shows first/last letter hints and either Chinese A–D choices or a line for the meaning.",
           "For audio, open the same English Quiz Taker page and use [Play Audio]; item numbers match the PDF.",
           "[Play Audio] uses the browser Web Speech API (OS voices)."
         ];
@@ -2733,12 +2994,31 @@
       for (let i = 0; i < spellData.length; i++) {
         syncSpellHiddenInput(i);
         const enEl = document.getElementById("spellInput_" + i);
-        const zhEl = document.getElementById("spellZhInput_" + i);
         const val = enEl ? enEl.value.trim() : "";
-        const zt = zhEl ? zhEl.value.trim() : "";
-        if (!val || !zt) {
+        if (!val) {
           allAnswered = false;
           break;
+        }
+        if (spellUsesZhMcq(spellData[i])) {
+          const radios = document.getElementsByName("spellZhMcq_" + i);
+          let picked = false;
+          for (let r = 0; r < radios.length; r++) {
+            if (radios[r].checked) {
+              picked = true;
+              break;
+            }
+          }
+          if (!picked) {
+            allAnswered = false;
+            break;
+          }
+        } else {
+          const zhEl = document.getElementById("spellZhInput_" + i);
+          const zt = zhEl ? zhEl.value.trim() : "";
+          if (!zt) {
+            allAnswered = false;
+            break;
+          }
         }
       }
 
@@ -2776,14 +3056,36 @@
         const expected = normalizeForSpell(spellItemWord(word));
         const got = normalizeForSpell(inputEl.value);
         const expZh = spellItemZhExpected(word);
-        const userZh = zhEl && zhEl.value ? zhEl.value.trim() : "";
+        let userZh = "";
+        let zhPartOk = false;
+        if (spellUsesZhMcq(word)) {
+          const radios = document.getElementsByName("spellZhMcq_" + idx);
+          for (let r = 0; r < radios.length; r++) {
+            if (radios[r].checked) userZh = radios[r].value;
+          }
+          const ans = spellItemZhAnswer(word);
+          zhPartOk =
+            !!userZh &&
+            normalizeZhMean(userZh) === normalizeZhMean(ans);
+        } else {
+          userZh = zhEl && zhEl.value ? zhEl.value.trim() : "";
+          const zhRefOk = spellZhHasGradableReference(word);
+          const userZhNorm = normalizeZhMean(userZh);
+          if (!userZhNorm) {
+            zhPartOk = false;
+          } else if (!zhRefOk) {
+            zhPartOk = userZhNorm.length >= 2;
+          } else {
+            zhPartOk = zhMeaningMatches(expZh, userZh);
+          }
+        }
+
         const spellPartOk = expected === got;
-        const zhPartOk =
-          userZh.length > 0 && zhMeaningMatches(expZh, userZh);
 
         setSpellCellsDisabled(idx, true);
         inputEl.disabled = true;
         if (zhEl) zhEl.disabled = true;
+        setSpellZhFieldsDisabled(idx, true);
 
         if (spellPartOk && zhPartOk) {
           totalScore++;
@@ -2797,12 +3099,25 @@
             );
           }
           if (!zhPartOk) {
-            if (!userZh) parts.push("Chinese meaning not filled in");
-            else if (expZh) {
-              parts.push("Chinese incorrect (reference: " + expZh + ")");
+            const userZhNorm = normalizeZhMean(userZh);
+            if (spellUsesZhMcq(word)) {
+              if (!userZh) {
+                parts.push("Chinese meaning not chosen");
+              } else {
+                parts.push(
+                  "Chinese wrong (correct: " + spellItemZhAnswer(word) + ")"
+                );
+              }
+            } else if (!userZh || !userZhNorm) {
+              parts.push("Chinese meaning not filled in");
+            } else if (!spellZhHasGradableReference(word)) {
+              parts.push(
+                "Chinese: this word has no zh in the quiz file — type at least 2 characters for the meaning, or re-export JSON so each word includes Chinese (generator: example/phrases zh)."
+              );
             } else {
               parts.push(
-                "Chinese could not be checked (no reference in quiz file)"
+                "Chinese: not close enough to the reference (same word, a short gloss that appears in the ref. sentence, or a / alternative is OK). Ref: " +
+                  expZh
               );
             }
           }
@@ -2813,7 +3128,11 @@
             qNum: idx + 1,
             expected:
               spellItemWord(word) +
-              (expZh ? " · Chinese (ref): " + expZh : ""),
+              (spellUsesZhMcq(word)
+                ? " · Chinese: " + spellItemZhAnswer(word)
+                : expZh
+                ? " · Chinese (ref): " + expZh
+                : ""),
             userAns:
               (inputEl.value || "").trim() +
               " · Chinese: " +
