@@ -2696,6 +2696,16 @@
       );
     }
 
+    /** Helvetica-safe: keep Latin + common punctuation; CJK -> ? (use canvas path elsewhere). */
+    function pdfLatinOrSafe(s) {
+      if (pdfNeedsCjk(s)) return pdfSafeAscii(s);
+      return String(s || "")
+        .replace(/[\u2013\u2014\u2212]/g, "-")
+        .replace(/[\u2018\u2019]/g, "'")
+        .replace(/[\u201C\u201D]/g, '"')
+        .replace(/\u2026/g, "...");
+    }
+
     function wrapTextGreedyCanvas(ctx, text, maxPx) {
       var lines = [];
       var line = "";
@@ -2834,7 +2844,7 @@
       var curW = 0;
       function tokW(tok) {
         doc.setFont("helvetica", tok.bold ? "bold" : "normal");
-        return doc.getTextWidth(pdfSafeAscii(tok.str));
+        return doc.getTextWidth(pdfLatinOrSafe(tok.str));
       }
       tokens.forEach(function(tok) {
         var w = tokW(tok);
@@ -2856,9 +2866,9 @@
         lineToks.forEach(function(tok) {
           doc.setFont("helvetica", tok.bold ? "bold" : "normal");
           doc.setFontSize(fontSize);
-          var safeStr = pdfSafeAscii(tok.str);
-          doc.text(safeStr, cx, y);
-          var tw = doc.getTextWidth(safeStr);
+          var outStr = pdfLatinOrSafe(tok.str);
+          doc.text(outStr, cx, y);
+          var tw = doc.getTextWidth(outStr);
           if (tok.underline && !tok.isSpace && tw > 0) {
             doc.setDrawColor(40);
             doc.setLineWidth(0.12);
@@ -3038,8 +3048,49 @@
         addParagraph("Part 2 -- Multiple Choice", 14, 7);
         y += 2;
         fullMixedData.forEach(function (q, idx) {
-          var stemPlain = htmlToPlain(q.stemHtml || "");
-          addParagraphFlexible(idx + 1 + ". " + stemPlain, 10, 5.5);
+          var blocks = stemHtmlToParagraphRunsList(q.stemHtml || "");
+          var n = idx + 1;
+          var bi;
+          if (!blocks.length) {
+            addParagraphFlexible(n + ". " + htmlToPlain(q.stemHtml || ""), 10, 5.5);
+          } else {
+            for (bi = 0; bi < blocks.length; bi++) {
+              var runs = blocks[bi];
+              var blockHasCjk = runs.some(function (r) {
+                return pdfNeedsCjk(r.text);
+              });
+              if (bi === 0) {
+                runs = [{ text: n + ". ", bold: false, underline: false }].concat(
+                  runs
+                );
+              } else {
+                runs = [{ text: "    ", bold: false, underline: false }].concat(
+                  runs
+                );
+              }
+              if (blockHasCjk) {
+                var flat = "";
+                runs.forEach(function (r) {
+                  flat += r.text;
+                });
+                addParagraphFlexible(flat, 10, 5.5);
+              } else {
+                y = drawParagraphRunsPdf(
+                  doc,
+                  runs,
+                  margin,
+                  y,
+                  maxW,
+                  10,
+                  5.5,
+                  newPageIf
+                );
+              }
+              if (bi < blocks.length - 1) {
+                y += 2.5;
+              }
+            }
+          }
           var choices = q.choices || [];
           choices.forEach(function (c, j) {
             addParagraphFlexible(
