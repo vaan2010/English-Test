@@ -124,12 +124,6 @@
       font-weight: 600;
       word-break: break-all;
     }
-    .loaded-quiz-file-note {
-      display: block;
-      font-size: 0.82rem;
-      margin-top: 6px;
-      color: #6e7681;
-    }
     .loaded-quiz-file-block {
       margin-top: 12px;
     }
@@ -914,7 +908,6 @@
       
       <div class="card" id="uploadPanel">
         <h2>Load Quiz Data</h2>
-        <p style="color:#8b949e;">Please upload the <code>english_quiz_questions.json</code> file you exported from the generator.</p>
         <div class="file-input-wrap">
           <input type="file" id="jsonFile" accept=".json" />
         </div>
@@ -922,7 +915,6 @@
           <div class="loaded-quiz-file-row">
             <p id="loadedQuizFileLine" class="loaded-quiz-file-line">
               Quiz file in use: <strong id="loadedQuizFileName"></strong>
-              <span class="loaded-quiz-file-note">Browsers clear the file picker after refresh; this name is the quiz data stored on this page (same as your last successful load).</span>
             </p>
             <button type="button" id="btnClearLoadedQuiz" class="btn-clear-loaded-quiz">Clear quiz file</button>
           </div>
@@ -976,7 +968,6 @@
             <button id="btnRetakeQuiz" type="button" class="btn-retake-quiz" disabled title="交卷後若要重做同一套題，請按此鈕清空作答；切換分頁不會清空。">重新測驗（清空作答）</button>
             <button id="btnExportPack" type="button" class="btn-export-pack">Export quiz PDF (ZIP)</button>
           </div>
-          <p id="quizFooterZipHint" style="color:#8b949e;font-size:0.85em;margin:12px 0 0;max-width:560px;margin-left:auto;margin-right:auto;">ZIP 僅含 <code>quiz.pdf</code>：<strong>只有題目、不含任何解答</strong>。中文會在匯出時用你電腦已安裝的字型畫進 PDF（例如 Windows 的微軟正黑體）。聽力請在 <strong>Listening &amp; spelling</strong> 用 <strong>Play audio</strong>，題號與 PDF 一致。</p>
           <div id="scoreDisplay" class="score-banner"></div>
         </div>
       </div>
@@ -1767,7 +1758,7 @@
       if (qp) qp.style.display = "block";
       listenPhaseLocked = false;
       renderQuiz();
-      persistQuizDraftNow();
+      // Do not persist immediately; avoids restoring edge hints as typed letters on refresh.
     }
 
     function persistQuizDraftNow() {
@@ -1782,10 +1773,18 @@
         return;
       }
       const spellInputs = [];
+      const spellCellInputs = [];
       const spellZhInputs = [];
       for (let i = 0; i < spellData.length; i++) {
         const el = document.getElementById("spellInput_" + i);
         spellInputs.push(el ? el.value : "");
+        const wArr = spellWordChars(spellData[i]);
+        const rowCells = [];
+        for (let j = 1; j < wArr.length - 1; j++) {
+          const c = document.getElementById("spellCell_" + i + "_" + j);
+          rowCells.push(c && c.value ? c.value : "");
+        }
+        spellCellInputs.push(rowCells);
         if (spellUsesZhMcq(spellData[i])) {
           const radios = document.getElementsByName("spellZhMcq_" + i);
           let zv = "";
@@ -1825,7 +1824,7 @@
       const activeTab =
         mcqPanel && mcqPanel.classList.contains("active") ? "mcq" : "listen";
       const draft = {
-        v: 4,
+        v: 5,
         baseFileName,
         examMode: hasSession ? examMode : null,
         fullSpellData,
@@ -1834,6 +1833,7 @@
         spellData,
         mixedData,
         spellInputs,
+        spellCellInputs,
         spellZhInputs,
         listenPhaseLocked: !!listenPhaseLocked,
         activeTab,
@@ -1859,16 +1859,31 @@
     }
 
     function applyRestoredQuizDraft(d) {
-      if (!d || (d.v !== 1 && d.v !== 2 && d.v !== 3 && d.v !== 4)) return;
+      if (
+        !d ||
+        (d.v !== 1 && d.v !== 2 && d.v !== 3 && d.v !== 4 && d.v !== 5)
+      )
+        return;
       const si = d.spellInputs || [];
+      const sci = Array.isArray(d.spellCellInputs) ? d.spellCellInputs : null;
       for (let i = 0; i < spellData.length; i++) {
         const el = document.getElementById("spellInput_" + i);
         if (el && si[i] != null) {
           el.value = si[i];
-          distributeAnswerToSpellCells(i, si[i]);
+        }
+        const row = sci && Array.isArray(sci[i]) ? sci[i] : null;
+        if (row) {
+          const wArr = spellWordChars(spellData[i]);
+          for (let j = 1; j < wArr.length - 1; j++) {
+            const cell = document.getElementById("spellCell_" + i + "_" + j);
+            if (!cell) continue;
+            const rv = row[j - 1];
+            cell.value = rv != null ? String(rv) : "";
+          }
+          syncSpellHiddenInput(i);
         }
       }
-      if (d.v === 2 || d.v === 3 || d.v === 4) {
+      if (d.v === 2 || d.v === 3 || d.v === 4 || d.v === 5) {
         const sz = d.spellZhInputs || [];
         for (let i = 0; i < spellData.length; i++) {
           if (spellUsesZhMcq(spellData[i])) {
@@ -1979,9 +1994,9 @@
         examMode === "all" &&
         spellData.length > 0 &&
         mixedData.length > 0;
-      if ((d.v === 2 || d.v === 3 || d.v === 4) && bothParts && d.activeTab === "mcq" && listenPhaseLocked) {
+      if ((d.v === 2 || d.v === 3 || d.v === 4 || d.v === 5) && bothParts && d.activeTab === "mcq" && listenPhaseLocked) {
         switchQuizTab("mcq");
-      } else if ((d.v === 2 || d.v === 3 || d.v === 4) && bothParts && d.activeTab === "listen") {
+      } else if ((d.v === 2 || d.v === 3 || d.v === 4 || d.v === 5) && bothParts && d.activeTab === "listen") {
         switchQuizTab("listen");
       }
     }
@@ -1991,7 +2006,11 @@
         const raw = localStorage.getItem(QUIZ_DRAFT_KEY);
         if (!raw) return;
         const d = JSON.parse(raw);
-        if (!d || (d.v !== 1 && d.v !== 2 && d.v !== 3 && d.v !== 4)) return;
+        if (
+          !d ||
+          (d.v !== 1 && d.v !== 2 && d.v !== 3 && d.v !== 4 && d.v !== 5)
+        )
+          return;
         if (!Array.isArray(d.spellData) || !Array.isArray(d.mixedData)) return;
         if (d.v >= 3) {
           baseFileName = d.baseFileName || "Quiz";
