@@ -5,16 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>English Quiz Taker</title>
   <style>
-    /* CSS matching the dark theme */
+    :root {
+      --bg-page: #0a0e14;
+      --bg-elevated: #111923;
+      --bg-card: #121a26;
+      --border-subtle: rgba(59, 130, 246, 0.22);
+      --border-strong: rgba(59, 130, 246, 0.45);
+      --primary: #3b82f6;
+      --primary-bright: #60a5fa;
+      --primary-deep: #2563eb;
+      --text: #e5e7eb;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      --green-play: #22c55e;
+      --green-play-deep: #16a34a;
+      --radius-lg: 12px;
+      --radius-pill: 999px;
+      --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+    }
     html {
       overflow-x: hidden;
       -webkit-text-size-adjust: 100%;
     }
-    body { 
-      background: #0d1117; 
-      color: #c9d1d9; 
-      font-family: sans-serif; 
-      padding: 20px; 
+    body {
+      background: var(--bg-page);
+      color: var(--text);
+      font-family: var(--font);
+      padding: 20px;
       line-height: 1.6;
       margin: 0;
       max-width: 100%;
@@ -23,7 +40,7 @@
     * {
       box-sizing: border-box;
     }
-    h1, h2, h3 { color: #58a6ff; margin-top: 0; }
+    h1, h2, h3 { color: var(--primary); margin-top: 0; font-weight: 700; }
     #pageTitle {
       font-size: clamp(1.2rem, 4.5vw, 2rem);
       line-height: 1.25;
@@ -32,7 +49,7 @@
       max-width: 1200px; 
       margin: 0 auto; 
       display: flex;
-      gap: 20px;
+      gap: 24px;
       align-items: flex-start;
       width: 100%;
       min-width: 0;
@@ -40,10 +57,10 @@
     .main-content { flex: 1; min-width: 0; max-width: 100%; }
     .sidebar { 
       width: 320px; 
-      background: #161b22; 
-      padding: 20px; 
-      border-radius: 8px; 
-      border: 1px solid #30363d;
+      background: var(--bg-card); 
+      padding: 22px 20px; 
+      border-radius: var(--radius-lg); 
+      border: 1px solid var(--border-subtle);
       position: sticky;
       top: 20px;
       max-height: calc(100vh - 40px);
@@ -61,14 +78,48 @@
       min-width: 0;
       width: 100%;
     }
+    .sidebar-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+    }
+    .sidebar-clock {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      color: var(--primary);
+      opacity: 0.95;
+    }
     .sidebar-title {
       margin: 0;
       flex: 1;
       min-width: 0;
       line-height: 1.3;
-      font-size: 1.05rem;
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--primary);
       word-break: break-word;
       overflow-wrap: break-word;
+    }
+    .sidebar-footer-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      padding: 0;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .sidebar-footer-link:hover {
+      color: var(--primary-bright);
+      text-decoration: underline;
     }
     .btn-clear-history {
       flex-shrink: 0;
@@ -87,11 +138,11 @@
       background: #f85149;
     }
     .card { 
-      background: #161b22; 
-      padding: 20px 30px; 
-      border-radius: 8px; 
-      margin-bottom: 25px; 
-      border: 1px solid #30363d;
+      background: var(--bg-card); 
+      padding: 24px 28px; 
+      border-radius: var(--radius-lg); 
+      margin-bottom: 24px; 
+      border: 1px solid var(--border-subtle);
       max-width: 100%;
       overflow-wrap: break-word;
       word-break: break-word;
@@ -116,11 +167,11 @@
     .loaded-quiz-file-line {
       margin-top: 12px;
       font-size: 0.95rem;
-      color: #8b949e;
+      color: var(--text-muted);
       line-height: 1.45;
     }
     .loaded-quiz-file-line strong {
-      color: #58a6ff;
+      color: var(--primary-bright);
       font-weight: 600;
       word-break: break-all;
     }
@@ -171,8 +222,8 @@
     }
     input[type="text"] { 
       padding: 8px 12px; 
-      background: #0d1117; 
-      border: 1px solid #30363d; 
+      background: var(--bg-page); 
+      border: 1px solid var(--border-subtle); 
       color: #fff; 
       width: 100%;
       max-width: 320px;
@@ -181,7 +232,7 @@
       font-size: 1em;
     }
     input[type="text"]:focus {
-      border-color: #58a6ff;
+      border-color: var(--primary);
       outline: none;
     }
     input[type="file"] {
@@ -238,8 +289,8 @@
     }
     .choice-label:hover { background: #21262d; }
     .choice-label.selected {
-      background: #1f6feb;
-      border-color: #58a6ff;
+      background: var(--primary);
+      border-color: var(--primary-bright);
       color: #ffffff;
     }
     .mcq-choices { margin-top: 15px; }
@@ -247,7 +298,7 @@
       font-size: 1.5em; 
       font-weight: bold; 
       margin-top: 20px; 
-      color: #f2cc60; 
+      color: #eab308; 
       text-align: center; 
       overflow-wrap: break-word;
       word-break: break-word;
@@ -255,24 +306,26 @@
     
     /* Sidebar list styling */
     .history-item {
-      background: #0d1117;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      padding: 12px;
-      margin-bottom: 15px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px 38px 14px 14px;
+      margin-bottom: 12px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.2s, border-color 0.2s;
       min-width: 0;
       max-width: 100%;
       overflow-x: hidden;
+      position: relative;
     }
     .history-item:hover {
-      background: #21262d;
+      background: rgba(59, 130, 246, 0.08);
+      border-color: var(--border-strong);
     }
     .history-item h4 {
-      margin: 0 0 8px 0;
-      color: #f2cc60;
-      font-size: 1em;
+      margin: 0 0 6px 0;
+      color: var(--text);
+      font-size: 0.95rem;
       font-weight: 600;
       white-space: normal;
       word-break: break-word;
@@ -280,17 +333,29 @@
       max-width: 100%;
       line-height: 1.35;
     }
+    .history-item-chevron {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1;
+      pointer-events: none;
+    }
     .history-card-head {
       min-width: 0;
       max-width: 100%;
     }
     .history-score-line {
-      font-size: 0.95em;
-      margin-bottom: 8px;
+      font-size: 0.88rem;
+      margin-bottom: 0;
       max-width: 100%;
       line-height: 1.4;
       word-break: break-word;
       overflow-wrap: break-word;
+      color: var(--text-muted);
     }
     .history-details {
       display: none;
@@ -348,21 +413,21 @@
     }
     .menu-toggle {
       display: none;
-      background: #1f6feb;
+      background: var(--primary);
       color: white;
       border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
+      padding: 8px 14px;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 1em;
-      font-weight: bold;
+      font-size: 0.95rem;
+      font-weight: 600;
       flex-shrink: 0;
       white-space: nowrap;
       align-self: flex-start;
       margin-top: 2px;
     }
     .menu-toggle:hover {
-      background: #388bfd;
+      background: var(--primary-bright);
     }
     .sidebar-overlay {
       display: none;
@@ -489,7 +554,7 @@
     }
     .btn-export-pack:hover {
       background: #30363d;
-      border-color: #58a6ff;
+      border-color: var(--primary);
     }
     .btn-retake-quiz {
       font-size: 0.95em;
@@ -527,52 +592,116 @@
       max-width: 1200px;
     }
     .btn-back-to-modes {
-      padding: 8px 14px;
-      font-size: 0.95rem;
-      background: #21262d;
-      color: #c9d1d9;
-      border: 1px solid #30363d;
-      border-radius: 6px;
+      padding: 10px 18px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: var(--bg-elevated);
+      color: var(--text);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-pill);
       cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      font-family: inherit;
     }
     .btn-back-to-modes:hover {
-      background: #30363d;
-      border-color: #484f58;
+      background: rgba(59, 130, 246, 0.12);
+      border-color: var(--primary);
+      color: var(--primary-bright);
+    }
+    .quiz-panel-surface {
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      max-width: 1200px;
+      background: var(--bg-card);
+      margin-bottom: 20px;
     }
     .quiz-tab-bar {
       display: flex;
       gap: 0;
       margin-bottom: 0;
-      border-radius: 8px 8px 0 0;
-      overflow: hidden;
-      border: 1px solid #30363d;
-      border-bottom: none;
+      border-radius: 0;
+      overflow: visible;
+      border: none;
+      border-bottom: 1px solid var(--border-subtle);
       max-width: 1200px;
+      background: var(--bg-elevated);
     }
     .quiz-tab {
       flex: 1;
-      padding: 12px 16px;
-      font-size: 1rem;
-      background: #161b22;
-      color: #8b949e;
+      padding: 14px 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      background: transparent;
+      color: var(--text-muted);
       border: none;
-      border-right: 1px solid #30363d;
+      border-bottom: 2px solid transparent;
       cursor: pointer;
       transition: background 0.15s, color 0.15s;
+      border-radius: 0;
+      margin-bottom: 0;
     }
     .quiz-tab:last-child { border-right: none; }
     .quiz-tab:hover:not(:disabled) {
-      background: #21262d;
-      color: #c9d1d9;
+      background: rgba(59, 130, 246, 0.08);
+      color: var(--text);
     }
     .quiz-tab.active {
-      background: #1f6feb;
+      background: var(--primary);
       color: #fff;
+      border-bottom-color: transparent;
+      box-shadow: none;
     }
     .quiz-tab:disabled {
       opacity: 0.45;
       cursor: not-allowed;
+    }
+    .quiz-tab-panel .card {
+      border: none;
+      border-radius: 0;
+      margin-bottom: 0;
+      background: transparent;
+    }
+    .quiz-tab-panel .card h2 {
+      font-size: 1.35rem;
+      margin-bottom: 8px;
+    }
+    .quiz-instruction-callout {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      border-radius: 10px;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid var(--border-subtle);
+    }
+    .quiz-instruction-icon {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 800;
+      font-style: italic;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+    .quiz-instruction-lead {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .quiz-instruction-detail {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin: 0 0 18px;
+      line-height: 1.55;
     }
     .quiz-tab-panel {
       display: none;
@@ -587,45 +716,66 @@
       margin-right: auto;
       margin-bottom: 22px;
       padding: 20px 22px 18px;
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 12px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
       box-sizing: border-box;
     }
     .spell-block:last-child {
       margin-bottom: 0;
     }
     .spell-card-header {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      min-height: 2.75rem;
     }
     .spell-card-num {
-      color: #58a6ff;
+      color: var(--primary-bright);
       font-size: 1.12rem;
       font-weight: 700;
       min-width: 1.75rem;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
     }
     .spell-card-progress {
-      flex: 1;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: max-content;
+      max-width: min(260px, calc(100% - 7rem));
       text-align: center;
-      color: #8b949e;
+      color: var(--primary);
       font-size: 0.95rem;
+      font-weight: 600;
       letter-spacing: 0.02em;
+      pointer-events: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .spell-speak-btn {
-      background: linear-gradient(180deg, #33b356 0%, #238636 100%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      background: linear-gradient(180deg, var(--green-play) 0%, var(--green-play-deep) 100%);
       color: #fff;
-      border: 1px solid #2ea043;
-      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-pill);
       padding: 10px 18px;
       font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 2px 10px rgba(34, 197, 94, 0.35);
     }
     .spell-speak-btn:hover:not(:disabled) {
       filter: brightness(1.06);
@@ -641,9 +791,9 @@
       border: 0;
     }
     .spell-word-panel {
-      background: #0d1117;
-      border: 1px solid #21262d;
-      border-radius: 8px;
+      background: var(--bg-page);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
       padding: 18px 16px 20px;
     }
     .spell-meaning-section {
@@ -722,10 +872,10 @@
     .spell-char-fixed {
       font-size: 1.65rem;
       font-weight: 700;
-      color: #58a6ff;
+      color: var(--primary-bright);
       line-height: 1.15;
       padding: 0 2px 6px;
-      border-bottom: 2px solid #484f58;
+      border-bottom: 2px solid var(--text-dim);
       min-width: 0.75em;
       text-align: center;
     }
@@ -740,14 +890,14 @@
       font-size: 1.55rem;
       background: transparent;
       border: none;
-      border-bottom: 2px solid #58a6ff;
-      color: #e8edf2;
+      border-bottom: 2px solid var(--primary);
+      color: var(--text);
       border-radius: 0;
       box-sizing: content-box;
     }
     input.spell-cell-in:focus {
       outline: none;
-      border-bottom-color: #f2cc60;
+      border-bottom-color: var(--primary-bright);
     }
     input.spell-cell-in:disabled {
       opacity: 0.65;
@@ -790,16 +940,47 @@
     .btn-proceed-mcq {
       font-size: 1.05em;
       padding: 12px 24px;
-      background: #1f6feb;
+      background: linear-gradient(180deg, var(--primary-bright) 0%, var(--primary-deep) 100%);
       color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
     }
     .btn-proceed-mcq:hover:not(:disabled) {
-      background: #388bfd;
+      filter: brightness(1.06);
     }
     .btn-proceed-mcq:disabled {
-      background: #21262d;
-      color: #484f58;
-      border: 1px solid #30363d;
+      background: var(--bg-elevated);
+      color: var(--text-dim);
+      border: 1px solid var(--border-subtle);
+      box-shadow: none;
+      cursor: not-allowed;
+      filter: none;
+    }
+    .btn-submit-quiz {
+      font-size: 1.15em;
+      font-weight: 700;
+      padding: 12px 32px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: linear-gradient(180deg, var(--green-play) 0%, var(--green-play-deep) 100%);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35);
+    }
+    .btn-submit-quiz:hover:not(:disabled) {
+      filter: brightness(1.06);
+    }
+    .btn-submit-quiz:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      background: var(--bg-elevated);
+      color: var(--text-dim);
+      border: 1px solid var(--border-subtle);
+      box-shadow: none;
+      filter: none;
     }
     .result-modal {
       display: none;
@@ -820,9 +1001,9 @@
     }
     .result-modal-card {
       position: relative;
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
       padding: 24px 28px;
       max-width: 520px;
       width: 100%;
@@ -852,42 +1033,214 @@
       width: 100%;
       padding: 10px;
     }
+    .exam-mode-sub {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      margin: 0 0 4px;
+    }
+    .exam-mode-sub strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+    .exam-mode-back-categories {
+      display: inline-block;
+      margin-bottom: 14px;
+      box-sizing: border-box;
+      text-align: left;
+    }
     .exam-mode-panel .exam-mode-buttons {
       display: flex;
       flex-direction: column;
       gap: 14px;
-      margin-top: 18px;
-      max-width: 420px;
+      margin-top: 22px;
+      max-width: 100%;
     }
     .exam-mode-btn {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 16px;
       width: 100%;
-      padding: 18px 22px;
-      font-size: 1.25rem;
-      font-weight: 600;
-      border-radius: 10px;
-      border: 1px solid #30363d;
-      background: linear-gradient(180deg, #21262d 0%, #161b22 100%);
-      color: #e6edf3;
+      padding: 16px 20px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: linear-gradient(180deg, var(--primary-bright) 0%, var(--primary-deep) 100%);
+      color: #fff;
       cursor: pointer;
-      transition: border-color 0.15s, background 0.15s, transform 0.1s;
+      text-align: left;
+      transition: filter 0.15s, transform 0.1s, box-shadow 0.15s;
+      font-family: inherit;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
     }
     .exam-mode-btn:hover:not(:disabled) {
-      border-color: #58a6ff;
-      background: linear-gradient(180deg, #30363d 0%, #21262d 100%);
+      filter: brightness(1.06);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
     }
     .exam-mode-btn:active:not(:disabled) {
-      transform: scale(0.99);
+      transform: scale(0.995);
     }
     .exam-mode-btn:disabled {
-      opacity: 0.4;
+      opacity: 0.42;
+      cursor: not-allowed;
+      filter: grayscale(0.2);
+      box-shadow: none;
+    }
+    .exam-mode-btn-icon-wrap {
+      flex: 0 0 48px;
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+    .exam-mode-btn-icon-wrap svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .exam-mode-btn-text {
+      flex: 1;
+      min-width: 0;
+    }
+    .firebase-category-panel .category-hint {
+      color: var(--text-muted);
+      margin: 0 0 18px;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    #firebaseCategoryStatus {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      min-height: 1.35em;
+    }
+    #firebaseCategoryStatus.error {
+      color: #f85149;
+    }
+    .category-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 560px;
+      width: 100%;
+    }
+    .category-box {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      border-radius: var(--radius-lg);
+      background: var(--bg-elevated);
+      cursor: pointer;
+      text-align: center;
+      padding: 0;
+      overflow: hidden;
+      font: inherit;
+      color: var(--text);
+      min-height: 56px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+    }
+    .category-box--standard {
+      border: 1px solid var(--border-strong);
+      justify-content: center;
+    }
+    .category-box--standard:hover:not(:disabled) {
+      border-color: var(--primary);
+      box-shadow:
+        0 2px 12px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(59, 130, 246, 0.35);
+    }
+    .category-box--newest {
+      position: relative;
+      border: 1px solid var(--border-subtle);
+      justify-content: center;
+    }
+    .category-box--newest:hover:not(:disabled) {
+      border-color: var(--border-strong);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    }
+    .category-box:active:not(:disabled) {
+      transform: scale(0.998);
+    }
+    .category-box:disabled {
+      opacity: 0.45;
       cursor: not-allowed;
     }
-    .exam-mode-btn.primary {
-      background: linear-gradient(180deg, #1f6feb 0%, #1158c7 100%);
-      border-color: #388bfd;
+    /* NEW sits out of flow so the label centers on the full card width (aligns with rows without NEW). */
+    .category-box--newest .category-new-badge {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 72px;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      box-sizing: border-box;
+      background: linear-gradient(180deg, #238636 0%, #196c2e 100%);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      border-radius: 11px 0 0 11px;
+      pointer-events: none;
     }
-    .exam-mode-btn.primary:hover:not(:disabled) {
-      background: linear-gradient(180deg, #388bfd 0%, #1f6feb 100%);
+    .category-box--newest .category-box-label {
+      flex: 1 1 auto;
+      width: 100%;
+      max-width: 100%;
+      position: relative;
+      z-index: 0;
+    }
+    .category-box-label {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 18px 20px;
+      font-size: 1.125rem;
+      font-weight: 700;
+      word-break: break-word;
+      line-height: 1;
+    }
+    .category-box-label-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 140px;
+      justify-content: flex-start;
+    }
+    .category-box-label-text {
+      line-height: 1.25;
+      display: block;
+    }
+    .category-box-label .category-notebook-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      line-height: 0;
+      color: var(--primary-bright);
+    }
+    .category-box-label .category-notebook-icon svg {
+      display: block;
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -906,35 +1259,44 @@
         <button id="btnToggleMenu" class="menu-toggle" type="button" aria-label="Open exam history"><span class="menu-icon" aria-hidden="true">☰</span><span class="menu-label">History</span></button>
       </div>
       
-      <div class="card" id="uploadPanel">
-        <h2>Load Quiz Data</h2>
-        <div class="file-input-wrap">
-          <input type="file" id="jsonFile" accept=".json" />
-        </div>
+      <div class="card firebase-category-panel" id="firebaseCategoryPanel">
+        <h2>Choose a quiz category</h2>
+        <p class="category-hint">Select a category to view available exam modes and start practicing.</p>
+        <div id="firebaseCategoryStatus"></div>
+        <div id="categoryGrid" class="category-grid" role="list"></div>
         <div id="loadedQuizFileBlock" class="loaded-quiz-file-block" style="display: none;">
           <div class="loaded-quiz-file-row">
             <p id="loadedQuizFileLine" class="loaded-quiz-file-line">
-              Quiz file in use: <strong id="loadedQuizFileName"></strong>
+              Current quiz set: <strong id="loadedQuizFileName"></strong>
             </p>
-            <button type="button" id="btnClearLoadedQuiz" class="btn-clear-loaded-quiz">Clear quiz file</button>
+            <button type="button" id="btnClearLoadedQuiz" class="btn-clear-loaded-quiz">Clear quiz and pick another category</button>
           </div>
         </div>
       </div>
 
       <div id="examModePanel" class="card exam-mode-panel" style="display:none;">
+        <button type="button" id="btnBackToCategories" class="btn-back-to-modes exam-mode-back-categories">← Back to categories</button>
         <h2>Choose exam mode</h2>
-        <p style="color:#8b949e;">Pick what you want to practice this time. The page title and history will show the mode you select.</p>
+        <p class="exam-mode-sub">Select the type of quiz you want to take for this category. Pick <strong>one</strong> mode below.</p>
         <div class="exam-mode-buttons">
-          <button type="button" class="exam-mode-btn primary" id="btnModeListen" disabled>Listening only</button>
-          <button type="button" class="exam-mode-btn primary" id="btnModeMcq" disabled>Multiple choice only</button>
-          <button type="button" class="exam-mode-btn primary" id="btnModeAll" disabled>Full quiz</button>
+          <button type="button" class="exam-mode-btn" id="btnModeListen" disabled>
+            <span class="exam-mode-btn-icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></span>
+            <span class="exam-mode-btn-text">Listening only</span>
+          </button>
+          <button type="button" class="exam-mode-btn" id="btnModeMcq" disabled>
+            <span class="exam-mode-btn-icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+            <span class="exam-mode-btn-text">Multiple choice only</span>
+          </button>
+          <button type="button" class="exam-mode-btn" id="btnModeAll" disabled>
+            <span class="exam-mode-btn-icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></span>
+            <span class="exam-mode-btn-text">Full quiz</span>
+          </button>
         </div>
       </div>
 
       <div id="quizPanel" style="display:none;">
-        <div class="quiz-panel-toolbar">
-          <button type="button" id="btnBackToModes" class="btn-back-to-modes">← Back to title (choose exam mode)</button>
-        </div>
+        <button type="button" id="btnBackToModes" class="btn-back-to-modes exam-mode-back-categories">← Choose Exam Mode</button>
+        <div class="quiz-panel-surface">
         <div class="quiz-tab-bar" id="quizTabBar">
           <button type="button" class="quiz-tab active" id="tabBtnListen" data-tab="listen">Listening &amp; spelling</button>
           <button type="button" class="quiz-tab" id="tabBtnMcq" data-tab="mcq" disabled>Multiple choice</button>
@@ -943,12 +1305,16 @@
         <div id="tabPanelListen" class="quiz-tab-panel active">
           <div class="card" style="border-radius: 0 0 8px 8px; margin-top: 0;">
             <h2>Listening &amp; spelling</h2>
-            <p id="listenInstr" style="color:#8b949e;">Use <strong>Play audio</strong> for each item. Spell the word in the <strong>underlined letter boxes</strong> (first and last letters are given). Then <strong>choose or type the Chinese meaning</strong> of that headword (short gloss, not a sentence). If the quiz JSON includes four <code>zhChoices</code> and <code>zhAnswer</code>, you will see a <strong>four-option Chinese MCQ</strong> — the choices stay in Chinese; all other UI text is in English.</p>
-            <hr style="border:0; border-top:1px solid #30363d; margin: 20px 0;">
+            <div class="quiz-instruction-callout" aria-label="Tip">
+              <span class="quiz-instruction-icon">i</span>
+              <p class="quiz-instruction-lead">Listen to the audio for each item, then spell the word in the letter boxes and complete the Chinese meaning as shown.</p>
+            </div>
+            <p id="listenInstr" class="quiz-instruction-detail">Use <strong>Play audio</strong> for each item. Spell the word in the <strong>underlined letter boxes</strong> (first and last letters are given). Then <strong>choose or type the Chinese meaning</strong> of that headword (short gloss, not a sentence). If the quiz JSON includes four <code>zhChoices</code> and <code>zhAnswer</code>, you will see a <strong>four-option Chinese MCQ</strong> — the choices stay in Chinese; all other UI text is in English.</p>
+            <hr style="border:0; border-top:1px solid var(--border-subtle); margin: 20px 0;">
             <div id="spellList"></div>
             <div class="listen-footer" id="listenFooter">
               <button type="button" id="btnProceedMcq" class="btn-proceed-mcq" disabled>Finish listening — continue to multiple choice</button>
-              <p class="listen-hint-text" id="listenProceedHint" style="color:#8b949e;font-size:0.9em;margin-top:10px;"></p>
+              <p class="listen-hint-text" id="listenProceedHint" style="color:var(--text-dim);font-size:0.9em;margin-top:10px;"></p>
             </div>
           </div>
         </div>
@@ -956,16 +1322,17 @@
         <div id="tabPanelMcq" class="quiz-tab-panel">
           <div class="card" style="border-radius: 0 0 8px 8px; margin-top: 0;">
             <h2>Multiple choice</h2>
-            <p style="color:#8b949e;"><strong>Instructions:</strong> Read each item and choose the best option to fill the blank or match the underlined word. One answer per question.</p>
-            <hr style="border:0; border-top:1px solid #30363d; margin: 20px 0;">
+            <p style="color:var(--text-muted);"><strong>Instructions:</strong> Read each item and choose the best option to fill the blank or match the underlined word. One answer per question.</p>
+            <hr style="border:0; border-top:1px solid var(--border-subtle); margin: 20px 0;">
             <div id="mcqList"></div>
           </div>
+        </div>
         </div>
 
         <div class="card" id="quizFooterCard" style="text-align: center; border:none; background:transparent;">
           <div class="submit-row" style="flex-wrap: wrap; justify-content: center; gap: 10px;">
-            <button id="btnSubmit" type="button" style="font-size: 1.2em; padding: 12px 30px;">Submit</button>
-            <button id="btnRetakeQuiz" type="button" class="btn-retake-quiz" disabled title="交卷後若要重做同一套題，請按此鈕清空作答；切換分頁不會清空。">重新測驗（清空作答）</button>
+            <button id="btnSubmit" class="btn-submit-quiz" type="button">Submit</button>
+            <button id="btnRetakeQuiz" type="button" class="btn-retake-quiz" disabled title="After you submit, use this to redo the same quiz. Switching tabs does not reset your attempt.">Retake quiz</button>
             <button id="btnExportPack" type="button" class="btn-export-pack">Export quiz PDF (ZIP)</button>
           </div>
           <div id="scoreDisplay" class="score-banner"></div>
@@ -990,11 +1357,15 @@
     <div class="sidebar" id="sidebar">
       <button type="button" id="btnCloseSidebar" class="sidebar-close">Close ✕</button>
       <div class="sidebar-toolbar">
-        <h3 class="sidebar-title">Exam History</h3>
+        <div class="sidebar-title-row">
+          <svg class="sidebar-clock" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <h3 class="sidebar-title">Exam History</h3>
+        </div>
         <button type="button" id="btnClearHistory" class="btn-clear-history">Clear</button>
       </div>
-      <p style="color:#8b949e; font-size: 0.9em;">Records of mistakes from your submissions will appear here.</p>
+      <p style="color:var(--text-muted); font-size: 0.9em;">Records of mistakes from your submissions will appear here.</p>
       <div id="historyContainer"></div>
+      <button type="button" class="sidebar-footer-link" id="btnViewAllHistory">View all history <span aria-hidden="true">›</span></button>
     </div>
 
   </div>
@@ -1019,6 +1390,8 @@
 
     const QUIZ_DRAFT_KEY = "quizTakerDraft";
     let saveQuizDraftTimer = null;
+    /** 若從 localStorage 還原了題庫 UI，則不再顯示 Firebase 分類選擇畫面 */
+    let draftRestoredFromStorage = false;
 
     function cleanKeyword(s) {
       return String(s || "").replace(/\*+/g, "").trim();
@@ -1088,6 +1461,52 @@
     function normalizeMixedList(arr) {
       return (arr || []).map(normalizeMixedQuestion);
     }
+
+    function applyQuizJsonPayload(json, baseName) {
+      const jsonObj = typeof json === "string" ? JSON.parse(json) : json;
+      if (!jsonObj || typeof jsonObj !== "object") {
+        throw new Error("Invalid quiz JSON");
+      }
+      fullSpellData = (jsonObj.spellQuestions || []).map(normalizeSpellQuestion);
+      let mixedRaw = jsonObj.mixedQuestions || [];
+      if (
+        !jsonObj.mixedQuestions &&
+        (jsonObj.mcqQuestions || jsonObj.synonymQuestions)
+      ) {
+        mixedRaw = (jsonObj.mcqQuestions || []).concat(
+          jsonObj.synonymQuestions || []
+        );
+      }
+      fullMixedData = normalizeMixedList(mixedRaw);
+      spellData = [];
+      mixedData = [];
+      baseFileName =
+        String(baseName || "Quiz").replace(/\.json$/i, "").trim() || "Quiz";
+      examMode = null;
+      listenPhaseLocked = false;
+      const catPanel = document.getElementById("firebaseCategoryPanel");
+      if (catPanel) catPanel.style.display = "none";
+      const st = document.getElementById("firebaseCategoryStatus");
+      if (st) {
+        st.textContent = "";
+        st.classList.remove("error");
+      }
+      showExamModePicker();
+      persistQuizDraftNow();
+    }
+
+    window.applyQuizJsonFromFirebase = function (json, baseName) {
+      try {
+        applyQuizJsonPayload(json, baseName);
+        return true;
+      } catch (err) {
+        console.error(err);
+        alert(
+          "Could not parse quiz data. Make sure the Firebase node matches your JSON file format."
+        );
+        return false;
+      }
+    };
 
     function spellItemWord(item) {
       if (item && typeof item === "object" && item.word != null) {
@@ -1538,7 +1957,7 @@
           const expL = document.createElement("span");
           expL.textContent = "Correct / expected: ";
           const expV = document.createElement("strong");
-          expV.style.color = "#58a6ff";
+          expV.style.color = "#60a5fa";
           expV.textContent = String(m.expected || "");
           li.appendChild(expL);
           li.appendChild(expV);
@@ -1593,6 +2012,22 @@
     const DEFAULT_LISTEN_INSTR_HTML =
       "Use <strong>Play audio</strong> for each item. Spell the word in the <strong>underlined letter boxes</strong> (first and last letters are given). Then <strong>choose or type the Chinese meaning</strong> (short headword gloss, not a sentence). Chinese four-choice options appear when the quiz file includes them; all other labels here are in English.";
 
+    function showFirebaseCategoryPicker() {
+      const cat = document.getElementById("firebaseCategoryPanel");
+      const emp = document.getElementById("examModePanel");
+      const qp = document.getElementById("quizPanel");
+      if (cat) cat.style.display = "block";
+      if (emp) emp.style.display = "none";
+      if (qp) qp.style.display = "none";
+      const pt = document.getElementById("pageTitle");
+      if (pt) pt.textContent = DEFAULT_PAGE_TITLE;
+      closeResultModal();
+      if (typeof window.__refreshFirebaseCategories === "function") {
+        window.__refreshFirebaseCategories();
+      }
+    }
+    window.showFirebaseCategoryPicker = showFirebaseCategoryPicker;
+
     function resetQuizUiToInitialState() {
       const listenInstr = document.getElementById("listenInstr");
       if (listenInstr) listenInstr.innerHTML = DEFAULT_LISTEN_INSTR_HTML;
@@ -1630,14 +2065,8 @@
       }
     }
 
-    function clearLoadedQuiz() {
-      if (
-        !confirm(
-          "Remove the quiz loaded on this page and clear saved progress? (Exam history in the sidebar is not deleted.)"
-        )
-      ) {
-        return;
-      }
+    /** 清空本頁題庫與暫存後回到 Firebase 分類（不跳出確認） */
+    function backToFirebaseCategories() {
       closeResultModal();
       fullSpellData = [];
       fullMixedData = [];
@@ -1647,11 +2076,6 @@
       listenPhaseLocked = false;
       baseFileName = "Quiz";
       currentFileName = "Quiz";
-      const qp = document.getElementById("quizPanel");
-      if (qp) qp.style.display = "none";
-      showExamModePicker();
-      const pt = document.getElementById("pageTitle");
-      if (pt) pt.textContent = DEFAULT_PAGE_TITLE;
       const sl = document.getElementById("spellList");
       const ml = document.getElementById("mcqList");
       if (sl) sl.innerHTML = "";
@@ -1667,17 +2091,23 @@
       try {
         localStorage.removeItem(QUIZ_DRAFT_KEY);
       } catch (e) {}
-      const fi = document.getElementById("jsonFile");
-      if (fi) {
-        try {
-          fi.value = "";
-        } catch (e) {}
-      }
       resetQuizUiToInitialState();
       refreshListenProceedGate();
       updateListenInstructionAndFooter();
       refreshProceedButtonVisibility();
       updateLoadedQuizFileLine();
+      showFirebaseCategoryPicker();
+    }
+
+    function clearLoadedQuiz() {
+      if (
+        !confirm(
+          "Remove the quiz on this page and clear saved progress? Exam history in the sidebar is not deleted."
+        )
+      ) {
+        return;
+      }
+      backToFirebaseCategories();
     }
 
     function backToExamModePicker() {
@@ -1687,7 +2117,7 @@
         spellData.length > 0 || mixedData.length > 0;
       if (!hasBank && !hasSession) {
         alert(
-          "No quiz loaded yet. Upload english_quiz_questions.json (or your export) via Load Quiz Data above."
+          "No quiz loaded yet. Choose a category from Firebase above."
         );
         return;
       }
@@ -1701,6 +2131,8 @@
     }
 
     function showExamModePicker() {
+      const catPanel = document.getElementById("firebaseCategoryPanel");
+      if (catPanel) catPanel.style.display = "none";
       examMode = null;
       spellData = [];
       mixedData = [];
@@ -2057,12 +2489,16 @@
         if (!hasSessionNow && hasBankNow && examMode == null) {
           const pt = document.getElementById("pageTitle");
           if (pt) pt.textContent = baseFileName;
+          draftRestoredFromStorage = true;
           showExamModePicker();
           return;
         }
         if (!hasSessionNow) return;
+        draftRestoredFromStorage = true;
         const emp = document.getElementById("examModePanel");
         const qp = document.getElementById("quizPanel");
+        const catPanel = document.getElementById("firebaseCategoryPanel");
+        if (catPanel) catPanel.style.display = "none";
         if (emp) emp.style.display = "none";
         if (qp) qp.style.display = "block";
         const pt = document.getElementById("pageTitle");
@@ -2076,7 +2512,6 @@
     }
 
     const pageTitle = document.getElementById("pageTitle");
-    const fileInput = document.getElementById("jsonFile");
     const quizPanel = document.getElementById("quizPanel");
     const spellList = document.getElementById("spellList");
     const mcqList = document.getElementById("mcqList");
@@ -2090,7 +2525,7 @@
         if (btnRetakeQuiz.disabled) return;
         if (
           !confirm(
-            "確定要重新測驗？將清空本卷所有作答與批改結果（仍為同一套題目）。"
+            "Retake this quiz? Your attempt and results for this session will be reset (same question set)."
           )
         ) {
           return;
@@ -2199,6 +2634,13 @@
       });
     }
 
+    const btnBackToCategories = document.getElementById("btnBackToCategories");
+    if (btnBackToCategories) {
+      btnBackToCategories.addEventListener("click", function () {
+        backToFirebaseCategories();
+      });
+    }
+
     const btnBackToModes = document.getElementById("btnBackToModes");
     if (btnBackToModes) {
       btnBackToModes.addEventListener("click", function () {
@@ -2246,6 +2688,13 @@
       });
     }
 
+    const btnViewAllHistory = document.getElementById("btnViewAllHistory");
+    if (btnViewAllHistory && historyContainer) {
+      btnViewAllHistory.addEventListener("click", () => {
+        historyContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+
     function shuffleArray(arr) {
       const a = arr.slice();
       for (let i = a.length - 1; i > 0; i--) {
@@ -2276,13 +2725,26 @@
         historyScore.className = "history-score-line";
         
         const scoreNum = parseFloat(attempt.score);
-        const scoreColor = scoreNum >= 80 ? "#3fb950" : "#f85149";
-        
-        historyScore.innerHTML = `<span style="color: #58a6ff; font-weight: bold;">Score:</span> <strong style="color: ${scoreColor};">${attempt.score}</strong>`;
+        const scoreColor =
+          !isFinite(scoreNum) || isNaN(scoreNum)
+            ? "#9ca3af"
+            : scoreNum >= 80
+              ? "#22c55e"
+              : scoreNum >= 60
+                ? "#eab308"
+                : "#f85149";
+
+        historyScore.innerHTML = `<span style="color: var(--primary); font-weight: 600;">Score:</span> <strong style="color: ${scoreColor};">${attempt.score}</strong>`;
         
         titleDiv.appendChild(historyScore);
         
         historyItem.appendChild(titleDiv);
+
+        const chev = document.createElement("span");
+        chev.className = "history-item-chevron";
+        chev.setAttribute("aria-hidden", "true");
+        chev.textContent = "›";
+        historyItem.appendChild(chev);
         
         const detailsWrap = document.createElement("div");
         detailsWrap.className = "history-details";
@@ -2299,7 +2761,7 @@
         } else {
           attempt.mistakes.forEach(m => {
             const li = document.createElement("li");
-            li.innerHTML = `<span style="color:#8b949e">[${displayMistakeType(m.type)} Q${m.qNum}]</span><br/>Expected: <strong style="color:#58a6ff">${m.expected}</strong><br/>You answered: <em style="color:#f85149; text-decoration: line-through;">${m.userAns}</em>`;
+            li.innerHTML = `<span style="color:var(--text-muted)">[${displayMistakeType(m.type)} Q${m.qNum}]</span><br/>Expected: <strong style="color:#60a5fa">${m.expected}</strong><br/>You answered: <em style="color:#f85149; text-decoration: line-through;">${m.userAns}</em>`;
             list.appendChild(li);
           });
           detailsWrap.appendChild(list);
@@ -2354,6 +2816,8 @@
             if (emp) emp.style.display = "none";
             const qp = document.getElementById("quizPanel");
             if (qp) qp.style.display = "block";
+            const catPanel = document.getElementById("firebaseCategoryPanel");
+            if (catPanel) catPanel.style.display = "none";
             renderQuiz();
             persistQuizDraftNow();
             updateLoadedQuizFileLine();
@@ -2405,41 +2869,10 @@
       speakEnglish(spellItemWord(word));
     }
 
-    // Load JSON file
-    fileInput.addEventListener("change", function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        try {
-          const json = JSON.parse(evt.target.result);
-          fullSpellData = (json.spellQuestions || []).map(normalizeSpellQuestion);
-          let mixedRaw = json.mixedQuestions || [];
-
-          // Backward compatibility for older exported JSON formats
-          if (!json.mixedQuestions && (json.mcqQuestions || json.synonymQuestions)) {
-            mixedRaw = (json.mcqQuestions || []).concat(json.synonymQuestions || []);
-          }
-          fullMixedData = normalizeMixedList(mixedRaw);
-          mixedData = [];
-
-          baseFileName = file.name.replace(/\.json$/i, "");
-          spellData = [];
-          mixedData = [];
-          examMode = null;
-          showExamModePicker();
-          persistQuizDraftNow();
-        } catch(err) {
-          alert("Error parsing JSON. Please upload a valid JSON file.");
-        }
-      };
-      reader.readAsText(file);
-    });
-
     // Render all questions to DOM
     function renderQuiz() {
       listenPhaseLocked = false;
-      // NOTE: Upload panel remains visible per user request.
+      // NOTE: Firebase category panel may stay visible behind quiz per prior layout.
       quizPanel.style.display = "block";
       spellList.innerHTML = "";
       mcqList.innerHTML = "";
@@ -2465,12 +2898,14 @@
           label.textContent = idx + 1 + ".";
           const prog = document.createElement("span");
           prog.className = "spell-card-progress";
-          prog.textContent = idx + 1 + " / " + spellData.length;
+          prog.textContent =
+            "Question " + (idx + 1) + " of " + spellData.length;
           const btnSpeak = document.createElement("button");
           btnSpeak.type = "button";
           btnSpeak.id = "spellSpeakBtn_" + idx;
           btnSpeak.className = "spell-speak-btn";
-          btnSpeak.innerHTML = "&#128266; Play audio";
+          btnSpeak.innerHTML =
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-3px;margin-right:6px" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg> Play audio';
           btnSpeak.onclick = function () {
             playSpellAudio(spellItemWord(word));
           };
@@ -2636,7 +3071,7 @@
           const stemWrap = document.createElement("div");
           stemWrap.className = "mcq-stem";
           stemWrap.style.marginBottom = "15px";
-          stemWrap.innerHTML = "<strong style='color:#58a6ff;margin-right:8px;'>" + (idx + 1) + ".</strong>" + (q.stemHtml || "");
+          stemWrap.innerHTML = "<strong style='color:var(--primary);margin-right:8px;font-weight:700;'>" + (idx + 1) + ".</strong>" + (q.stemHtml || "");
           row.appendChild(stemWrap);
           
           const choicesWrap = document.createElement("div");
@@ -3127,7 +3562,7 @@
 
     async function exportQuizPack() {
       if (!fullSpellData.length && !fullMixedData.length) {
-        alert("Load a quiz JSON file first.");
+        alert("Load a quiz from Firebase first (pick a category above).");
         return;
       }
       if (!window.JSZip) {
@@ -3430,7 +3865,164 @@
     });
 
     tryRestoreQuizDraftFromStorage();
+    window.__englishQuizDraftRestored = draftRestoredFromStorage;
 
+  </script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      get,
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCC3HGzf4ZKvdjsIH2T3AzKyrn9tmNXtt0",
+      authDomain: "synctest-de367.firebaseapp.com",
+      databaseURL: "https://synctest-de367-default-rtdb.firebaseio.com",
+      projectId: "synctest-de367",
+      storageBucket: "synctest-de367.firebasestorage.app",
+      messagingSenderId: "51397611512",
+      appId: "1:51397611512:web:345e2bacc0fbe586e9900d",
+    };
+
+    function snapExists(snap) {
+      return typeof snap.exists === "function" ? snap.exists() : snap.exists;
+    }
+
+    const app = initializeApp(firebaseConfig);
+    const rtdb = getDatabase(app);
+
+    function parseCategoryDatePrefix(key) {
+      const m = String(key).match(/^(\d{4})_/);
+      return m ? parseInt(m[1], 10) : -1;
+    }
+
+    function pickNewestCategoryKey(keys) {
+      if (!keys.length) return null;
+      const sorted = keys.slice().sort((a, b) => {
+        const na = parseCategoryDatePrefix(a);
+        const nb = parseCategoryDatePrefix(b);
+        if (nb !== na) return nb - na;
+        return String(b).localeCompare(String(a));
+      });
+      return sorted[0];
+    }
+
+    function isQuizObject(val) {
+      return (
+        val &&
+        typeof val === "object" &&
+        !Array.isArray(val) &&
+        Object.keys(val).length > 0
+      );
+    }
+
+    window.__refreshFirebaseCategories = async function () {
+      const grid = document.getElementById("categoryGrid");
+      const statusEl = document.getElementById("firebaseCategoryStatus");
+      if (!grid || !statusEl) return;
+      grid.innerHTML = "";
+      statusEl.textContent = "Loading categories…";
+      statusEl.classList.remove("error");
+      try {
+        const snap = await get(ref(rtdb, "/"));
+        if (!snapExists(snap)) {
+          statusEl.textContent = "The database is empty.";
+          return;
+        }
+        const val = snap.val();
+        const rawKeys = Object.keys(val || {}).filter(
+          (k) => k && !String(k).startsWith(".")
+        );
+        const quizKeys = rawKeys.filter((k) => isQuizObject(val[k]));
+        if (!quizKeys.length) {
+          statusEl.textContent =
+            "No quiz categories yet. Each root key must be an object with quiz data (not an empty string). Upload your quiz JSON in Firebase first.";
+          return;
+        }
+        statusEl.textContent = "Choose one category:";
+        const newest = pickNewestCategoryKey(quizKeys);
+        const sorted = quizKeys.slice().sort((a, b) =>
+          String(a).localeCompare(String(b), "en")
+        );
+        for (const key of sorted) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className =
+            "category-box " +
+            (key === newest ? "category-box--newest" : "category-box--standard");
+          btn.setAttribute("role", "listitem");
+          if (key === newest) {
+            const badge = document.createElement("span");
+            badge.className = "category-new-badge";
+            badge.textContent = "NEW";
+            btn.appendChild(badge);
+          }
+          const label = document.createElement("span");
+          label.className = "category-box-label";
+          const contentWrap = document.createElement("span");
+          contentWrap.className = "category-box-label-content";
+          const notebook = document.createElement("span");
+          notebook.className = "category-notebook-icon";
+          notebook.setAttribute("aria-hidden", "true");
+          notebook.innerHTML =
+            '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M16 2v20"/></svg>';
+          contentWrap.appendChild(notebook);
+          const labelText = document.createElement("span");
+          labelText.className = "category-box-label-text";
+          labelText.textContent = key;
+          contentWrap.appendChild(labelText);
+          label.appendChild(contentWrap);
+          btn.appendChild(label);
+          btn.addEventListener("click", async () => {
+            if (btn.disabled) return;
+            btn.disabled = true;
+            statusEl.textContent = 'Loading "' + key + '"…';
+            try {
+              const sub = await get(ref(rtdb, key));
+              if (!snapExists(sub)) {
+                alert("No data found for this category.");
+                return;
+              }
+              let data = sub.val();
+              if (typeof data === "string") {
+                try {
+                  data = JSON.parse(data);
+                } catch (_) {
+                  alert("This category is not valid JSON text.");
+                  return;
+                }
+              }
+              if (!isQuizObject(data)) {
+                alert("This category does not contain a valid quiz object.");
+                return;
+              }
+              window.applyQuizJsonFromFirebase(data, key);
+            } catch (err) {
+              console.error(err);
+              alert(
+                "Load failed: " + (err && err.message ? err.message : String(err))
+              );
+            } finally {
+              btn.disabled = false;
+            }
+          });
+          grid.appendChild(btn);
+        }
+      } catch (e) {
+        console.error(e);
+        statusEl.textContent =
+          "Could not connect to Firebase: " + (e && e.message ? e.message : String(e));
+        statusEl.classList.add("error");
+      }
+    };
+
+    if (!window.__englishQuizDraftRestored) {
+      if (typeof window.showFirebaseCategoryPicker === "function") {
+        window.showFirebaseCategoryPicker();
+      }
+    }
   </script>
 </body>
 </html>
