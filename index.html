@@ -882,6 +882,16 @@
     .spell-char-fixed.spell-char-tail {
       font-weight: 600;
     }
+    /* Phrase word gaps: no underline, not editable */
+    .spell-char-gap {
+      display: inline-block;
+      min-width: 0.45em;
+      align-self: flex-end;
+      padding-bottom: 6px;
+      border-bottom: none;
+      box-sizing: content-box;
+      pointer-events: none;
+    }
     input.spell-cell-in {
       width: 1.45em;
       max-width: 12vw;
@@ -1127,6 +1137,45 @@
     #firebaseCategoryStatus.error {
       color: #f85149;
     }
+    .category-grid-wrap {
+      position: relative;
+      min-height: 120px;
+    }
+    .category-grid-loading {
+      display: none;
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      border-radius: var(--radius-lg);
+      background: rgba(17, 25, 35, 0.82);
+      backdrop-filter: blur(5px);
+      pointer-events: auto;
+    }
+    .category-grid-wrap.is-loading .category-grid-loading {
+      display: flex;
+    }
+    .category-grid-spinner {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 3px solid var(--border-subtle);
+      border-top-color: var(--primary-bright);
+      animation: engCategorySpin 0.7s linear infinite;
+    }
+    @keyframes engCategorySpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    .category-grid-loading-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
     .category-grid {
       display: flex;
       flex-direction: column;
@@ -1242,11 +1291,305 @@
       height: 22px;
       flex-shrink: 0;
     }
+
+    /* ===== Firebase 登入閘道（與 money.html 相同：帳號名稱 + RTDB 密碼雜湊）===== */
+    html.eng-gate-pending .layout-container,
+    html.eng-gate-pending #sidebarOverlay {
+      visibility: hidden;
+      pointer-events: none;
+    }
+    #engCloudGate {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background: var(--bg-page);
+      color: var(--text);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: max(16px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+    html.eng-gate-pending #engCloudGate {
+      display: flex;
+    }
+    .eng-cloud-panel {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 8px;
+    }
+    .eng-gate-loading {
+      display: none;
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      border-radius: 16px;
+      background: rgba(17, 25, 35, 0.9);
+      backdrop-filter: blur(5px);
+      pointer-events: auto;
+    }
+    .eng-cloud-panel.is-gate-loading .eng-gate-loading {
+      display: flex;
+    }
+    .eng-gate-spinner {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 3px solid var(--border-subtle);
+      border-top-color: var(--primary-bright);
+      animation: engGateSpin 0.72s linear infinite;
+    }
+    @keyframes engGateSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    .eng-gate-loading-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .eng-cloud-brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-align: center;
+      color: var(--primary-bright);
+    }
+    .eng-cloud-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      line-height: 1.45;
+    }
+    .eng-cloud-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .eng-cloud-tabs button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .eng-cloud-tabs button.eng-tab-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+    .eng-cloud-tabs button.eng-tab-ghost {
+      background: var(--bg-elevated);
+      color: var(--text);
+      border: 1px solid var(--border-subtle);
+    }
+    .eng-cloud-field {
+      margin-bottom: 12px;
+    }
+    .eng-cloud-field label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .eng-cloud-field input {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-page);
+      color: var(--text);
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    .eng-cloud-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .eng-cloud-btn:hover:not(:disabled) {
+      background: var(--primary-bright);
+    }
+    .eng-cloud-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .eng-cloud-status {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 10px;
+      min-height: 1.2em;
+    }
+    .eng-cloud-status.err {
+      color: #f85149;
+    }
+    .eng-cloud-hidden {
+      display: none !important;
+    }
+    .page-header-left {
+      flex: 1;
+      min-width: 0;
+    }
+    .eng-signed-in-row {
+      margin-top: 10px;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .eng-signed-in-row.is-visible {
+      display: flex;
+    }
+    .eng-user-welcome-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+      flex: 1;
+    }
+    .eng-user-avatar {
+      flex-shrink: 0;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-bright);
+      background: var(--bg-elevated);
+      border: 2px solid var(--border-subtle);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .eng-user-avatar svg {
+      width: 26px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+    .eng-welcome-line {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.12em 0.28em;
+      min-width: 0;
+      flex: 1;
+      font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+      line-height: 1.35;
+      letter-spacing: 0.02em;
+    }
+    .eng-welcome-prefix {
+      font-weight: 700;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+    .eng-user-name {
+      font-weight: 800;
+      color: var(--primary-bright);
+      font-size: 1.12em;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+    .btn-eng-logout {
+      font-size: 0.8rem;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-elevated);
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-eng-logout:hover {
+      border-color: var(--primary);
+      color: var(--primary-bright);
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 <body>
+  <script>
+    (function () {
+      if (
+        sessionStorage.getItem("english_rtdb_session_ok") ||
+        localStorage.getItem("english_rtdb_session_ok")
+      ) {
+        document.documentElement.classList.remove("eng-gate-pending");
+      } else {
+        document.documentElement.classList.add("eng-gate-pending");
+      }
+      if (document.documentElement.classList.contains("eng-gate-pending")) {
+        var g = document.getElementById("engCloudGate");
+        if (g) g.setAttribute("aria-hidden", "false");
+      }
+    })();
+  </script>
+
+  <div id="engCloudGate" aria-hidden="true">
+    <div class="eng-cloud-panel" id="engCloudPanel">
+      <div id="engGateLoading" class="eng-gate-loading" aria-hidden="true">
+        <div class="eng-gate-spinner" role="presentation"></div>
+        <span class="eng-gate-loading-text">Loading…</span>
+      </div>
+      <div class="eng-cloud-brand">English Quiz — 登入</div>
+      <p class="eng-cloud-sub">帳號名稱僅限英文字母。請登入或註冊。</p>
+      <div id="engGateAuth">
+        <div class="eng-cloud-tabs">
+          <button type="button" class="eng-tab-primary" id="engGateTabLogin" data-tab="login">登入</button>
+          <button type="button" class="eng-tab-ghost" id="engGateTabReg" data-tab="reg">註冊</button>
+        </div>
+        <div id="engGateLoginBlock">
+          <div class="eng-cloud-field">
+            <label for="engGateSerial">帳號名稱</label>
+            <input id="engGateSerial" class="eng-gate-input" type="text" inputmode="latin" autocomplete="username" spellcheck="false" />
+          </div>
+          <div class="eng-cloud-field">
+            <label for="engGatePassword">密碼</label>
+            <input id="engGatePassword" class="eng-gate-input" type="password" autocomplete="current-password" />
+          </div>
+          <button type="button" class="eng-cloud-btn" id="engGateBtnLogin">登入並進入測驗</button>
+        </div>
+        <div id="engGateRegBlock" class="eng-cloud-hidden">
+          <div class="eng-cloud-field">
+            <label for="engGateRegUser">帳號名稱</label>
+            <input id="engGateRegUser" class="eng-gate-input" type="text" inputmode="latin" autocomplete="username" spellcheck="false" />
+          </div>
+          <div class="eng-cloud-field">
+            <label for="engGateRegPassword">密碼（至少 6 碼）</label>
+            <input id="engGateRegPassword" class="eng-gate-input" type="password" autocomplete="new-password" />
+          </div>
+          <div class="eng-cloud-field">
+            <label for="engGateRegPassword2">確認密碼</label>
+            <input id="engGateRegPassword2" class="eng-gate-input" type="password" autocomplete="new-password" />
+          </div>
+          <button type="button" class="eng-cloud-btn" id="engGateBtnCreate">註冊並進入測驗</button>
+        </div>
+        <div class="eng-cloud-status" id="engGateAuthStatus"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Sidebar Overlay for mobile -->
   <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
@@ -1255,7 +1598,38 @@
     <!-- Main Content Area -->
     <div class="main-content">
       <div class="page-header">
-        <h1 id="pageTitle">English Quiz Taker</h1>
+        <div class="page-header-left">
+          <h1 id="pageTitle">English Quiz Taker</h1>
+          <div id="engSignedInRow" class="eng-signed-in-row">
+            <div class="eng-user-welcome-wrap">
+              <div
+                id="engUserAvatar"
+                class="eng-user-avatar"
+                role="img"
+                aria-label="使用者圖示"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.85"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="8" r="3.5" />
+                  <path d="M5 20v-1.2C5 15.9 8.1 14 12 14s7 1.9 7 3.8V20" />
+                </svg>
+              </div>
+              <div class="eng-welcome-line" aria-live="polite">
+                <span class="eng-welcome-prefix">歡迎回來，</span>
+                <span id="engUserNameDisplay" class="eng-user-name"></span>
+              </div>
+            </div>
+            <button type="button" id="btnEngLogout" class="btn-eng-logout">登出</button>
+          </div>
+        </div>
         <button id="btnToggleMenu" class="menu-toggle" type="button" aria-label="Open exam history"><span class="menu-icon" aria-hidden="true">☰</span><span class="menu-label">History</span></button>
       </div>
       
@@ -1263,7 +1637,17 @@
         <h2>Choose a quiz category</h2>
         <p class="category-hint">Select a category to view available exam modes and start practicing.</p>
         <div id="firebaseCategoryStatus"></div>
-        <div id="categoryGrid" class="category-grid" role="list"></div>
+        <div class="category-grid-wrap" id="categoryGridWrap" aria-busy="false">
+          <div
+            id="categoryGridLoading"
+            class="category-grid-loading"
+            aria-hidden="true"
+          >
+            <div class="category-grid-spinner" role="presentation"></div>
+            <span class="category-grid-loading-text">Loading…</span>
+          </div>
+          <div id="categoryGrid" class="category-grid" role="list"></div>
+        </div>
         <div id="loadedQuizFileBlock" class="loaded-quiz-file-block" style="display: none;">
           <div class="loaded-quiz-file-row">
             <p id="loadedQuizFileLine" class="loaded-quiz-file-line">
@@ -1601,8 +1985,26 @@
       return Array.from(spellItemWord(wordItem));
     }
 
+    /** Interior letter index is a phrase gap (space) — no input cell, fixed from the word. */
+    function spellIndexIsPhraseGap(wordItem, i) {
+      const wArr = spellWordChars(wordItem);
+      if (i <= 0 || i >= wArr.length - 1) return false;
+      return /\s/.test(wArr[i]);
+    }
+
+    /** Single allowed character for a spelling cell (English + common word punctuation). */
+    function spellCellTakeFirstAllowed(raw) {
+      const s = String(raw || "");
+      for (let k = 0; k < s.length; k++) {
+        const c = s.charAt(k);
+        if (/[a-zA-Z]/.test(c) || c === "'" || c === "-") return c;
+      }
+      return "";
+    }
+
     function syncSpellHiddenInput(idx) {
-      const wArr = spellWordChars(spellData[idx]);
+      const wordItem = spellData[idx];
+      const wArr = spellWordChars(wordItem);
       const h = document.getElementById("spellInput_" + idx);
       if (!h || !wArr.length) return;
       if (wArr.length <= 2) {
@@ -1613,6 +2015,8 @@
       for (let i = 0; i < wArr.length; i++) {
         if (i === 0 || i === wArr.length - 1) {
           s += wArr[i];
+        } else if (spellIndexIsPhraseGap(wordItem, i)) {
+          s += wArr[i];
         } else {
           const cell = document.getElementById("spellCell_" + idx + "_" + i);
           s += cell && cell.value ? cell.value : "";
@@ -1622,13 +2026,18 @@
     }
 
     function distributeAnswerToSpellCells(idx, answerRaw) {
-      const wArr = spellWordChars(spellData[idx]);
+      const wordItem = spellData[idx];
+      const wArr = spellWordChars(wordItem);
       if (wArr.length <= 2) return;
       const aStr = String(answerRaw || "");
       const aArr = Array.from(aStr);
       for (let i = 1; i < wArr.length - 1; i++) {
+        if (spellIndexIsPhraseGap(wordItem, i)) continue;
         const cell = document.getElementById("spellCell_" + idx + "_" + i);
-        if (cell && aArr[i] != null) cell.value = aArr[i];
+        if (cell && aArr[i] != null) {
+          const one = spellCellTakeFirstAllowed(aArr[i]);
+          cell.value = one;
+        }
       }
       syncSpellHiddenInput(idx);
     }
@@ -1638,11 +2047,26 @@
         cell.addEventListener("keydown", function (e) {
           if (e.key === "Backspace" && !cell.value) {
             if (j > 0) {
+              e.preventDefault();
+              cells[j - 1].value = "";
+              syncSpellHiddenInput(idx);
+              scheduleQuizDraftSave();
+              refreshListenProceedGate();
               cells[j - 1].focus();
-              cells[j - 1].select();
             }
-            e.preventDefault();
             return;
+          }
+          if (
+            e.key.length === 1 &&
+            !e.ctrlKey &&
+            !e.metaKey &&
+            !e.altKey &&
+            !e.isComposing
+          ) {
+            if (!/[a-zA-Z'-]/.test(e.key)) {
+              e.preventDefault();
+              return;
+            }
           }
           if (e.key === "ArrowLeft" && j > 0) {
             cells[j - 1].focus();
@@ -1653,12 +2077,21 @@
             e.preventDefault();
           }
         });
+        cell.addEventListener("compositionend", function () {
+          const v = spellCellTakeFirstAllowed(cell.value);
+          if (cell.value !== v) cell.value = v;
+          syncSpellHiddenInput(idx);
+          scheduleQuizDraftSave();
+          refreshListenProceedGate();
+        });
         cell.addEventListener("input", function () {
-          let v = cell.value;
-          if (v.length > 1) {
-            const extra = v.slice(1);
-            v = v.charAt(0);
+          const allowedSeq = (
+            String(cell.value || "").match(/[a-zA-Z'-]/g) || []
+          ).join("");
+          const v = allowedSeq.charAt(0) || "";
+          if (allowedSeq.length > 1) {
             cell.value = v;
+            const extra = allowedSeq.slice(1);
             for (
               let k = 0;
               k < extra.length && j + 1 + k < cells.length;
@@ -1668,6 +2101,8 @@
             }
             const lastIdx = Math.min(j + extra.length, cells.length - 1);
             cells[lastIdx].focus();
+          } else {
+            cell.value = v;
           }
           syncSpellHiddenInput(idx);
           scheduleQuizDraftSave();
@@ -1680,7 +2115,7 @@
           e.preventDefault();
           const t =
             (e.clipboardData || window.clipboardData).getData("text") || "";
-          const chars = Array.from(t.replace(/\s/g, ""));
+          const chars = Array.from(t.match(/[a-zA-Z'-]/g) || []);
           let cj = j;
           for (
             let p = 0;
@@ -1873,6 +2308,7 @@
         const wArr = spellWordChars(spellData[i]);
         if (wArr.length > 2) {
           for (let j = 1; j < wArr.length - 1; j++) {
+            if (spellIndexIsPhraseGap(spellData[i], j)) continue;
             const cell = document.getElementById("spellCell_" + i + "_" + j);
             if (!cell || !String(cell.value || "").trim()) return false;
           }
@@ -2213,6 +2649,10 @@
         const wArr = spellWordChars(spellData[i]);
         const rowCells = [];
         for (let j = 1; j < wArr.length - 1; j++) {
+          if (spellIndexIsPhraseGap(spellData[i], j)) {
+            rowCells.push("");
+            continue;
+          }
           const c = document.getElementById("spellCell_" + i + "_" + j);
           rowCells.push(c && c.value ? c.value : "");
         }
@@ -2280,6 +2720,11 @@
       } catch (e) {
         console.warn("Could not save quiz draft (storage full?)", e);
       }
+      try {
+        if (typeof window.__scheduleEnglishQuizRtdbPush === "function") {
+          window.__scheduleEnglishQuizRtdbPush();
+        }
+      } catch (e) {}
     }
 
     function scheduleQuizDraftSave() {
@@ -2307,6 +2752,7 @@
         if (row) {
           const wArr = spellWordChars(spellData[i]);
           for (let j = 1; j < wArr.length - 1; j++) {
+            if (spellIndexIsPhraseGap(spellData[i], j)) continue;
             const cell = document.getElementById("spellCell_" + i + "_" + j);
             if (!cell) continue;
             const rv = row[j - 1];
@@ -2684,6 +3130,11 @@
           examHistory = [];
           localStorage.removeItem("quizHistory");
           renderHistory();
+          try {
+            if (typeof window.__scheduleEnglishQuizRtdbPush === "function") {
+              window.__scheduleEnglishQuizRtdbPush();
+            }
+          } catch (e) {}
         }
       });
     }
@@ -2963,6 +3414,12 @@
                     ? String(wArr[i]).toUpperCase()
                     : String(wArr[i]);
                 slot.appendChild(fix);
+              } else if (/\s/.test(wArr[i])) {
+                const gap = document.createElement("span");
+                gap.className = "spell-char-gap";
+                gap.setAttribute("role", "presentation");
+                gap.textContent = "\u00a0";
+                slot.appendChild(gap);
               } else {
                 const inp = document.createElement("input");
                 inp.type = "text";
@@ -2970,6 +3427,9 @@
                 inp.id = "spellCell_" + idx + "_" + i;
                 inp.maxLength = 1;
                 inp.setAttribute("inputmode", "text");
+                inp.setAttribute("lang", "en");
+                inp.setAttribute("autocapitalize", "off");
+                inp.setAttribute("autocorrect", "off");
                 inp.autocomplete = "off";
                 inp.spellcheck = false;
                 slot.appendChild(inp);
@@ -3867,6 +4327,23 @@
     tryRestoreQuizDraftFromStorage();
     window.__englishQuizDraftRestored = draftRestoredFromStorage;
 
+    /**
+     * Firebase 模組拉取 englishQuizBackup 後呼叫：把 quizHistory 載入記憶體並重跑暫存還原。
+     */
+    window.__afterEnglishRtdbPullMerge = function () {
+      try {
+        examHistory = JSON.parse(localStorage.getItem("quizHistory") || "[]");
+      } catch (e) {
+        examHistory = [];
+      }
+      if (typeof renderHistory === "function") {
+        renderHistory();
+      }
+      draftRestoredFromStorage = false;
+      tryRestoreQuizDraftFromStorage();
+      window.__englishQuizDraftRestored = draftRestoredFromStorage;
+    };
+
   </script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
@@ -3874,9 +4351,27 @@
       getDatabase,
       ref,
       get,
+      push,
+      set,
     } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
+    /**
+     * 與 Firebase 主控台「專案設定」一致（與你提供的 firebaseConfig 相同欄位）。
+     * Realtime Database 須加 databaseURL，請到主控台「Realtime Database」複製實際網址（常見為 *.firebaseio.com 或 *.firebasedatabase.app）。
+     */
     const firebaseConfig = {
+      apiKey: "AIzaSyDHyax5rNbHQ8mqYj0k7lqdTNz-lwFQpyY",
+      authDomain: "engtest-login.firebaseapp.com",
+      projectId: "engtest-login",
+      storageBucket: "engtest-login.firebasestorage.app",
+      messagingSenderId: "932301450079",
+      appId: "1:932301450079:web:c674953df00bbc8c7be4ea",
+      databaseURL: "https://engtest-login-default-rtdb.firebaseio.com",
+    };
+    window.ENGLISH_FIREBASE_CONFIG = firebaseConfig;
+
+    /** 題庫分類與 JSON 專用（與登入帳號 engtest-login 分開）。 */
+    const firebaseConfigQuiz = {
       apiKey: "AIzaSyCC3HGzf4ZKvdjsIH2T3AzKyrn9tmNXtt0",
       authDomain: "synctest-de367.firebaseapp.com",
       databaseURL: "https://synctest-de367-default-rtdb.firebaseio.com",
@@ -3885,13 +4380,286 @@
       messagingSenderId: "51397611512",
       appId: "1:51397611512:web:345e2bacc0fbe586e9900d",
     };
+    window.ENGLISH_QUIZ_FIREBASE_CONFIG = firebaseConfigQuiz;
+
+    const QUIZ_RTDB_APP_NAME = "englishQuizContentSynctest";
+
+    const PATH_ACCOUNT_INDEX = "accountIndex";
+    const ACCT_USER = "username";
+    const ACCT_HASH = "passHash";
+    const LS_ENGLISH_ACCOUNT_SERIAL = "english_rtdb_account_serial";
+    const LS_ENGLISH_ACCOUNT_NAME = "english_rtdb_account_username";
+    const LS_ENGLISH_BACKUP_LAST_PUSH_AT = "englishQuizBackup_lastPushAt";
 
     function snapExists(snap) {
-      return typeof snap.exists === "function" ? snap.exists() : snap.exists;
+      if (!snap) return false;
+      return typeof snap.exists === "function" ? snap.exists() : !!snap.exists;
     }
 
-    const app = initializeApp(firebaseConfig);
-    const rtdb = getDatabase(app);
+    const appAuth = initializeApp(firebaseConfig);
+    const appQuiz = initializeApp(firebaseConfigQuiz, QUIZ_RTDB_APP_NAME);
+    const rtdbAuth = getDatabase(appAuth);
+    const rtdbQuiz = getDatabase(appQuiz);
+
+    function englishSessionOk() {
+      return !!(
+        sessionStorage.getItem("english_rtdb_session_ok") ||
+        localStorage.getItem("english_rtdb_session_ok")
+      );
+    }
+
+    /** 與 money.html 的 moneeAppBackup 相同概念：寫入 RTDB `{帳戶序號}/englishQuizBackup`。 */
+    const ENGLISH_QUIZ_BACKUP_PATH = "englishQuizBackup";
+    const QUIZ_DRAFT_LS_KEY = "quizTakerDraft";
+    const QUIZ_HISTORY_LS_KEY = "quizHistory";
+    let englishRtdbPushTimer = null;
+    const ENGLISH_RTDB_PUSH_MS = 600;
+
+    async function pushEnglishQuizBackupNow() {
+      const serial = localStorage.getItem(LS_ENGLISH_ACCOUNT_SERIAL);
+      if (!serial) return;
+      if (!englishSessionOk()) return;
+      let draftRaw = "";
+      let historyRaw = "";
+      try {
+        draftRaw = localStorage.getItem(QUIZ_DRAFT_LS_KEY) || "";
+      } catch (e) {}
+      try {
+        historyRaw = localStorage.getItem(QUIZ_HISTORY_LS_KEY) || "";
+      } catch (e) {}
+      const updatedAt = new Date().toISOString();
+      const content = JSON.stringify({
+        v: 1,
+        draft: draftRaw,
+        quizHistory: historyRaw,
+        updatedAt: updatedAt,
+      });
+      try {
+        await set(ref(rtdbAuth, serial + "/" + ENGLISH_QUIZ_BACKUP_PATH), {
+          content: content,
+          updatedAt: updatedAt,
+        });
+        try {
+          localStorage.setItem(LS_ENGLISH_BACKUP_LAST_PUSH_AT, updatedAt);
+        } catch (e2) {}
+      } catch (e) {
+        console.warn("[English RTDB] englishQuizBackup upload failed", e);
+      }
+    }
+
+    /**
+     * 從 RTDB 讀取雲端備份並寫入本機（多裝置同步）。若本機上次成功上傳時間不早於雲端則略過，避免覆寫較新本機稿。
+     */
+    async function pullEnglishQuizBackupFromRtdb() {
+      const serial = localStorage.getItem(LS_ENGLISH_ACCOUNT_SERIAL);
+      if (!serial || !englishSessionOk()) return false;
+      try {
+        const snap = await get(
+          ref(rtdbAuth, serial + "/" + ENGLISH_QUIZ_BACKUP_PATH)
+        );
+        if (!snapExists(snap)) return false;
+        const val = snap.val();
+        if (!val || typeof val.content !== "string" || !val.content.trim()) {
+          return false;
+        }
+        const remoteUpdatedAt =
+          typeof val.updatedAt === "string" ? val.updatedAt : "";
+        const localPushAt =
+          localStorage.getItem(LS_ENGLISH_BACKUP_LAST_PUSH_AT) || "";
+        if (remoteUpdatedAt && localPushAt && remoteUpdatedAt <= localPushAt) {
+          return false;
+        }
+        let outer;
+        try {
+          outer = JSON.parse(val.content);
+        } catch (e) {
+          return false;
+        }
+        if (!outer || typeof outer !== "object") return false;
+        let wrote = false;
+        if (typeof outer.draft === "string" && outer.draft.trim()) {
+          localStorage.setItem(QUIZ_DRAFT_LS_KEY, outer.draft);
+          wrote = true;
+        }
+        if (outer.quizHistory != null && typeof outer.quizHistory === "string") {
+          localStorage.setItem(QUIZ_HISTORY_LS_KEY, outer.quizHistory);
+          wrote = true;
+        }
+        if (wrote && remoteUpdatedAt) {
+          try {
+            localStorage.setItem(LS_ENGLISH_BACKUP_LAST_PUSH_AT, remoteUpdatedAt);
+          } catch (e) {}
+        }
+        return wrote;
+      } catch (e) {
+        console.warn("[English RTDB] englishQuizBackup pull failed", e);
+        return false;
+      }
+    }
+
+    window.__scheduleEnglishQuizRtdbPush = function () {
+      if (!localStorage.getItem(LS_ENGLISH_ACCOUNT_SERIAL)) return;
+      if (!englishSessionOk()) return;
+      if (englishRtdbPushTimer) clearTimeout(englishRtdbPushTimer);
+      englishRtdbPushTimer = setTimeout(function () {
+        englishRtdbPushTimer = null;
+        pushEnglishQuizBackupNow().catch(function (e) {
+          console.warn(e);
+        });
+      }, ENGLISH_RTDB_PUSH_MS);
+    };
+
+    function setEngAuthErr(msg) {
+      const el = document.getElementById("engGateAuthStatus");
+      if (!el) return;
+      el.textContent = msg || "";
+      el.classList.toggle("err", !!msg);
+    }
+
+    function setEngGateLoading(show, message) {
+      const panel = document.getElementById("engCloudPanel");
+      const layer = document.getElementById("engGateLoading");
+      if (!panel || !layer) return;
+      const txt = layer.querySelector(".eng-gate-loading-text");
+      if (show) {
+        panel.classList.add("is-gate-loading");
+        panel.setAttribute("aria-busy", "true");
+        layer.setAttribute("aria-hidden", "false");
+        if (txt) txt.textContent = message || "Loading…";
+      } else {
+        panel.classList.remove("is-gate-loading");
+        panel.removeAttribute("aria-busy");
+        layer.setAttribute("aria-hidden", "true");
+        if (txt) txt.textContent = "Loading…";
+      }
+    }
+
+    function updateEngSignedInHeader(display) {
+      const nameDisp = document.getElementById("engUserNameDisplay");
+      const d = String(display || "").trim();
+      if (nameDisp) nameDisp.textContent = d;
+    }
+
+    /** RTDB 規則拒絕時的說明（本頁帳號驗證未使用 Firebase Auth，規則須允許對應路徑讀寫）。 */
+    function engFirebaseErrUserMessage(e) {
+      const code = e && (e.code || e["code"]);
+      const msg = e && e.message ? String(e.message) : "";
+      if (
+        code === "permission-denied" ||
+        code === "PERMISSION_DENIED" ||
+        /permission denied/i.test(msg)
+      ) {
+        return (
+          "Firebase 已拒絕存取（Permission denied）。登入／備份在 engtest-login，題庫在 synctest-de367，請分別到兩個專案的 Realtime Database →「規則」檢查讀寫權限。" +
+          " 帳號流程未使用 Authentication，勿只用 auth != null 而封鎖匿名讀寫（除非您已自行接 Auth）。開發測試可於各專案暫設 .read / .write true。"
+        );
+      }
+      return msg || String(e);
+    }
+
+    function switchEngGateTab(isReg) {
+      const loginBlock = document.getElementById("engGateLoginBlock");
+      const regBlock = document.getElementById("engGateRegBlock");
+      const tabLoginBtn = document.getElementById("engGateTabLogin");
+      const tabRegBtn = document.getElementById("engGateTabReg");
+      if (!loginBlock || !regBlock || !tabLoginBtn || !tabRegBtn) return;
+      loginBlock.classList.toggle("eng-cloud-hidden", isReg);
+      regBlock.classList.toggle("eng-cloud-hidden", !isReg);
+      tabLoginBtn.classList.toggle("eng-tab-primary", !isReg);
+      tabLoginBtn.classList.toggle("eng-tab-ghost", isReg);
+      tabRegBtn.classList.toggle("eng-tab-primary", isReg);
+      tabRegBtn.classList.toggle("eng-tab-ghost", !isReg);
+      setEngAuthErr("");
+    }
+
+    /** 帳號名稱欄：僅允許 A–Z / a–z（無空格、無數字）。 */
+    function wireEngGateUsernameField(el) {
+      if (!el) return;
+      el.setAttribute("lang", "en");
+      el.setAttribute("autocapitalize", "off");
+      el.addEventListener("keydown", function (e) {
+        if (
+          e.key.length === 1 &&
+          !e.ctrlKey &&
+          !e.metaKey &&
+          !e.altKey &&
+          !e.isComposing
+        ) {
+          if (!/[a-zA-Z]/.test(e.key)) e.preventDefault();
+        }
+      });
+      el.addEventListener("input", function () {
+        const t = (String(el.value || "").match(/[a-zA-Z]/g) || []).join("");
+        if (el.value !== t) el.value = t;
+      });
+      el.addEventListener("paste", function (e) {
+        e.preventDefault();
+        const txt =
+          (e.clipboardData || window.clipboardData).getData("text") || "";
+        el.value = (txt.match(/[a-zA-Z]/g) || []).join("");
+      });
+      el.addEventListener("compositionend", function () {
+        const t = (String(el.value || "").match(/[a-zA-Z]/g) || []).join("");
+        if (el.value !== t) el.value = t;
+      });
+    }
+
+    async function sha256Hex(text) {
+      const subtle = globalThis.crypto?.subtle;
+      if (!subtle) {
+        throw new Error(
+          "無法雜湊密碼：請以 HTTPS 或 http://localhost 開啟（需 Web Crypto）。"
+        );
+      }
+      const buf = new TextEncoder().encode(String(text || ""));
+      const hash = await subtle.digest("SHA-256", buf);
+      return [...new Uint8Array(hash)]
+        .map(function (b) {
+          return b.toString(16).padStart(2, "0");
+        })
+        .join("");
+    }
+
+    function usernameIndexKey(username) {
+      const t = String(username || "").trim();
+      return t.replace(/[.#$\[\]/\s]/g, "_");
+    }
+
+    function accountIndexRefFor(username) {
+      return ref(rtdbAuth, PATH_ACCOUNT_INDEX + "/" + usernameIndexKey(username));
+    }
+
+    async function resolveAccountFromLoginInput(loginInput) {
+      const trimmed = String(loginInput || "").trim();
+      if (!trimmed) return null;
+
+      const idxSnap = await get(accountIndexRefFor(trimmed));
+      if (snapExists(idxSnap)) {
+        const serial = idxSnap.val();
+        if (typeof serial === "string" && serial)
+          return { serial: serial, label: trimmed };
+      }
+
+      const acctSnap = await get(ref(rtdbAuth, trimmed));
+      if (snapExists(acctSnap)) {
+        const data = acctSnap.val();
+        if (
+          data &&
+          typeof data === "object" &&
+          typeof data[ACCT_HASH] === "string"
+        )
+          return { serial: trimmed, label: data[ACCT_USER] || trimmed };
+      }
+      return null;
+    }
+
+    async function enterMainAfterEnglishCloudAuth(accountSerial, displayName) {
+      localStorage.setItem(LS_ENGLISH_ACCOUNT_SERIAL, String(accountSerial));
+      localStorage.setItem(LS_ENGLISH_ACCOUNT_NAME, String(displayName || ""));
+      sessionStorage.setItem("english_rtdb_session_ok", "1");
+      localStorage.setItem("english_rtdb_session_ok", "1");
+      location.reload();
+    }
 
     function parseCategoryDatePrefix(key) {
       const m = String(key).match(/^(\d{4})_/);
@@ -3900,7 +4668,7 @@
 
     function pickNewestCategoryKey(keys) {
       if (!keys.length) return null;
-      const sorted = keys.slice().sort((a, b) => {
+      const sorted = keys.slice().sort(function (a, b) {
         const na = parseCategoryDatePrefix(a);
         const nb = parseCategoryDatePrefix(b);
         if (nb !== na) return nb - na;
@@ -3909,33 +4677,71 @@
       return sorted[0];
     }
 
+    function isAccountRecord(val) {
+      return (
+        val &&
+        typeof val === "object" &&
+        !Array.isArray(val) &&
+        typeof val.passHash === "string"
+      );
+    }
+
     function isQuizObject(val) {
       return (
         val &&
         typeof val === "object" &&
         !Array.isArray(val) &&
-        Object.keys(val).length > 0
+        Object.keys(val).length > 0 &&
+        !isAccountRecord(val)
       );
+    }
+
+    function setFirebaseCategoryPanelLoading(show, message) {
+      const wrap = document.getElementById("categoryGridWrap");
+      const layer = document.getElementById("categoryGridLoading");
+      if (!wrap || !layer) return;
+      const txt = layer.querySelector(".category-grid-loading-text");
+      if (show) {
+        wrap.classList.add("is-loading");
+        wrap.setAttribute("aria-busy", "true");
+        layer.setAttribute("aria-hidden", "false");
+        if (txt) txt.textContent = message || "Loading…";
+      } else {
+        wrap.classList.remove("is-loading");
+        wrap.setAttribute("aria-busy", "false");
+        layer.setAttribute("aria-hidden", "true");
+        if (txt) txt.textContent = "Loading…";
+      }
     }
 
     window.__refreshFirebaseCategories = async function () {
       const grid = document.getElementById("categoryGrid");
       const statusEl = document.getElementById("firebaseCategoryStatus");
       if (!grid || !statusEl) return;
+      if (!englishSessionOk()) {
+        grid.innerHTML = "";
+        setFirebaseCategoryPanelLoading(false);
+        statusEl.textContent = "請先登入後再載入題庫分類。";
+        statusEl.classList.add("error");
+        return;
+      }
       grid.innerHTML = "";
       statusEl.textContent = "Loading categories…";
       statusEl.classList.remove("error");
+      setFirebaseCategoryPanelLoading(true, "Loading categories…");
       try {
-        const snap = await get(ref(rtdb, "/"));
+        const snap = await get(ref(rtdbQuiz, "/"));
         if (!snapExists(snap)) {
           statusEl.textContent = "The database is empty.";
           return;
         }
         const val = snap.val();
-        const rawKeys = Object.keys(val || {}).filter(
-          (k) => k && !String(k).startsWith(".")
-        );
-        const quizKeys = rawKeys.filter((k) => isQuizObject(val[k]));
+        const rawKeys = Object.keys(val || {}).filter(function (k) {
+          return k && !String(k).startsWith(".") && k !== PATH_ACCOUNT_INDEX;
+        });
+        const quizKeys = rawKeys.filter(function (k) {
+          return isQuizObject(val[k]);
+        });
         if (!quizKeys.length) {
           statusEl.textContent =
             "No quiz categories yet. Each root key must be an object with quiz data (not an empty string). Upload your quiz JSON in Firebase first.";
@@ -3943,9 +4749,9 @@
         }
         statusEl.textContent = "Choose one category:";
         const newest = pickNewestCategoryKey(quizKeys);
-        const sorted = quizKeys.slice().sort((a, b) =>
-          String(a).localeCompare(String(b), "en")
-        );
+        const sorted = quizKeys.slice().sort(function (a, b) {
+          return String(a).localeCompare(String(b), "en");
+        });
         for (const key of sorted) {
           const btn = document.createElement("button");
           btn.type = "button";
@@ -3979,8 +4785,12 @@
             if (btn.disabled) return;
             btn.disabled = true;
             statusEl.textContent = 'Loading "' + key + '"…';
+            setFirebaseCategoryPanelLoading(
+              true,
+              'Loading "' + key + '"…'
+            );
             try {
-              const sub = await get(ref(rtdb, key));
+              const sub = await get(ref(rtdbQuiz, key));
               if (!snapExists(sub)) {
                 alert("No data found for this category.");
                 return;
@@ -4002,10 +4812,12 @@
             } catch (err) {
               console.error(err);
               alert(
-                "Load failed: " + (err && err.message ? err.message : String(err))
+                "Load failed: " +
+                  (err && err.message ? err.message : String(err))
               );
             } finally {
               btn.disabled = false;
+              setFirebaseCategoryPanelLoading(false);
             }
           });
           grid.appendChild(btn);
@@ -4013,15 +4825,184 @@
       } catch (e) {
         console.error(e);
         statusEl.textContent =
-          "Could not connect to Firebase: " + (e && e.message ? e.message : String(e));
+          "Could not connect to Firebase: " + engFirebaseErrUserMessage(e);
         statusEl.classList.add("error");
+      } finally {
+        setFirebaseCategoryPanelLoading(false);
       }
     };
 
-    if (!window.__englishQuizDraftRestored) {
-      if (typeof window.showFirebaseCategoryPicker === "function") {
-        window.showFirebaseCategoryPicker();
-      }
+    if (document.documentElement.classList.contains("eng-gate-pending")) {
+      const rootRef = ref(rtdbAuth, "/");
+      wireEngGateUsernameField(document.getElementById("engGateSerial"));
+      wireEngGateUsernameField(document.getElementById("engGateRegUser"));
+      const tabLoginBtn = document.getElementById("engGateTabLogin");
+      const tabRegBtn = document.getElementById("engGateTabReg");
+      if (tabLoginBtn)
+        tabLoginBtn.addEventListener("click", function () {
+          switchEngGateTab(false);
+        });
+      if (tabRegBtn)
+        tabRegBtn.addEventListener("click", function () {
+          switchEngGateTab(true);
+        });
+
+      document.getElementById("engGateBtnLogin")?.addEventListener(
+        "click",
+        async function () {
+          const loginKey =
+            document.getElementById("engGateSerial")?.value.trim() || "";
+          const password =
+            document.getElementById("engGatePassword")?.value || "";
+          setEngAuthErr("");
+          if (!loginKey || !password) {
+            setEngAuthErr("請輸入帳號名稱與密碼。");
+            return;
+          }
+          if (!/^[a-zA-Z]+$/.test(loginKey)) {
+            setEngAuthErr("帳號名稱僅限英文字母。");
+            return;
+          }
+          const btn = document.getElementById("engGateBtnLogin");
+          if (btn) btn.disabled = true;
+          setEngGateLoading(true, "登入中…");
+          try {
+            const resolved = await resolveAccountFromLoginInput(loginKey);
+            if (!resolved) {
+              setEngAuthErr("找不到帳號，請確認名稱或節點序號。");
+              return;
+            }
+            const acctSnap = await get(ref(rtdbAuth, resolved.serial));
+            if (!snapExists(acctSnap)) {
+              setEngAuthErr("帳號資料不存在。");
+              return;
+            }
+            const data = acctSnap.val();
+            const hash = await sha256Hex(password);
+            if (
+              typeof data[ACCT_HASH] !== "string" ||
+              data[ACCT_HASH] !== hash
+            ) {
+              setEngAuthErr("帳號或密碼錯誤。");
+              return;
+            }
+            await enterMainAfterEnglishCloudAuth(
+              resolved.serial,
+              data[ACCT_USER] || resolved.label
+            );
+          } catch (e) {
+            console.error(e);
+            setEngAuthErr("登入失敗：" + engFirebaseErrUserMessage(e));
+          } finally {
+            setEngGateLoading(false);
+            if (btn) btn.disabled = false;
+          }
+        }
+      );
+
+      document.getElementById("engGateBtnCreate")?.addEventListener(
+        "click",
+        async function () {
+          const u =
+            document.getElementById("engGateRegUser")?.value.trim() || "";
+          const p1 =
+            document.getElementById("engGateRegPassword")?.value || "";
+          const p2 =
+            document.getElementById("engGateRegPassword2")?.value || "";
+          setEngAuthErr("");
+          if (!u) {
+            setEngAuthErr("請輸入帳號名稱。");
+            return;
+          }
+          if (!/^[a-zA-Z]+$/.test(u)) {
+            setEngAuthErr("帳號名稱僅限英文字母。");
+            return;
+          }
+          if (usernameIndexKey(u).length < 1) {
+            setEngAuthErr("帳號名稱格式無效。");
+            return;
+          }
+          if (!p1 || p1.length < 6) {
+            setEngAuthErr("密碼至少 6 碼。");
+            return;
+          }
+          if (p1 !== p2) {
+            setEngAuthErr("兩次密碼不一致。");
+            return;
+          }
+          const idxRef = accountIndexRefFor(u);
+          const btn = document.getElementById("engGateBtnCreate");
+          if (btn) btn.disabled = true;
+          setEngGateLoading(true, "註冊中…");
+          try {
+            const idxSnap = await get(idxRef);
+            if (snapExists(idxSnap)) {
+              setEngAuthErr("此帳號名稱已被註冊。");
+              return;
+            }
+            const passHash = await sha256Hex(p1);
+            const newAcct = push(rootRef);
+            const serial = newAcct.key;
+            await set(newAcct, {
+              [ACCT_USER]: u,
+              [ACCT_HASH]: passHash,
+            });
+            await set(idxRef, serial);
+            await enterMainAfterEnglishCloudAuth(serial, u);
+          } catch (e) {
+            console.error(e);
+            setEngAuthErr("註冊失敗：" + engFirebaseErrUserMessage(e));
+          } finally {
+            setEngGateLoading(false);
+            if (btn) btn.disabled = false;
+          }
+        }
+      );
+    } else {
+      const gate = document.getElementById("engCloudGate");
+      if (gate) gate.setAttribute("aria-hidden", "true");
+      const signedRow = document.getElementById("engSignedInRow");
+      const display =
+        localStorage.getItem(LS_ENGLISH_ACCOUNT_NAME) ||
+        localStorage.getItem(LS_ENGLISH_ACCOUNT_SERIAL) ||
+        "";
+      updateEngSignedInHeader(display);
+      if (signedRow) signedRow.classList.add("is-visible");
+      document.getElementById("btnEngLogout")?.addEventListener(
+        "click",
+        function () {
+          try {
+            localStorage.removeItem(LS_ENGLISH_ACCOUNT_SERIAL);
+            localStorage.removeItem(LS_ENGLISH_ACCOUNT_NAME);
+            localStorage.removeItem(LS_ENGLISH_BACKUP_LAST_PUSH_AT);
+            sessionStorage.removeItem("english_rtdb_session_ok");
+            localStorage.removeItem("english_rtdb_session_ok");
+          } catch (e) {
+            console.error(e);
+          }
+          location.reload();
+        }
+      );
+      (async function () {
+        try {
+          const merged = await pullEnglishQuizBackupFromRtdb();
+          if (merged && typeof window.__afterEnglishRtdbPullMerge === "function") {
+            window.__afterEnglishRtdbPullMerge();
+          }
+        } catch (e) {
+          console.warn(e);
+        }
+        if (!window.__englishQuizDraftRestored) {
+          if (typeof window.showFirebaseCategoryPicker === "function") {
+            window.showFirebaseCategoryPicker();
+          }
+        }
+        try {
+          if (typeof window.__scheduleEnglishQuizRtdbPush === "function") {
+            window.__scheduleEnglishQuizRtdbPush();
+          }
+        } catch (e2) {}
+      })();
     }
   </script>
 </body>
