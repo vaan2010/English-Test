@@ -1445,6 +1445,30 @@
     .eng-cloud-status.err {
       color: #f85149;
     }
+    .eng-cloud-status.ok {
+      color: #3fb950;
+    }
+    .eng-gate-forgot-row {
+      margin-top: 6px;
+      text-align: right;
+    }
+    .eng-gate-link {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 0.85rem;
+      color: var(--primary-bright);
+      cursor: pointer;
+      text-decoration: underline;
+      font-weight: 500;
+    }
+    .eng-gate-link:hover {
+      color: var(--primary);
+    }
+    .eng-gate-back-row {
+      margin-top: 10px;
+      text-align: center;
+    }
     .eng-cloud-hidden {
       display: none !important;
     }
@@ -1552,10 +1576,10 @@
         <div class="eng-gate-spinner" role="presentation"></div>
         <span class="eng-gate-loading-text">Loading…</span>
       </div>
-      <div class="eng-cloud-brand">English Quiz — 登入</div>
-      <p class="eng-cloud-sub">帳號名稱僅限英文字母。請登入或註冊。</p>
+      <div class="eng-cloud-brand" id="engCloudBrand">English Quiz — 登入</div>
+      <p class="eng-cloud-sub" id="engCloudSub">帳號名稱僅限英文字母。請登入或註冊。</p>
       <div id="engGateAuth">
-        <div class="eng-cloud-tabs">
+        <div class="eng-cloud-tabs" id="engGateTabs">
           <button type="button" class="eng-tab-primary" id="engGateTabLogin" data-tab="login">登入</button>
           <button type="button" class="eng-tab-ghost" id="engGateTabReg" data-tab="reg">註冊</button>
         </div>
@@ -1567,6 +1591,9 @@
           <div class="eng-cloud-field">
             <label for="engGatePassword">密碼</label>
             <input id="engGatePassword" class="eng-gate-input" type="password" autocomplete="current-password" />
+          </div>
+          <div class="eng-gate-forgot-row">
+            <button type="button" class="eng-gate-link" id="engGateForgotLink">忘記密碼？</button>
           </div>
           <button type="button" class="eng-cloud-btn" id="engGateBtnLogin">登入並進入測驗</button>
         </div>
@@ -1584,6 +1611,24 @@
             <input id="engGateRegPassword2" class="eng-gate-input" type="password" autocomplete="new-password" />
           </div>
           <button type="button" class="eng-cloud-btn" id="engGateBtnCreate">註冊並進入測驗</button>
+        </div>
+        <div id="engGateResetBlock" class="eng-cloud-hidden">
+          <div class="eng-cloud-field">
+            <label for="engGateResetUser">帳號名稱</label>
+            <input id="engGateResetUser" class="eng-gate-input" type="text" inputmode="latin" autocomplete="username" spellcheck="false" />
+          </div>
+          <div class="eng-cloud-field">
+            <label for="engGateResetPassword">新密碼（至少 6 碼）</label>
+            <input id="engGateResetPassword" class="eng-gate-input" type="password" autocomplete="new-password" />
+          </div>
+          <div class="eng-cloud-field">
+            <label for="engGateResetPassword2">確認新密碼</label>
+            <input id="engGateResetPassword2" class="eng-gate-input" type="password" autocomplete="new-password" />
+          </div>
+          <button type="button" class="eng-cloud-btn" id="engGateBtnReset">重設密碼</button>
+          <div class="eng-gate-back-row">
+            <button type="button" class="eng-gate-link" id="engGateBackLoginLink">返回登入</button>
+          </div>
         </div>
         <div class="eng-cloud-status" id="engGateAuthStatus"></div>
       </div>
@@ -4727,11 +4772,17 @@
       }, ENGLISH_RTDB_PUSH_MS);
     };
 
-    function setEngAuthErr(msg) {
+    function setEngAuthMsg(msg, isError) {
       const el = document.getElementById("engGateAuthStatus");
       if (!el) return;
       el.textContent = msg || "";
-      el.classList.toggle("err", !!msg);
+      const has = !!msg;
+      el.classList.toggle("err", has && isError !== false);
+      el.classList.toggle("ok", has && isError === false);
+    }
+
+    function setEngAuthErr(msg) {
+      setEngAuthMsg(msg, true);
     }
 
     function setEngGateLoading(show, message) {
@@ -4775,19 +4826,49 @@
       return msg || String(e);
     }
 
-    function switchEngGateTab(isReg) {
+    function switchEngGateView(view) {
       const loginBlock = document.getElementById("engGateLoginBlock");
       const regBlock = document.getElementById("engGateRegBlock");
+      const resetBlock = document.getElementById("engGateResetBlock");
+      const tabs = document.getElementById("engGateTabs");
       const tabLoginBtn = document.getElementById("engGateTabLogin");
       const tabRegBtn = document.getElementById("engGateTabReg");
-      if (!loginBlock || !regBlock || !tabLoginBtn || !tabRegBtn) return;
-      loginBlock.classList.toggle("eng-cloud-hidden", isReg);
+      const brand = document.getElementById("engCloudBrand");
+      const sub = document.getElementById("engCloudSub");
+      if (!loginBlock || !regBlock || !resetBlock) return;
+
+      const isLogin = view === "login";
+      const isReg = view === "reg";
+      const isReset = view === "reset";
+
+      loginBlock.classList.toggle("eng-cloud-hidden", !isLogin);
       regBlock.classList.toggle("eng-cloud-hidden", !isReg);
-      tabLoginBtn.classList.toggle("eng-tab-primary", !isReg);
-      tabLoginBtn.classList.toggle("eng-tab-ghost", isReg);
-      tabRegBtn.classList.toggle("eng-tab-primary", isReg);
-      tabRegBtn.classList.toggle("eng-tab-ghost", !isReg);
-      setEngAuthErr("");
+      resetBlock.classList.toggle("eng-cloud-hidden", !isReset);
+      if (tabs) tabs.classList.toggle("eng-cloud-hidden", isReset);
+
+      if (tabLoginBtn && tabRegBtn) {
+        tabLoginBtn.classList.toggle("eng-tab-primary", isLogin);
+        tabLoginBtn.classList.toggle("eng-tab-ghost", !isLogin);
+        tabRegBtn.classList.toggle("eng-tab-primary", isReg);
+        tabRegBtn.classList.toggle("eng-tab-ghost", !isReg);
+      }
+
+      if (brand) {
+        brand.textContent = isReset
+          ? "English Quiz — 重設密碼"
+          : "English Quiz — 登入";
+      }
+      if (sub) {
+        sub.textContent = isReset
+          ? "輸入帳號名稱與新密碼，完成後返回登入。"
+          : "帳號名稱僅限英文字母。請登入或註冊。";
+      }
+
+      setEngAuthMsg("", false);
+    }
+
+    function switchEngGateTab(isReg) {
+      switchEngGateView(isReg ? "reg" : "login");
     }
 
     /** 帳號名稱欄：僅允許 A–Z / a–z（無空格、無數字）。 */
@@ -5054,6 +5135,7 @@
       const rootRef = ref(rtdbAuth, "/");
       wireEngGateUsernameField(document.getElementById("engGateSerial"));
       wireEngGateUsernameField(document.getElementById("engGateRegUser"));
+      wireEngGateUsernameField(document.getElementById("engGateResetUser"));
       const tabLoginBtn = document.getElementById("engGateTabLogin");
       const tabRegBtn = document.getElementById("engGateTabReg");
       if (tabLoginBtn)
@@ -5064,6 +5146,89 @@
         tabRegBtn.addEventListener("click", function () {
           switchEngGateTab(true);
         });
+
+      document.getElementById("engGateForgotLink")?.addEventListener(
+        "click",
+        function () {
+          const u =
+            document.getElementById("engGateSerial")?.value.trim() || "";
+          const ru = document.getElementById("engGateResetUser");
+          if (ru && u) ru.value = u;
+          switchEngGateView("reset");
+        }
+      );
+
+      document.getElementById("engGateBackLoginLink")?.addEventListener(
+        "click",
+        function () {
+          switchEngGateView("login");
+        }
+      );
+
+      document.getElementById("engGateBtnReset")?.addEventListener(
+        "click",
+        async function () {
+          const u =
+            document.getElementById("engGateResetUser")?.value.trim() || "";
+          const p1 =
+            document.getElementById("engGateResetPassword")?.value || "";
+          const p2 =
+            document.getElementById("engGateResetPassword2")?.value || "";
+          setEngAuthMsg("", false);
+          if (!u) {
+            setEngAuthErr("請輸入帳號名稱。");
+            return;
+          }
+          if (!/^[a-zA-Z]+$/.test(u)) {
+            setEngAuthErr("帳號名稱僅限英文字母。");
+            return;
+          }
+          if (!p1 || p1.length < 6) {
+            setEngAuthErr("密碼至少 6 碼。");
+            return;
+          }
+          if (p1 !== p2) {
+            setEngAuthErr("兩次密碼不一致。");
+            return;
+          }
+          const btn = document.getElementById("engGateBtnReset");
+          if (btn) btn.disabled = true;
+          setEngGateLoading(true, "重設密碼中…");
+          try {
+            const resolved = await resolveAccountFromLoginInput(u);
+            if (!resolved) {
+              setEngAuthErr("找不到此帳號。");
+              return;
+            }
+            const acctSnap = await get(ref(rtdbAuth, resolved.serial));
+            if (!snapExists(acctSnap)) {
+              setEngAuthErr("帳號資料不存在。");
+              return;
+            }
+            const passHash = await sha256Hex(p1);
+            await set(
+              ref(rtdbAuth, resolved.serial + "/" + ACCT_HASH),
+              passHash
+            );
+            const rp = document.getElementById("engGateResetPassword");
+            const rp2 = document.getElementById("engGateResetPassword2");
+            if (rp) rp.value = "";
+            if (rp2) rp2.value = "";
+            const loginUser = document.getElementById("engGateSerial");
+            const loginPw = document.getElementById("engGatePassword");
+            if (loginUser) loginUser.value = u;
+            if (loginPw) loginPw.value = "";
+            switchEngGateView("login");
+            setEngAuthMsg("密碼已更新，請使用新密碼登入。", false);
+          } catch (e) {
+            console.error(e);
+            setEngAuthErr("重設失敗：" + engFirebaseErrUserMessage(e));
+          } finally {
+            setEngGateLoading(false);
+            if (btn) btn.disabled = false;
+          }
+        }
+      );
 
       document.getElementById("engGateBtnLogin")?.addEventListener(
         "click",
